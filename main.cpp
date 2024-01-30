@@ -1,7 +1,7 @@
 #include <iostream>
 
 int main(){
-    std::cout << "commit hehehaha";
+    std::cout << "commit hello world";
 
     return 0;
 }
