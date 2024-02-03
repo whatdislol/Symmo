@@ -6,25 +6,35 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1121</width>
+    <height>617</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #596FB7</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>100</y>
-      <width>241</width>
-      <height>71</height>
+      <x>-10</x>
+      <y>500</y>
+      <width>1171</width>
+      <height>81</height>
      </rect>
     </property>
-    <property name="text">
-     <string>PushButton</string>
+    <property name="styleSheet">
+     <string notr="true">background-color: #11235A;
+</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
     </property>
    </widget>
   </widget>
@@ -33,12 +43,24 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>21</height>
+     <width>1121</width>
+     <height>38</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionAdd_Fiel"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionAdd_Fiel">
+   <property name="text">
+    <string>Add File</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
