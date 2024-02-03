@@ -15,6 +15,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_PREFIX_PATH $ENV{QTDIR})
 find_package(Qt6Core REQUIRED)
 find_package(Qt6Widgets REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Multimedia)
 
 #=================== INCLUSION OF Project Files ====================#
 set(FORMS_DIR "${CMAKE_SOURCE_DIR}/forms")
@@ -54,4 +55,5 @@ target_include_directories(Symmo PRIVATE ${INCLUDE_DIR})
 target_include_directories(Symmo PRIVATE ${SOURCE_DIR})
 
 #===================== LINKING LIBRARIES =======================#
-target_link_libraries(Symmo Qt6::Widgets)
+target_link_libraries(Symmo PRIVATE Qt6::Widgets)
+target_link_libraries(Symmo PRIVATE Qt6::Multimedia)

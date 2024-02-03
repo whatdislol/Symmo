@@ -20,10 +20,10 @@
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>-10</x>
-      <y>500</y>
+      <x>-20</x>
+      <y>480</y>
       <width>1171</width>
-      <height>81</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -36,6 +36,171 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
+    <widget class="QPushButton" name="pushButton_Play">
+     <property name="geometry">
+      <rect>
+       <x>570</x>
+       <y>20</y>
+       <width>50</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border: none;
+    border-radius: 25px; /* Adjust the border-radius for a smaller circle */
+    background-color: rgb(255, 255, 255);
+    color: rgb(52, 51, 64);
+    min-width: 50px;    /* Adjust the size of the button */
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    padding: 0px;
+}
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_Back">
+     <property name="geometry">
+      <rect>
+       <x>500</x>
+       <y>20</y>
+       <width>50</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border: none;
+    border-radius: 25px; /* Adjust the border-radius for a smaller circle */
+    background-color: rgb(255, 255, 255);
+    color: rgb(52, 51, 64);
+    min-width: 50px;    /* Adjust the size of the button */
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    padding: 0px;
+}
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_Skip">
+     <property name="geometry">
+      <rect>
+       <x>640</x>
+       <y>20</y>
+       <width>50</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border: none;
+    border-radius: 25px; /* Adjust the border-radius for a smaller circle */
+    background-color: rgb(255, 255, 255);
+    color: rgb(52, 51, 64);
+    min-width: 50px;    /* Adjust the size of the button */
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    padding: 0px;
+}
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_Loop">
+     <property name="geometry">
+      <rect>
+       <x>710</x>
+       <y>20</y>
+       <width>50</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border: none;
+    border-radius: 25px; /* Adjust the border-radius for a smaller circle */
+    background-color: rgb(255, 255, 255);
+    color: rgb(52, 51, 64);
+    min-width: 50px;    /* Adjust the size of the button */
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    padding: 0px;
+}
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_Shuffle">
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>20</y>
+       <width>50</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border: none;
+    border-radius: 25px; /* Adjust the border-radius for a smaller circle */
+    background-color: rgb(255, 255, 255);
+    color: rgb(52, 51, 64);
+    min-width: 50px;    /* Adjust the size of the button */
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    padding: 0px;
+}
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
