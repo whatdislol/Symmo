@@ -53,13 +53,15 @@ void MainWindow::on_pushButton_Volumn_clicked()
 
 void MainWindow::on_pushButton_Play_clicked()
 {
-    if (is_pause == false) {
-        ui->pushButton_Play->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-        is_pause = true;
+    if (!is_paused) {
+        ui->pushButton_Play->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+        M_Player->pause();
+        is_paused = true;
     }
     else {
-        ui->pushButton_Play->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-        is_pause = false;
+        ui->pushButton_Play->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+        M_Player->play();
+        is_paused = false;
     }
 }
 

@@ -34,7 +34,7 @@ private slots:
 private:
     Ui::MainWindow* ui;
     bool is_muted = false;
-    bool is_pause = false;
+    bool is_paused = false;
     QMediaPlayer* M_Player;
 };
 #endif // MAINWINDOW_H
