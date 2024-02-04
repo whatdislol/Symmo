@@ -40,12 +40,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_Volumn_clicked()
 {
-    if (is_muted == false) {
-        ui->pushButton_Volumn->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+    if (!is_muted) {
+        ui->pushButton_Volumn->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
         is_muted = true;
     }
     else {
-        ui->pushButton_Volumn->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
+        ui->pushButton_Volumn->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
         is_muted = false;
     }
 }
