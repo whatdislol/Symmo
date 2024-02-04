@@ -27,7 +27,7 @@ private slots:
 
     void on_pushButton_Play_clicked();
 
-    void on_actionAdd_Fiel_triggered();
+    void on_actionAdd_File_triggered();
 
     void on_horizontalSlider_song_duration_valueChanged(int value);
 

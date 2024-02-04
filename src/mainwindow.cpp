@@ -64,9 +64,11 @@ void MainWindow::on_pushButton_Play_clicked()
 }
 
 
-void MainWindow::on_actionAdd_Fiel_triggered()
+void MainWindow::on_actionAdd_File_triggered()
 {
-
+    QString file_name = QFileDialog::getOpenFileName(this, "Open a file", "", "Audio File (*.mp3)");
+    M_Player->setSource(QUrl::fromLocalFile(file_name));
+    M_Player->play();
 }
 
 

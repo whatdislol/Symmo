@@ -630,12 +630,12 @@ border-radius: 10px;</string>
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionAdd_Fiel"/>
+    <addaction name="actionAdd_File"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionAdd_Fiel">
+  <action name="actionAdd_File">
    <property name="text">
     <string>Open Audio File</string>
    </property>
