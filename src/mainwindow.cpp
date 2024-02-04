@@ -29,7 +29,8 @@ MainWindow::MainWindow(QWidget* parent)
     ui->pushButton_Volumn->setIconSize(actualSize);
 
     M_Player = new QMediaPlayer();
-
+    audioOutput = new QAudioOutput();
+    M_Player->setAudioOutput(audioOutput);
 
 }
 
@@ -78,5 +79,5 @@ void MainWindow::on_actionAdd_File_triggered()
 
 void MainWindow::on_horizontalSlider_song_duration_valueChanged(int value)
 {
-
+    audioOutput->setVolume(value);
 }

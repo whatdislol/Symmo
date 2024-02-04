@@ -36,5 +36,6 @@ private:
     bool is_muted = false;
     bool is_paused = false;
     QMediaPlayer* M_Player;
+    QAudioOutput* audioOutput;
 };
 #endif // MAINWINDOW_H
