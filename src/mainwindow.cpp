@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget* parent)
     this->audio_output = new QAudioOutput();
 
     M_Player->setAudioOutput(audio_output);
+    Mduration = M_Player->duration() / 1000;
 
     //default volume
     ui->horizontalSlider_volume->setMinimum(0);
@@ -135,7 +136,7 @@ void MainWindow::on_actionAdd_File_triggered()
 
 void MainWindow::on_horizontalSlider_song_duration_sliderMoved(int value)
 {
-    M_Player->setPosition(value * 1000);
+    M_Player->setPosition(static_cast<qint64>(value) * 1000);
 }
 
 void MainWindow::on_horizontalSlider_volume_sliderMoved(int value)
