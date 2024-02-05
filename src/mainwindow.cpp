@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->horizontalSlider_volume->setMinimum(0);
     ui->horizontalSlider_volume->setMaximum(100);
     ui->horizontalSlider_volume->setValue(50);
-    audio_output->setVolume(50);
+    audio_output->setVolume(0.5);
 
     // Connect volume to slider
     connect(ui->horizontalSlider_volume, &QSlider::sliderMoved, this, &MainWindow::on_horizontalSlider_volume_sliderMoved);
@@ -141,7 +141,7 @@ void MainWindow::on_horizontalSlider_song_duration_sliderMoved(int value)
 
 void MainWindow::on_horizontalSlider_volume_sliderMoved(int value)
 {
-    audio_output->setVolume(value);
+    audio_output->setVolume(value / 100.0);
 
     if (value == 0) {
         ui->pushButton_Volume->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
