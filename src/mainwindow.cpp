@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget* parent)
     audio_output->setVolume(50);
 
     // Connect volume to slider
-    connect(ui->horizontalSlider_volume, &QSlider::valueChanged, this, &MainWindow::on_horizontalSlider_volume_valueChanged);
+    connect(ui->horizontalSlider_volume, &QSlider::sliderMoved, this, &MainWindow::on_horizontalSlider_volume_sliderMoved);
 
     // Duration slider
     connect(M_Player, &QMediaPlayer::durationChanged, this, &MainWindow::durationChanged);
@@ -67,10 +67,10 @@ void MainWindow::positionChanged(qint64 progress)
     if (!ui->horizontalSlider_song_duration->isSliderDown()) {
 		ui->horizontalSlider_song_duration->setValue(progress / 1000);
 	}
-    updateduration(progress / 1000);
+    updateDuration(progress / 1000);
 }
 
-void MainWindow::updateduration(qint64 duration)
+void MainWindow::updateDuration(qint64 duration)
 {
     QString timestr;
     if (duration || Mduration) {
@@ -82,7 +82,6 @@ void MainWindow::updateduration(qint64 duration)
 		}
         ui->timeLabel_left->setText(currentTime.toString(format));
         ui->timeLabel->setText(totalTime.toString(format));
-
     }
 }
 
@@ -134,12 +133,12 @@ void MainWindow::on_actionAdd_File_triggered()
     }
 }
 
-void MainWindow::on_horizontalSlider_song_duration_valueChanged(int value)
+void MainWindow::on_horizontalSlider_song_duration_sliderMoved(int value)
 {
     M_Player->setPosition(value * 1000);
 }
 
-void MainWindow::on_horizontalSlider_volume_valueChanged(int value)
+void MainWindow::on_horizontalSlider_volume_sliderMoved(int value)
 {
     audio_output->setVolume(value);
 

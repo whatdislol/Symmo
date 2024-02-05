@@ -294,7 +294,7 @@ QSlider::handle:horizontal {
       <rect>
        <x>300</x>
        <y>80</y>
-       <width>41</width>
+       <width>45</width>
        <height>21</height>
       </rect>
      </property>
@@ -310,7 +310,7 @@ QSlider::handle:horizontal {
       <rect>
        <x>807</x>
        <y>80</y>
-       <width>41</width>
+       <width>45</width>
        <height>20</height>
       </rect>
      </property>
