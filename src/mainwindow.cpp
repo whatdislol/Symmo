@@ -45,7 +45,8 @@ MainWindow::MainWindow(QWidget* parent)
     connect(M_Player, &QMediaPlayer::positionChanged, ui->horizontalSlider_song_duration, &QSlider::setValue);
 
     // Time Label
-    connect(M_Player, &QMediaPlayer::durationChanged, this, &MainWindow::setTimeLabel);
+    connect(M_Player, &QMediaPlayer::durationChanged, this, &MainWindow::setTotalTimeLabel);
+    connect(M_Player, &QMediaPlayer::positionChanged, this, &MainWindow::setCurrentTimeLabel);
 }
 
 MainWindow::~MainWindow()
@@ -119,18 +120,29 @@ void MainWindow::on_horizontalSlider_volume_valueChanged(int value)
     }
 }
 
-void MainWindow::setTimeLabel()
+void MainWindow::setTotalTimeLabel()
 {
     // Convert duration into HH:MM format and set the label
-    qint64 milli = M_Player->duration();
-    qint64 min = milli / 60000;
-    milli = milli - 60000 * min;
-    qint64 sec = milli / 1000;
+    qint64 songMilli = M_Player->duration();
+    qint64 songMin = songMilli / 60000;
+    qint64 songSec = songMilli % 60000 / 1000;
 
-    QString timeLbl = QString("%1:%2")
-        .arg(min, 2, 10, QLatin1Char('0'))  // Two digits, zero-padded
-        .arg(sec, 2, 10, QLatin1Char('0')); // Two digits, zero-padded
+    QString timeLabelTotal = QString("%1:%2")
+        .arg(songMin, 2, 10, QLatin1Char('0'))  // Two digits, zero-padded
+        .arg(songSec, 2, 10, QLatin1Char('0')); // Two digits, zero-padded
 
-    ui->timeLabel->setText(timeLbl);
+    ui->timeLabel->setText(timeLabelTotal);
 }
 
+void MainWindow::setCurrentTimeLabel()
+{
+	qint64 currentMilli = M_Player->position();
+	qint64 currentMin = currentMilli / 60000;
+	qint64 currentSec = currentMilli % 60000 / 1000;
+
+	QString timeLabelCurrent = QString("%1:%2")
+		.arg(currentMin, 2, 10, QLatin1Char('0'))  // Two digits, zero-padded
+		.arg(currentSec, 2, 10, QLatin1Char('0')); // Two digits, zero-padded
+
+	ui->timeLabel_left->setText(timeLabelCurrent);
+}

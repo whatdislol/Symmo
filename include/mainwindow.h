@@ -34,7 +34,9 @@ private slots:
 
     void on_horizontalSlider_volume_valueChanged(int value);
 
-    void setTimeLabel();
+    void setTotalTimeLabel();
+
+    void setCurrentTimeLabel();
 
 private:
     Ui::MainWindow* ui;
