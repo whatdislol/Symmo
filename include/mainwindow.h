@@ -24,6 +24,10 @@ public:
     ~MainWindow();
 
 private slots:
+    void durationChanged(qint64 duration);
+
+    void positionChanged(qint64 progress);
+
     void on_pushButton_Volume_clicked();
 
     void on_pushButton_Play_clicked();
@@ -34,15 +38,13 @@ private slots:
 
     void on_horizontalSlider_volume_valueChanged(int value);
 
-    void setTotalTimeLabel();
-
-    void setCurrentTimeLabel();
-
 private:
     Ui::MainWindow* ui;
     bool is_muted = false;
     bool is_paused = false;
     QMediaPlayer* M_Player;
     QAudioOutput* audio_output;
+    qint64 Mduration;
+    void updateduration(qint64 duration);
 };
 #endif // MAINWINDOW_H
