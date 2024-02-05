@@ -7,6 +7,7 @@
 #include <QtMultimedia>
 #include <QFileDialog>
 #include <QStyle>
+#include <QAudioOutput>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,7 +24,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_pushButton_Volumn_clicked();
+    void on_pushButton_Volume_clicked();
 
     void on_pushButton_Play_clicked();
 
@@ -31,11 +32,15 @@ private slots:
 
     void on_horizontalSlider_song_duration_valueChanged(int value);
 
+    void on_horizontalSlider_volume_valueChanged(int value);
+
+    void setTimeLabel();
+
 private:
     Ui::MainWindow* ui;
     bool is_muted = false;
     bool is_paused = false;
     QMediaPlayer* M_Player;
-    QAudioOutput* audioOutput;
+    QAudioOutput* audio_output;
 };
 #endif // MAINWINDOW_H
