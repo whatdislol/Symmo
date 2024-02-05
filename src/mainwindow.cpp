@@ -34,19 +34,19 @@ MainWindow::MainWindow(QWidget* parent)
     M_Player->setAudioOutput(audio_output);
 
     //default volume
-    audio_output->setVolume(50);
+    ui->horizontalSlider_volume->setMinimum(0);
+    ui->horizontalSlider_volume->setMaximum(100);
     ui->horizontalSlider_volume->setValue(50);
+    audio_output->setVolume(50);
 
     // Connect volume to slider
     connect(ui->horizontalSlider_volume, &QSlider::valueChanged, this, &MainWindow::on_horizontalSlider_volume_valueChanged);
 
     // Duration slider
-    connect(M_Player, &QMediaPlayer::durationChanged, ui->horizontalSlider_song_duration, &QSlider::setMaximum);
-    connect(M_Player, &QMediaPlayer::positionChanged, ui->horizontalSlider_song_duration, &QSlider::setValue);
+    connect(M_Player, &QMediaPlayer::durationChanged, this, &MainWindow::durationChanged);
+    connect(M_Player, &QMediaPlayer::positionChanged, this, &MainWindow::positionChanged);
 
-    // Time Label
-    connect(M_Player, &QMediaPlayer::durationChanged, this, &MainWindow::setTotalTimeLabel);
-    connect(M_Player, &QMediaPlayer::positionChanged, this, &MainWindow::setCurrentTimeLabel);
+    ui->horizontalSlider_song_duration->setRange(0, M_Player->duration() / 1000);
 }
 
 MainWindow::~MainWindow()
@@ -54,6 +54,36 @@ MainWindow::~MainWindow()
     delete ui;
     delete M_Player;
     delete audio_output;
+}
+
+void MainWindow::durationChanged(qint64 duration)
+{
+	Mduration = duration / 1000;
+    ui->horizontalSlider_song_duration->setMaximum(Mduration);
+}
+
+void MainWindow::positionChanged(qint64 progress)
+{
+    if (!ui->horizontalSlider_song_duration->isSliderDown()) {
+		ui->horizontalSlider_song_duration->setValue(progress / 1000);
+	}
+    updateduration(progress / 1000);
+}
+
+void MainWindow::updateduration(qint64 duration)
+{
+    QString timestr;
+    if (duration || Mduration) {
+        QTime currentTime((duration / 3600) % 60, (duration / 60) % 60, duration % 60, (duration * 1000) % 1000);
+        QTime totalTime((Mduration / 3600) % 60, (Mduration / 60) % 60, Mduration % 60, (Mduration * 1000) % 1000);
+        QString format = "mm:ss";
+        if (Mduration > 3600) {
+			format = "hh:mm:ss";
+		}
+        ui->timeLabel_left->setText(currentTime.toString(format));
+        ui->timeLabel->setText(totalTime.toString(format));
+
+    }
 }
 
 void MainWindow::on_pushButton_Volume_clicked()
@@ -106,6 +136,7 @@ void MainWindow::on_actionAdd_File_triggered()
 
 void MainWindow::on_horizontalSlider_song_duration_valueChanged(int value)
 {
+    M_Player->setPosition(value * 1000);
 }
 
 void MainWindow::on_horizontalSlider_volume_valueChanged(int value)
@@ -118,31 +149,4 @@ void MainWindow::on_horizontalSlider_volume_valueChanged(int value)
     else {
         ui->pushButton_Volume->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
     }
-}
-
-void MainWindow::setTotalTimeLabel()
-{
-    // Convert duration into HH:MM format and set the label
-    qint64 songMilli = M_Player->duration();
-    qint64 songMin = songMilli / 60000;
-    qint64 songSec = songMilli % 60000 / 1000;
-
-    QString timeLabelTotal = QString("%1:%2")
-        .arg(songMin, 2, 10, QLatin1Char('0'))  // Two digits, zero-padded
-        .arg(songSec, 2, 10, QLatin1Char('0')); // Two digits, zero-padded
-
-    ui->timeLabel->setText(timeLabelTotal);
-}
-
-void MainWindow::setCurrentTimeLabel()
-{
-	qint64 currentMilli = M_Player->position();
-	qint64 currentMin = currentMilli / 60000;
-	qint64 currentSec = currentMilli % 60000 / 1000;
-
-	QString timeLabelCurrent = QString("%1:%2")
-		.arg(currentMin, 2, 10, QLatin1Char('0'))  // Two digits, zero-padded
-		.arg(currentSec, 2, 10, QLatin1Char('0')); // Two digits, zero-padded
-
-	ui->timeLabel_left->setText(timeLabelCurrent);
 }
