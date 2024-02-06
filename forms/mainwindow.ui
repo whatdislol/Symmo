@@ -298,6 +298,9 @@ QSlider::handle:horizontal {
        <height>21</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">color: white;</string>
+     </property>
      <property name="text">
       <string>0:00</string>
      </property>
@@ -313,6 +316,9 @@ QSlider::handle:horizontal {
        <width>45</width>
        <height>20</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: white;</string>
      </property>
      <property name="text">
       <string>0:00</string>
@@ -334,6 +340,9 @@ QSlider::handle:horizontal {
       <font>
        <family>STHeiti</family>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: white;</string>
      </property>
      <property name="text">
       <string>File Name</string>
@@ -409,9 +418,7 @@ border-radius: 10px;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">font-size: 20px;
-QLabel {
-    color: white;
-}
+color: white;
 
 </string>
       </property>
@@ -617,7 +624,8 @@ border-radius: 10px;</string>
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">font-size: 20px;</string>
+       <string notr="true">font-size: 20px;
+color: white;</string>
       </property>
       <property name="text">
        <string>Songs</string>
@@ -632,7 +640,7 @@ border-radius: 10px;</string>
      <x>0</x>
      <y>0</y>
      <width>1150</width>
-     <height>38</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
