@@ -201,7 +201,7 @@
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_Volumn">
+    <widget class="QPushButton" name="pushButton_Volume">
      <property name="geometry">
       <rect>
        <x>930</x>
@@ -234,7 +234,7 @@
       <string/>
      </property>
     </widget>
-    <widget class="QSlider" name="horizontalSlider_volumn">
+    <widget class="QSlider" name="horizontalSlider_volume">
      <property name="geometry">
       <rect>
        <x>980</x>
@@ -255,6 +255,9 @@ QSlider::handle:horizontal {
                 width: 20px;
                 border-radius: 10px;
   }</string>
+     </property>
+     <property name="value">
+      <number>50</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -286,12 +289,12 @@ QSlider::handle:horizontal {
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="label_duration_left">
+    <widget class="QLabel" name="timeLabel_left">
      <property name="geometry">
       <rect>
        <x>300</x>
        <y>80</y>
-       <width>41</width>
+       <width>45</width>
        <height>21</height>
       </rect>
      </property>
@@ -302,12 +305,12 @@ QSlider::handle:horizontal {
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="label_duration_right">
+    <widget class="QLabel" name="timeLabel">
      <property name="geometry">
       <rect>
        <x>807</x>
        <y>80</y>
-       <width>41</width>
+       <width>45</width>
        <height>20</height>
       </rect>
      </property>
@@ -321,10 +324,10 @@ QSlider::handle:horizontal {
     <widget class="QLabel" name="label_filename">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>90</x>
        <y>50</y>
-       <width>181</width>
-       <height>16</height>
+       <width>211</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="font">
@@ -344,10 +347,10 @@ QSlider::handle:horizontal {
     <zorder>pushButton_Skip</zorder>
     <zorder>pushButton_Loop</zorder>
     <zorder>pushButton_Shuffle</zorder>
-    <zorder>pushButton_Volumn</zorder>
-    <zorder>horizontalSlider_volumn</zorder>
-    <zorder>label_duration_left</zorder>
-    <zorder>label_duration_right</zorder>
+    <zorder>pushButton_Volume</zorder>
+    <zorder>horizontalSlider_volume</zorder>
+    <zorder>timeLabel_left</zorder>
+    <zorder>timeLabel</zorder>
     <zorder>horizontalSlider_song_duration</zorder>
     <zorder>label_filename</zorder>
    </widget>
@@ -401,10 +404,16 @@ border-radius: 10px;</string>
        <font>
         <family>STHeiti</family>
         <pointsize>-1</pointsize>
+        <bold>true</bold>
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">font-size: 20px;</string>
+       <string notr="true">font-size: 20px;
+QLabel {
+    color: white;
+}
+
+</string>
       </property>
       <property name="text">
        <string>Playlist</string>
@@ -630,12 +639,12 @@ border-radius: 10px;</string>
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionAdd_Fiel"/>
+    <addaction name="actionAdd_File"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionAdd_Fiel">
+  <action name="actionAdd_File">
    <property name="text">
     <string>Open Audio File</string>
    </property>
