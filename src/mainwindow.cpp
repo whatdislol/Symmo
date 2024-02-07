@@ -48,6 +48,11 @@ MainWindow::MainWindow(QWidget* parent)
     connect(M_Player, &QMediaPlayer::positionChanged, this, &MainWindow::positionChanged);
 
     ui->horizontalSlider_song_duration->setRange(0, M_Player->duration() / 1000);
+
+    // List Widget
+    for (int i = 0; i < 10; i++) {
+        ui->listWidget_playlist->addItem("Item-" + QString::number(i));
+    }
 }
 
 MainWindow::~MainWindow()
@@ -59,15 +64,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::durationChanged(qint64 duration)
 {
-	Mduration = duration / 1000;
+    Mduration = duration / 1000;
     ui->horizontalSlider_song_duration->setMaximum(Mduration);
 }
 
 void MainWindow::positionChanged(qint64 progress)
 {
     if (!ui->horizontalSlider_song_duration->isSliderDown()) {
-		ui->horizontalSlider_song_duration->setValue(progress / 1000);
-	}
+        ui->horizontalSlider_song_duration->setValue(progress / 1000);
+    }
     updateDuration(progress / 1000);
 }
 
@@ -79,8 +84,8 @@ void MainWindow::updateDuration(qint64 duration)
         QTime totalTime((Mduration / 3600) % 60, (Mduration / 60) % 60, Mduration % 60, (Mduration * 1000) % 1000);
         QString format = "mm:ss";
         if (Mduration > 3600) {
-			format = "hh:mm:ss";
-		}
+            format = "hh:mm:ss";
+        }
         ui->timeLabel_left->setText(currentTime.toString(format));
         ui->timeLabel->setText(totalTime.toString(format));
     }
@@ -149,4 +154,10 @@ void MainWindow::on_horizontalSlider_volume_sliderMoved(int value)
     else {
         ui->pushButton_Volume->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
     }
+}
+
+void MainWindow::on_pushButton_AddPlaylist_clicked()
+{
+    playlist_adder = new PlaylistAdder;
+    playlist_adder->show();
 }

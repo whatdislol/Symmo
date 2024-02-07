@@ -8,6 +8,8 @@
 #include <QFileDialog>
 #include <QStyle>
 #include <QAudioOutput>
+#include <QListWidget>
+#include "playlistadder.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -38,6 +40,8 @@ private slots:
 
     void on_horizontalSlider_volume_sliderMoved(int value);
 
+    void on_pushButton_AddPlaylist_clicked();
+
 private:
     Ui::MainWindow* ui;
     bool is_muted = false;
@@ -46,5 +50,6 @@ private:
     QAudioOutput* audio_output;
     qint64 Mduration;
     void updateDuration(qint64 duration);
+    PlaylistAdder* playlist_adder;
 };
 #endif // MAINWINDOW_H
