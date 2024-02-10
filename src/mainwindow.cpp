@@ -19,54 +19,54 @@ MainWindow::MainWindow(QWidget* parent)
     QSize actualSize = playIcon.actualSize(QSize(iconSize, iconSize));
 
     // set size for button
-    ui->pushButton_Play->setIcon(playIcon);
-    ui->pushButton_Play->setIconSize(actualSize);
+    ui->toggleButton_PlayPause->setIcon(playIcon);
+    ui->toggleButton_PlayPause->setIconSize(actualSize);
     ui->pushButton_Skip->setIcon(skipIcon);
     ui->pushButton_Skip->setIconSize(actualSize);
     ui->pushButton_Back->setIcon(backIcon);
     ui->pushButton_Back->setIconSize(actualSize);
-    ui->pushButton_Volume->setIcon(volumeIcon);
-    ui->pushButton_Volume->setIconSize(actualSize);
+    ui->toggleButton_Mute->setIcon(volumeIcon);
+    ui->toggleButton_Mute->setIconSize(actualSize);
 
     this->M_Player = new QMediaPlayer();
-    this->audio_output = new QAudioOutput();
+    this->audio_Output = new QAudioOutput();
 
-    M_Player->setAudioOutput(audio_output);
-    Mduration = M_Player->duration() / 1000;
+    M_Player->setAudioOutput(audio_Output);
+    M_Duration = M_Player->duration() / 1000;
 
     //default volume
-    ui->horizontalSlider_volume->setMinimum(0);
-    ui->horizontalSlider_volume->setMaximum(100);
-    ui->horizontalSlider_volume->setValue(50);
-    audio_output->setVolume(0.5);
+    ui->slider_SongVolume->setMinimum(0);
+    ui->slider_SongVolume->setMaximum(100);
+    ui->slider_SongVolume->setValue(50);
+    audio_Output->setVolume(0.5);
 
     // Connect volume to slider
-    connect(ui->horizontalSlider_volume, &QSlider::sliderMoved, this, &MainWindow::on_horizontalSlider_volume_sliderMoved);
+    connect(ui->slider_SongVolume, &QSlider::sliderMoved, this, &MainWindow::on_horizontalSlider_SongVolume_sliderMoved);
 
     // Duration slider
     connect(M_Player, &QMediaPlayer::durationChanged, this, &MainWindow::durationChanged);
     connect(M_Player, &QMediaPlayer::positionChanged, this, &MainWindow::positionChanged);
 
-    ui->horizontalSlider_song_duration->setRange(0, M_Player->duration() / 1000);
+    ui->slider_SongProgress->setRange(0, M_Player->duration() / 1000);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     delete M_Player;
-    delete audio_output;
+    delete audio_Output;
 }
 
 void MainWindow::durationChanged(qint64 duration)
 {
-	Mduration = duration / 1000;
-    ui->horizontalSlider_song_duration->setMaximum(Mduration);
+	M_Duration = duration / 1000;
+    ui->slider_SongProgress->setMaximum(M_Duration);
 }
 
 void MainWindow::positionChanged(qint64 progress)
 {
-    if (!ui->horizontalSlider_song_duration->isSliderDown()) {
-		ui->horizontalSlider_song_duration->setValue(progress / 1000);
+    if (!ui->slider_SongProgress->isSliderDown()) {
+		ui->slider_SongProgress->setValue(progress / 1000);
 	}
     updateDuration(progress / 1000);
 }
@@ -74,43 +74,43 @@ void MainWindow::positionChanged(qint64 progress)
 void MainWindow::updateDuration(qint64 duration)
 {
     QString timestr;
-    if (duration || Mduration) {
+    if (duration || M_Duration) {
         QTime currentTime((duration / 3600) % 60, (duration / 60) % 60, duration % 60, (duration * 1000) % 1000);
-        QTime totalTime((Mduration / 3600) % 60, (Mduration / 60) % 60, Mduration % 60, (Mduration * 1000) % 1000);
+        QTime totalTime((M_Duration / 3600) % 60, (M_Duration / 60) % 60, M_Duration % 60, (M_Duration * 1000) % 1000);
         QString format = "mm:ss";
-        if (Mduration > 3600) {
+        if (M_Duration > 3600) {
 			format = "hh:mm:ss";
 		}
-        ui->timeLabel_left->setText(currentTime.toString(format));
-        ui->timeLabel->setText(totalTime.toString(format));
+        ui->label_CurrentSongDuration->setText(currentTime.toString(format));
+        ui->label_TotalSongDuration->setText(totalTime.toString(format));
     }
 }
 
 void MainWindow::on_pushButton_Volume_clicked()
 {
-    if (!is_muted) {
-        ui->pushButton_Volume->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
-        audio_output->setMuted(true);  // Mute the audio
-        is_muted = true;
+    if (!isMuted) {
+        ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
+        audio_Output->setMuted(true);  // Mute the audio
+        isMuted = true;
     }
     else {
-        ui->pushButton_Volume->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
-        audio_output->setMuted(false);  // Unmute the audio
-        is_muted = false;
+        ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+        audio_Output->setMuted(false);  // Unmute the audio
+        isMuted = false;
     }
 }
 
 void MainWindow::on_pushButton_Play_clicked()
 {
-    if (!is_paused) {
-        ui->pushButton_Play->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+    if (!isPaused) {
+        ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
         M_Player->play();
-        is_paused = true;
+        isPaused = true;
     }
     else {
-        ui->pushButton_Play->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+        ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
         M_Player->pause();
-        is_paused = false;
+        isPaused = false;
     }
 }
 
@@ -125,7 +125,7 @@ void MainWindow::on_actionAdd_File_triggered()
         if (M_Player->mediaStatus() != QMediaPlayer::NoMedia) {
             // Media loaded successfully
             QFileInfo fileInfo(file_name);
-            ui->label_filename->setText(fileInfo.fileName());
+            ui->label_fileName->setText(fileInfo.fileName());
         }
         else {
             // Handle error loading media
@@ -134,19 +134,39 @@ void MainWindow::on_actionAdd_File_triggered()
     }
 }
 
-void MainWindow::on_horizontalSlider_song_duration_sliderMoved(int value)
+void MainWindow::on_horizontalSlider_SongProgress_sliderMoved(int value)
 {
     M_Player->setPosition(static_cast<qint64>(value) * 1000);
 }
 
-void MainWindow::on_horizontalSlider_volume_sliderMoved(int value)
+void MainWindow::on_horizontalSlider_SongVolume_sliderMoved(int value)
 {
-    audio_output->setVolume(value / 100.0);
+    audio_Output->setVolume(value / 100.0);
 
     if (value == 0) {
-        ui->pushButton_Volume->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
+        ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
     }
     else {
-        ui->pushButton_Volume->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+        ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
     }
 }
+
+void MainWindow::on_pushButton_AddPlaylist_clicked()
+{
+    // Open a dialog to get the name of the new item from the user
+    QString newItemText = QInputDialog::getText(this, tr("Add Playlist"), tr("Enter the name of the new playlist:"));
+
+    // Handle Error
+    if (!newItemText.isEmpty()) {
+        // Create a new item with the text entered by the user
+        QListWidgetItem* newItem = new QListWidgetItem(newItemText);
+
+        // Add item to playlist
+        ui->listWidget_Playlist->addItem(newItem);
+    }
+}
+void MainWindow::on_pushButton_RemovePlaylist_clicked()
+{
+
+}
+

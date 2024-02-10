@@ -8,6 +8,8 @@
 #include <QFileDialog>
 #include <QStyle>
 #include <QAudioOutput>
+#include <QListWidget>
+#include <QInputDialog>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -34,17 +36,22 @@ private slots:
 
     void on_actionAdd_File_triggered();
 
-    void on_horizontalSlider_song_duration_sliderMoved(int value);
+    void on_horizontalSlider_SongProgress_sliderMoved(int value);
 
-    void on_horizontalSlider_volume_sliderMoved(int value);
+    void on_horizontalSlider_SongVolume_sliderMoved(int value);
+
+    void on_pushButton_AddPlaylist_clicked();
+
+    void on_pushButton_RemovePlaylist_clicked();
 
 private:
     Ui::MainWindow* ui;
-    bool is_muted = false;
-    bool is_paused = false;
+    bool isMuted = false;
+    bool isPaused = false;
     QMediaPlayer* M_Player;
-    QAudioOutput* audio_output;
-    qint64 Mduration;
+    QAudioOutput* audio_Output;
+    qint64 M_Duration;
     void updateDuration(qint64 duration);
+    QListWidgetItem* item_Song;
 };
 #endif // MAINWINDOW_H
