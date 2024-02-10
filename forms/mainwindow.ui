@@ -607,13 +607,13 @@ border-radius: 10px;</string>
       <enum>QFrame::Raised</enum>
      </property>
     </widget>
-    <widget class="QFrame" name="frame_PlaylistAndSongStats">
+    <widget class="QFrame" name="frame_InfoAndStats">
      <property name="geometry">
       <rect>
        <x>900</x>
        <y>100</y>
        <width>261</width>
-       <height>441</height>
+       <height>241</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -626,45 +626,12 @@ border-radius: 10px;</string>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QPushButton" name="pushButton_AddSong">
+     <widget class="QLabel" name="label_PlaylistName">
       <property name="geometry">
        <rect>
-        <x>170</x>
-        <y>10</y>
-        <width>40</width>
-        <height>40</height>
-       </rect>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>40</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-    border: none;
-    border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-    background-color: #86B6F6;
-    color: rgb(52, 51, 64);
-    min-width: 40px;    /* Adjust the size of the button */
-    max-width: 40px;
-    min-height: 40px;
-    max-height: 40px;
-    padding: 0px;
-}
-</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_3">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>20</y>
-        <width>59</width>
+        <x>20</x>
+        <y>140</y>
+        <width>141</width>
         <height>24</height>
        </rect>
       </property>
@@ -679,7 +646,92 @@ border-radius: 10px;</string>
 color: rgb(255,255,255);</string>
       </property>
       <property name="text">
-       <string>Songs</string>
+       <string>[playlist name]</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_PlaylistImage">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>111</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>[PLAYLIST PIC]</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_TrackQuantity">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>190</y>
+        <width>121</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>[number of songs]</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_Tracks">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>200</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Tracks</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="frame_Ambience">
+     <property name="geometry">
+      <rect>
+       <x>900</x>
+       <y>350</y>
+       <width>261</width>
+       <height>191</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #192655;
+border-radius: 10px;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLabel" name="label_Ambience">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>141</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>STHeiti</family>
+        <pointsize>-1</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font-size: 20px;
+color: rgb(255,255,255);</string>
+      </property>
+      <property name="text">
+       <string>Ambience Mode</string>
       </property>
      </widget>
     </widget>
