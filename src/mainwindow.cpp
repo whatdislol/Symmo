@@ -154,15 +154,15 @@ void MainWindow::on_horizontalSlider_SongVolume_sliderMoved(int value)
 void MainWindow::on_pushButton_AddPlaylist_clicked()
 {
     // Open a dialog to get the name of the new item from the user
-    QString newItemText = QInputDialog::getText(this, tr("Add Playlist"), tr("Enter the name of the new playlist:"));
+    QString newPlaylistName = QInputDialog::getText(this, tr("Add Playlist"), tr("Enter the name of the new playlist:"));
 
     // Handle Error
-    if (!newItemText.isEmpty()) {
+    if (!newPlaylistName.isEmpty()) {
         // Create a new item with the text entered by the user
-        QListWidgetItem* newItem = new QListWidgetItem(newItemText);
+        QListWidgetItem* newPlaylist = new QListWidgetItem(newPlaylistName);
 
         // Add item to playlist
-        ui->listWidget_Playlist->addItem(newItem);
+        ui->listWidget_Playlist->addItem(newPlaylist);
     }
 }
 void MainWindow::on_pushButton_RemovePlaylist_clicked()

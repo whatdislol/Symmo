@@ -52,6 +52,6 @@ private:
     QAudioOutput* audio_Output;
     qint64 M_Duration;
     void updateDuration(qint64 duration);
-    QListWidgetItem* item_Song;
+    //QListWidgetItem* item_Song;
 };
 #endif // MAINWINDOW_H
