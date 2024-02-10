@@ -167,6 +167,11 @@ void MainWindow::on_pushButton_AddPlaylist_clicked()
 }
 void MainWindow::on_pushButton_RemovePlaylist_clicked()
 {
+	// Get the currently selected item
+	QListWidgetItem* item = ui->listWidget_Playlist->currentItem();
+
+	// Remove the item from the list
+	delete item;
 
 }
 
