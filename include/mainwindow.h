@@ -1,15 +1,12 @@
+// mainwindow.h
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QtCore>
-#include <QtWidgets>
-#include <QtMultimedia>
 #include <QFileDialog>
 #include <QStyle>
-#include <QAudioOutput>
-#include <QListWidget>
-#include <QInputDialog>
+#include <QSlider>
 #include "audiocontrol.h"
 
 QT_BEGIN_NAMESPACE
@@ -27,28 +24,18 @@ public:
     ~MainWindow();
 
 private slots:
-    /*
     void durationChanged(qint64 duration);
     void positionChanged(qint64 progress);
     void on_pushButton_Volume_clicked();
-    void on_pushButton_Play_clicked();*/
-    void on_actionAdd_File_triggered();/*
-    void on_horizontalSlider_SongProgress_sliderMoved(int value);
-    void on_horizontalSlider_SongVolume_sliderMoved(int value);
-    */
-    void on_pushButton_AddPlaylist_clicked();
-    void on_pushButton_RemovePlaylist_clicked();
+    void on_pushButton_Play_clicked();
+    void on_actionAdd_File_triggered();
+    void on_horizontalSlider_song_duration_sliderMoved(int value);
+    void on_horizontalSlider_volume_sliderMoved(int value);
+    void updateIcons(); // Added slot to update icons
 
 private:
     Ui::MainWindow* ui;
-    AudioControl* audioControl;
-    /*
-    bool isMuted = false;
-    bool isPaused = false;
-    QMediaPlayer* M_Player;
-    QAudioOutput* audio_Output;
-    qint64 M_Duration;
-    void updateDuration(qint64 duration);
-    */
+    AudioControl* m_audioControl;
 };
+
 #endif // MAINWINDOW_H

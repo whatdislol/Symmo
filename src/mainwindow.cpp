@@ -1,185 +1,88 @@
+// mainwindow.cpp
+
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include <QIcon>
 
-MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget* parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow),
+    m_audioControl(new AudioControl(this))
 {
     ui->setupUi(this);
 
-    audioControl = new AudioControl(this, ui, style());
-    /*
-    int iconSize = 25;
+    // Connect UI signals to playback controller slots
+    connect(ui->slider_SongVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setVolume);
+    connect(ui->toggleButton_PlayPause, &QPushButton::clicked, m_audioControl, &AudioControl::togglePlayPause);
+    connect(ui->actionAdd_File, &QAction::triggered, this, &MainWindow::on_actionAdd_File_triggered);
+    connect(ui->slider_SongProgress, &QSlider::sliderMoved, m_audioControl, &AudioControl::setPosition);
 
-    QIcon playIcon = style()->standardIcon(QStyle::SP_MediaPlay);
-    QIcon skipIcon = style()->standardIcon(QStyle::SP_MediaSeekForward);
-    QIcon backIcon = style()->standardIcon(QStyle::SP_MediaSeekBackward);
-    QIcon volumeIcon = style()->standardIcon((QStyle::SP_MediaVolume));
+    // Connect playback controller signals to update UI
+    connect(m_audioControl, &AudioControl::durationChanged, this, &MainWindow::durationChanged);
+    connect(m_audioControl, &AudioControl::positionChanged, this, &MainWindow::positionChanged);
 
-    // Get the actual size of the icon without scaling
-    QSize actualSize = playIcon.actualSize(QSize(iconSize, iconSize));
+    // Connect playback controller signal to update icons
+    connect(m_audioControl, &AudioControl::positionChanged, this, &MainWindow::updateIcons);
+    connect(m_audioControl, &AudioControl::togglePlayPause, this, &MainWindow::updateIcons);
+    connect(m_audioControl, &AudioControl::toggleMute, this, &MainWindow::updateIcons);
 
-    // set size for button
-    ui->toggleButton_PlayPause->setIcon(playIcon);
-    ui->toggleButton_PlayPause->setIconSize(actualSize);
-    ui->pushButton_Skip->setIcon(skipIcon);
-    ui->pushButton_Skip->setIconSize(actualSize);
-    ui->pushButton_Back->setIcon(backIcon);
-    ui->pushButton_Back->setIconSize(actualSize);
-    ui->toggleButton_Mute->setIcon(volumeIcon);
-    ui->toggleButton_Mute->setIconSize(actualSize);
-
-    this->M_Player = new QMediaPlayer();
-    this->audio_Output = new QAudioOutput();
-
-    M_Player->setAudioOutput(audio_Output);
-    M_Duration = M_Player->duration() / 1000;
-
-    //default volume
-    ui->slider_SongVolume->setMinimum(0);
-    ui->slider_SongVolume->setMaximum(100);
-    ui->slider_SongVolume->setValue(50);
-    audio_Output->setVolume(0.5);
-
-    // Connect volume to slider
-    connect(ui->slider_SongVolume, &QSlider::sliderMoved, this, &MainWindow::on_horizontalSlider_SongVolume_sliderMoved);
-
-    // Duration slider
-    connect(M_Player, &QMediaPlayer::durationChanged, this, &MainWindow::durationChanged);
-    connect(M_Player, &QMediaPlayer::positionChanged, this, &MainWindow::positionChanged);
-
-    ui->slider_SongProgress->setRange(0, M_Player->duration() / 1000);
-    */
+    // Initial setup of icons
+    updateIcons();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete audioControl;
-    /*
-    delete M_Player;
-    delete audio_Output;
-    */
+    delete m_audioControl;
 }
-/*
+
 void MainWindow::durationChanged(qint64 duration)
 {
-	M_Duration = duration / 1000;
-    ui->slider_SongProgress->setMaximum(M_Duration);
+    ui->slider_SongProgress->setMaximum(duration / 1000);
 }
 
 void MainWindow::positionChanged(qint64 progress)
 {
     if (!ui->slider_SongProgress->isSliderDown()) {
-		ui->slider_SongProgress->setValue(progress / 1000);
-	}
-    updateDuration(progress / 1000);
-}
-
-void MainWindow::updateDuration(qint64 duration)
-{
-    QString timestr;
-    if (duration || M_Duration) {
-        QTime currentTime((duration / 3600) % 60, (duration / 60) % 60, duration % 60, (duration * 1000) % 1000);
-        QTime totalTime((M_Duration / 3600) % 60, (M_Duration / 60) % 60, M_Duration % 60, (M_Duration * 1000) % 1000);
-        QString format = "mm:ss";
-        if (M_Duration > 3600) {
-			format = "hh:mm:ss";
-		}
-        ui->label_CurrentSongDuration->setText(currentTime.toString(format));
-        ui->label_TotalSongDuration->setText(totalTime.toString(format));
+        ui->slider_SongProgress->setValue(progress / 1000);
     }
 }
-
-void MainWindow::on_pushButton_Volume_clicked()
-{
-    if (!isMuted) {
-        ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
-        audio_Output->setMuted(true);  // Mute the audio
-        isMuted = true;
-    }
-    else {
-        ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
-        audio_Output->setMuted(false);  // Unmute the audio
-        isMuted = false;
-    }
-}
-
-void MainWindow::on_pushButton_Play_clicked()
-{
-    if (!isPaused) {
-        ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-        M_Player->play();
-        isPaused = true;
-    }
-    else {
-        ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-        M_Player->pause();
-        isPaused = false;
-    }
-}*/
-
 
 void MainWindow::on_actionAdd_File_triggered()
 {
     QString file_name = QFileDialog::getOpenFileName(this, "Open a file", "", "Audio File (*.mp3)");
-    QMediaPlayer* M_Player = new QMediaPlayer();
 
     if (!file_name.isEmpty()) {
-        M_Player->setSource(QUrl::fromLocalFile(file_name));
-
-        if (M_Player->mediaStatus() != QMediaPlayer::NoMedia) {
-            // Media loaded successfully
-            QFileInfo fileInfo(file_name);
-            ui->label_fileName->setText(fileInfo.fileName());
-        }
-        else {
-            // Handle error loading media
-            qDebug() << "Error loading media file:" << M_Player->errorString();
-        }
-    }
-    audioControl->setMediaPlayer(M_Player);
-}
-/*
-void MainWindow::on_horizontalSlider_SongProgress_sliderMoved(int value)
-{
-    M_Player->setPosition(static_cast<qint64>(value) * 1000);
-}
-
-void MainWindow::on_horizontalSlider_SongVolume_sliderMoved(int value)
-{
-    audio_Output->setVolume(value / 100.0);
-
-    if (value == 0) {
-        ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolumeMuted));
-    }
-    else {
-        ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
-    }
-}*/
-
-void MainWindow::on_pushButton_AddPlaylist_clicked()
-{
-    // Open a dialog to get the name of the new item from the user
-    QString newPlaylistName = QInputDialog::getText(this, tr("Add Playlist"), tr("Enter the name of the new playlist:"));
-
-    // Handle Error
-    if (!newPlaylistName.isEmpty()) {
-        // Create a new item with the text entered by the user
-        QListWidgetItem* newPlaylist = new QListWidgetItem(newPlaylistName);
-
-        // Add item to playlist
-        ui->listWidget_Playlist->addItem(newPlaylist);
+        m_audioControl->loadMedia(QUrl::fromLocalFile(file_name));
     }
 }
-void MainWindow::on_pushButton_RemovePlaylist_clicked()
+
+void MainWindow::on_horizontalSlider_volume_sliderMoved(int value)
 {
-	// Get the currently selected item
-	QListWidgetItem* item = ui->listWidget_Playlist->currentItem();
-
-	// Remove the item from the list
-	delete item;
-
+    m_audioControl->setVolume(value);
 }
 
+void MainWindow::on_horizontalSlider_song_duration_sliderMoved(int value)
+{
+    m_audioControl->setPosition(value * 1000);
+}
+
+void MainWindow::on_pushButton_Volume_clicked()
+{
+    m_audioControl->toggleMute();
+}
+
+void MainWindow::on_pushButton_Play_clicked()
+{
+    m_audioControl->togglePlayPause();
+}
+
+void MainWindow::updateIcons()
+{
+    // Update play/pause button icon
+    QIcon playPauseIcon = m_audioControl->isPaused() ? style()->standardIcon(QStyle::SP_MediaPlay) : style()->standardIcon(QStyle::SP_MediaPause);
+    ui->toggleButton_PlayPause->setIcon(playPauseIcon);
+
+    // Update volume button icon
+    QIcon volumeIcon = m_audioControl->isMuted() ? style()->standardIcon(QStyle::SP_MediaVolumeMuted) : style()->standardIcon(QStyle::SP_MediaVolume);
+    ui->toggleButton_PlayPause->setIcon(volumeIcon);
+}

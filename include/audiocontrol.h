@@ -1,44 +1,39 @@
-#ifndef AUDIOCONTROLS_H
-#define AUDIOCONTROLS_H
+// audiocontrol.h
+
+#ifndef AUDIOCONTROL_H
+#define AUDIOCONTROL_H
 
 #include <QObject>
-#include <QtCore>
-#include <QtWidgets>
-#include <QtMultimedia>
-#include <QStyle>
+#include <QMediaPlayer>
 #include <QAudioOutput>
-#include "mainwindow.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-    class MainWindow;
-}
-QT_END_NAMESPACE
-
-class AudioControl : public QObject {
+class AudioControl : public QObject
+{
     Q_OBJECT
 public:
-    AudioControl(QWidget* parent, Ui::MainWindow* ui, QStyle* style);
+    explicit AudioControl(QObject* parent = nullptr);
     ~AudioControl();
-    void setMediaPlayer(QMediaPlayer* player);
 
-private slots:
+    void setVolume(int volume);
+    void toggleMute();
+    void togglePlayPause();
+    void loadMedia(const QUrl& url);
+    qint64 duration() const;
+    qint64 position() const;
+    void setPosition(qint64 position);
+
+    bool isMuted() const { return m_isMuted; }
+    bool isPaused() const { return m_isPaused; }
+
+signals:
     void durationChanged(qint64 duration);
     void positionChanged(qint64 progress);
-    void on_pushButton_Play_clicked();
-    void on_pushButton_Volume_clicked();
-    void on_horizontalSlider_SongProgress_sliderMoved(int value);
-    void on_horizontalSlider_SongVolume_sliderMoved(int value);
 
 private:
-    Ui::MainWindow* ui;
-    QStyle* style;
-    bool isMuted = false;
-    bool isPaused = false;
-    QMediaPlayer* M_Player;
-    QAudioOutput* audio_Output;
-    qint64 M_Duration;
-    void updateDuration(qint64 duration);
+    QMediaPlayer* m_player;
+    QAudioOutput* m_audioOutput;
+    bool m_isMuted;
+    bool m_isPaused;
 };
 
-#endif // AUDIOCONTROLS_H
+#endif // AUDIOCONTROL_H
