@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget* parent)
 {
     ui->setupUi(this);
 
+    audioControl = new AudioControl(this, ui, style());
+    /*
     int iconSize = 25;
 
     QIcon playIcon = style()->standardIcon(QStyle::SP_MediaPlay);
@@ -48,15 +50,19 @@ MainWindow::MainWindow(QWidget* parent)
     connect(M_Player, &QMediaPlayer::positionChanged, this, &MainWindow::positionChanged);
 
     ui->slider_SongProgress->setRange(0, M_Player->duration() / 1000);
+    */
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete audioControl;
+    /*
     delete M_Player;
     delete audio_Output;
+    */
 }
-
+/*
 void MainWindow::durationChanged(qint64 duration)
 {
 	M_Duration = duration / 1000;
@@ -112,12 +118,13 @@ void MainWindow::on_pushButton_Play_clicked()
         M_Player->pause();
         isPaused = false;
     }
-}
+}*/
 
 
 void MainWindow::on_actionAdd_File_triggered()
 {
     QString file_name = QFileDialog::getOpenFileName(this, "Open a file", "", "Audio File (*.mp3)");
+    QMediaPlayer* M_Player = new QMediaPlayer();
 
     if (!file_name.isEmpty()) {
         M_Player->setSource(QUrl::fromLocalFile(file_name));
@@ -132,8 +139,9 @@ void MainWindow::on_actionAdd_File_triggered()
             qDebug() << "Error loading media file:" << M_Player->errorString();
         }
     }
+    audioControl->setMediaPlayer(M_Player);
 }
-
+/*
 void MainWindow::on_horizontalSlider_SongProgress_sliderMoved(int value)
 {
     M_Player->setPosition(static_cast<qint64>(value) * 1000);
@@ -149,7 +157,7 @@ void MainWindow::on_horizontalSlider_SongVolume_sliderMoved(int value)
     else {
         ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
     }
-}
+}*/
 
 void MainWindow::on_pushButton_AddPlaylist_clicked()
 {

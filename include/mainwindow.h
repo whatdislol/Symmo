@@ -10,6 +10,7 @@
 #include <QAudioOutput>
 #include <QListWidget>
 #include <QInputDialog>
+#include "audiocontrol.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,32 +27,28 @@ public:
     ~MainWindow();
 
 private slots:
+    /*
     void durationChanged(qint64 duration);
-
     void positionChanged(qint64 progress);
-
     void on_pushButton_Volume_clicked();
-
-    void on_pushButton_Play_clicked();
-
-    void on_actionAdd_File_triggered();
-
+    void on_pushButton_Play_clicked();*/
+    void on_actionAdd_File_triggered();/*
     void on_horizontalSlider_SongProgress_sliderMoved(int value);
-
     void on_horizontalSlider_SongVolume_sliderMoved(int value);
-
+    */
     void on_pushButton_AddPlaylist_clicked();
-
     void on_pushButton_RemovePlaylist_clicked();
 
 private:
     Ui::MainWindow* ui;
+    AudioControl* audioControl;
+    /*
     bool isMuted = false;
     bool isPaused = false;
     QMediaPlayer* M_Player;
     QAudioOutput* audio_Output;
     qint64 M_Duration;
     void updateDuration(qint64 duration);
-    //QListWidgetItem* item_Song;
+    */
 };
 #endif // MAINWINDOW_H
