@@ -20,7 +20,7 @@ public:
     void loadMedia(const QUrl& url);
     qint64 duration() const;
     qint64 position() const;
-    void setPosition(qint64 position);
+    void setPosition(int position);
 
     bool isMuted() const { return m_isMuted; }
     bool isPaused() const { return m_isPaused; }

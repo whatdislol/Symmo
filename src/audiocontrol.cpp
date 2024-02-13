@@ -56,7 +56,7 @@ qint64 AudioControl::position() const
     return m_player->position();
 }
 
-void AudioControl::setPosition(qint64 position)
+void AudioControl::setPosition(int position)
 {
-    m_player->setPosition(position);
+    m_player->setPosition(static_cast<qint64>(position) * 1000);
 }
