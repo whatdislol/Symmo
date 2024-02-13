@@ -84,5 +84,5 @@ void MainWindow::updateIcons()
 
     // Update volume button icon
     QIcon volumeIcon = m_audioControl->isMuted() ? style()->standardIcon(QStyle::SP_MediaVolumeMuted) : style()->standardIcon(QStyle::SP_MediaVolume);
-    ui->toggleButton_PlayPause->setIcon(volumeIcon);
+    ui->toggleButton_Mute->setIcon(volumeIcon);
 }
