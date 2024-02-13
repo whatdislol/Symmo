@@ -21,9 +21,8 @@ public:
     qint64 duration() const;
     qint64 position() const;
     void setPosition(int position);
-
-    bool isMuted() const { return m_isMuted; }
-    bool isPaused() const { return m_isPaused; }
+    bool isMuted() const;
+    bool isPaused() const;
 
 signals:
     void durationChanged(qint64 duration);

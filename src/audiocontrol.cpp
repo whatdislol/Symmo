@@ -60,3 +60,13 @@ void AudioControl::setPosition(int position)
 {
     m_player->setPosition(static_cast<qint64>(position) * 1000);
 }
+
+bool AudioControl::isMuted() const
+{
+	return m_isMuted;
+}
+
+bool AudioControl::isPaused() const
+{
+	return m_isPaused;
+}
