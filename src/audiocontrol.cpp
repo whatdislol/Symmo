@@ -70,3 +70,8 @@ bool AudioControl::isPaused() const
 {
 	return m_isPaused;
 }
+
+QMediaPlayer* AudioControl::getMediaPlayer() const
+{
+	return m_player;
+}

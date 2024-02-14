@@ -50,9 +50,22 @@ void MainWindow::positionChanged(qint64 progress)
 void MainWindow::on_actionAdd_File_triggered()
 {
     QString file_name = QFileDialog::getOpenFileName(this, "Open a file", "", "Audio File (*.mp3)");
+    QMediaPlayer* M_Player = m_audioControl->getMediaPlayer();
 
     if (!file_name.isEmpty()) {
-        m_audioControl->loadMedia(QUrl::fromLocalFile(file_name));
+        M_Player->setSource(QUrl::fromLocalFile(file_name));
+
+        if (M_Player->mediaStatus() != QMediaPlayer::NoMedia) {
+            // Media loaded successfully
+            QFileInfo fileInfo(file_name);
+            QString fileNameWithoutExtension = fileInfo.fileName();
+            fileNameWithoutExtension = fileNameWithoutExtension.left(fileNameWithoutExtension.lastIndexOf('.')); // Remove the file extension
+            ui->label_fileName->setText(fileNameWithoutExtension);
+        }
+        else {
+            // Handle error loading media
+            qDebug() << "Error loading media file:" << M_Player->errorString();
+        }
     }
 }
 

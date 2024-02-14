@@ -23,6 +23,7 @@ public:
     void setPosition(int position);
     bool isMuted() const;
     bool isPaused() const;
+    QMediaPlayer* getMediaPlayer() const;
 
 signals:
     void durationChanged(qint64 duration);
