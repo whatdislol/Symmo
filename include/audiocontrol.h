@@ -24,6 +24,8 @@ public:
     bool isMuted() const;
     bool isPaused() const;
     QMediaPlayer* getMediaPlayer() const;
+    void setTotalDuration(qint64& duration);
+    qint64 getTotalDuration() const;
 
 signals:
     void durationChanged(qint64 duration);
@@ -34,6 +36,7 @@ private:
     QAudioOutput* m_audioOutput;
     bool m_isMuted;
     bool m_isPaused;
+    qint64 m_totalDuration;
 };
 
 #endif // AUDIOCONTROL_H

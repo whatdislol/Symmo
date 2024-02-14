@@ -26,6 +26,8 @@ public:
 private slots:
     void durationChanged(qint64 duration);
     void positionChanged(qint64 progress);
+    void updateDuration(qint64 duration);
+    void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
     void on_pushButton_Volume_clicked();
     void on_pushButton_Play_clicked();
     void on_actionAdd_File_triggered();

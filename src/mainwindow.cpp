@@ -36,13 +36,51 @@ MainWindow::~MainWindow()
 
 void MainWindow::durationChanged(qint64 duration)
 {
-    ui->slider_SongProgress->setMaximum(duration / 1000);
+    qint64 totalDuration = duration / 1000;
+    m_audioControl->setTotalDuration(totalDuration);
+    ui->slider_SongProgress->setMaximum(totalDuration);
 }
 
 void MainWindow::positionChanged(qint64 progress)
 {
     if (!ui->slider_SongProgress->isSliderDown()) {
         ui->slider_SongProgress->setValue(progress / 1000);
+    }
+    updateDuration(progress / 1000);
+}
+
+void MainWindow::updateDuration(qint64 duration)
+{
+    qint64 totalDuration = m_audioControl->getTotalDuration();
+    if (duration || totalDuration) {
+        QTime currentTime((duration / 3600) % 60, (duration / 60) % 60, duration % 60, (duration * 1000) % 1000);
+        QTime totalTime((totalDuration / 3600) % 60, (totalDuration / 60) % 60, totalDuration % 60, (totalDuration * 1000) % 1000);
+        QString format = "mm:ss";
+        if (totalDuration > 3600) {
+            format = "hh:mm:ss";
+        }
+        ui->label_CurrentSongDuration->setText(currentTime.toString(format));
+        ui->label_TotalSongDuration->setText(totalTime.toString(format));
+    }
+}
+
+void MainWindow::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
+{
+    if (status == QMediaPlayer::LoadedMedia) {
+        QMediaPlayer* M_Player = m_audioControl->getMediaPlayer();
+        qint64 totalDuration = M_Player->duration() / 1000;
+
+        if (M_Player->mediaStatus() != QMediaPlayer::NoMedia) {
+            // Media loaded successfully
+            QUrl mediaUrl = M_Player->source();
+            QFileInfo fileInfo(mediaUrl.toLocalFile());
+            QString fileNameWithoutExtension = fileInfo.fileName();
+            fileNameWithoutExtension = fileNameWithoutExtension.left(fileNameWithoutExtension.lastIndexOf('.')); // Remove the file extension
+            ui->label_fileName->setText(fileNameWithoutExtension);
+            m_audioControl->setTotalDuration(totalDuration);
+            updateDuration(0);
+            disconnect(M_Player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::onMediaStatusChanged);
+        }
     }
 }
 
@@ -53,18 +91,7 @@ void MainWindow::on_actionAdd_File_triggered()
 
     if (!file_name.isEmpty()) {
         M_Player->setSource(QUrl::fromLocalFile(file_name));
-
-        if (M_Player->mediaStatus() != QMediaPlayer::NoMedia) {
-            // Media loaded successfully
-            QFileInfo fileInfo(file_name);
-            QString fileNameWithoutExtension = fileInfo.fileName();
-            fileNameWithoutExtension = fileNameWithoutExtension.left(fileNameWithoutExtension.lastIndexOf('.')); // Remove the file extension
-            ui->label_fileName->setText(fileNameWithoutExtension);
-        }
-        else {
-            // Handle error loading media
-            qDebug() << "Error loading media file:" << M_Player->errorString();
-        }
+        connect(M_Player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::onMediaStatusChanged);
     }
 }
 

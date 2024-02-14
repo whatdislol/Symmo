@@ -75,3 +75,13 @@ QMediaPlayer* AudioControl::getMediaPlayer() const
 {
 	return m_player;
 }
+
+void AudioControl::setTotalDuration(qint64& duration)
+{
+	m_totalDuration = duration;
+}
+
+qint64 AudioControl::getTotalDuration() const
+{
+	return m_totalDuration;
+}
