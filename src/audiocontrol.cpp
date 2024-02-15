@@ -33,6 +33,7 @@ void AudioControl::toggleMute()
         m_audioOutput->setMuted(true);
     }
     m_isMuted = !m_isMuted;
+    emit muteStateChanged(m_isMuted);
 }
 
 void AudioControl::togglePlayPause()
@@ -44,6 +45,7 @@ void AudioControl::togglePlayPause()
         m_player->pause();
     }
     m_isPaused = !m_isPaused;
+    emit playPauseStateChanged(m_isPaused);
 }
 
 void AudioControl::loadMedia(const QUrl& url)

@@ -28,12 +28,10 @@ private slots:
     void positionChanged(qint64 progress);
     void updateDuration(qint64 duration);
     void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
-    void on_pushButton_Volume_clicked();
-    void on_pushButton_Play_clicked();
+    void updateMuteIcon(bool isMuted);
+    void updatePlayPauseIcon(bool isPaused);
     void on_actionAdd_File_triggered();
-    void on_horizontalSlider_song_duration_sliderMoved(int value);
-    void on_horizontalSlider_volume_sliderMoved(int value);
-    void updateIcons(); // Added slot to update icons
+    void setupIcons();
 
 private:
     Ui::MainWindow* ui;

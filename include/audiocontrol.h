@@ -30,6 +30,8 @@ public:
 signals:
     void durationChanged(qint64 duration);
     void positionChanged(qint64 progress);
+    void muteStateChanged(bool m_isMuted);
+    void playPauseStateChanged(bool m_isPaused);
 
 private:
     QMediaPlayer* m_player;
