@@ -19,10 +19,16 @@ public:
     void addPlaylist();
     void viewAllSongs();
     void selectSongs(QListWidgetItem* song);
-    int getPlaylistSize(const QString& folderPath);
+    int getTotalSongsCount();
     void toNextSong();
     void toPreviousSong();
     void skipOnSongEnd();
+
+signals:
+    void clearSongList();
+    void addSongToPlaylist(const QListWidgetItem* song);
+    void setPlaylistName(const QString& name);
+    void setTrackQuantity(const int& quantity);
 };
 
 #endif // PLAYLISTMANAGER_H

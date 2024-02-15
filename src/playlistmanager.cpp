@@ -18,14 +18,32 @@ void PlaylistManager::addPlaylist()
 
 void PlaylistManager::viewAllSongs()
 {
+	emit clearSongList();
+    QString directory = "song_library/";
 
+    QStringList musicFilters;
+    musicFilters << "*.mp3" << "*.wav";
+
+    QDir musicDir(directory);
+    QFileInfoList musicFiles = musicDir.entryInfoList(musicFilters, QDir::Files);
+
+    for (const QFileInfo& fileInfo : musicFiles) {
+        // Get the file name without extension
+        QString fileName = fileInfo.fileName();
+        fileName = fileName.left(fileName.lastIndexOf('.')); // Remove the file extension
+
+        QListWidgetItem* musicItem = new QListWidgetItem(fileName);
+        emit addSongToPlaylist(musicItem);
+    }
+    emit setPlaylistName("All Tracks");
+    emit setTrackQuantity(getTotalSongsCount()); // Set Track Quantity
 }
 
 void PlaylistManager::selectSongs(QListWidgetItem* song)
 {
 }
 
-int PlaylistManager::getPlaylistSize(const QString& folderPath)
+int PlaylistManager::getTotalSongsCount()
 {
 	return 0;
 }
