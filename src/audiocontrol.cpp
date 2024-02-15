@@ -2,11 +2,13 @@
 
 #include "audiocontrol.h"
 
-AudioControl::AudioControl(QObject* parent) : QObject(parent),
-m_player(new QMediaPlayer(this)),
-m_audioOutput(new QAudioOutput(this)),
-m_isMuted(false),
-m_isPaused(true)
+AudioControl::AudioControl(QObject* parent) 
+    : QObject(parent),
+    m_player(new QMediaPlayer(this)),
+    m_audioOutput(new QAudioOutput(this)),
+    m_isMuted(false),
+    m_isPaused(true),
+    m_totalDuration(0)
 {
     m_player->setAudioOutput(m_audioOutput);
     connect(m_player, &QMediaPlayer::durationChanged, this, &AudioControl::durationChanged);
