@@ -26,8 +26,13 @@ void AudioControl::setVolume(int volume)
 
 void AudioControl::toggleMute()
 {
+    if (m_isMuted) {
+        m_audioOutput->setMuted(false);
+    }
+    else {
+        m_audioOutput->setMuted(true);
+    }
     m_isMuted = !m_isMuted;
-    m_audioOutput->setMuted(m_isMuted);
 }
 
 void AudioControl::togglePlayPause()
