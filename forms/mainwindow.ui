@@ -17,7 +17,7 @@
    <string notr="true">background-color: white;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="frame">
+   <widget class="QFrame" name="frame_AudioControl">
     <property name="geometry">
      <rect>
       <x>-10</x>
@@ -36,7 +36,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QPushButton" name="pushButton_Play">
+    <widget class="QPushButton" name="toggleButton_PlayPause">
      <property name="geometry">
       <rect>
        <x>559</x>
@@ -201,7 +201,7 @@
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_Volume">
+    <widget class="QPushButton" name="toggleButton_Mute">
      <property name="geometry">
       <rect>
        <x>930</x>
@@ -234,7 +234,7 @@
       <string/>
      </property>
     </widget>
-    <widget class="QSlider" name="horizontalSlider_volume">
+    <widget class="QSlider" name="slider_SongVolume">
      <property name="geometry">
       <rect>
        <x>980</x>
@@ -263,7 +263,7 @@ QSlider::handle:horizontal {
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
-    <widget class="QSlider" name="horizontalSlider_song_duration">
+    <widget class="QSlider" name="slider_SongProgress">
      <property name="geometry">
       <rect>
        <x>350</x>
@@ -289,39 +289,45 @@ QSlider::handle:horizontal {
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="timeLabel_left">
+    <widget class="QLabel" name="label_CurrentSongDuration">
      <property name="geometry">
       <rect>
-       <x>300</x>
+       <x>290</x>
        <y>80</y>
-       <width>45</width>
+       <width>51</width>
        <height>21</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255,255,255);</string>
+     </property>
      <property name="text">
-      <string>0:00</string>
+      <string>00:00</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="timeLabel">
+    <widget class="QLabel" name="label_TotalSongDuration">
      <property name="geometry">
       <rect>
        <x>807</x>
        <y>80</y>
-       <width>45</width>
+       <width>51</width>
        <height>20</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255,255,255);</string>
+     </property>
      <property name="text">
-      <string>0:00</string>
+      <string>00:00</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="label_filename">
+    <widget class="QLabel" name="label_fileName">
      <property name="geometry">
       <rect>
        <x>90</x>
@@ -335,6 +341,9 @@ QSlider::handle:horizontal {
        <family>STHeiti</family>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255,255,255);</string>
+     </property>
      <property name="text">
       <string>File Name</string>
      </property>
@@ -342,17 +351,17 @@ QSlider::handle:horizontal {
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <zorder>pushButton_Play</zorder>
+    <zorder>toggleButton_PlayPause</zorder>
     <zorder>pushButton_Back</zorder>
     <zorder>pushButton_Skip</zorder>
     <zorder>pushButton_Loop</zorder>
     <zorder>pushButton_Shuffle</zorder>
-    <zorder>pushButton_Volume</zorder>
-    <zorder>horizontalSlider_volume</zorder>
-    <zorder>timeLabel_left</zorder>
-    <zorder>timeLabel</zorder>
-    <zorder>horizontalSlider_song_duration</zorder>
-    <zorder>label_filename</zorder>
+    <zorder>toggleButton_Mute</zorder>
+    <zorder>slider_SongVolume</zorder>
+    <zorder>label_CurrentSongDuration</zorder>
+    <zorder>label_TotalSongDuration</zorder>
+    <zorder>slider_SongProgress</zorder>
+    <zorder>label_fileName</zorder>
    </widget>
    <widget class="QFrame" name="frame_2">
     <property name="geometry">
@@ -372,7 +381,7 @@ QSlider::handle:horizontal {
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QFrame" name="frame_3">
+    <widget class="QFrame" name="frame_Playlist">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -391,10 +400,10 @@ border-radius: 10px;</string>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="label_Playlist">
       <property name="geometry">
        <rect>
-        <x>98</x>
+        <x>40</x>
         <y>20</y>
         <width>71</width>
         <height>24</height>
@@ -409,9 +418,7 @@ border-radius: 10px;</string>
       </property>
       <property name="styleSheet">
        <string notr="true">font-size: 20px;
-QLabel {
-    color: white;
-}
+ color: rgb(255, 255, 255);
 
 </string>
       </property>
@@ -425,7 +432,7 @@ QLabel {
      <widget class="QPushButton" name="pushButton_AddPlaylist">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>160</x>
         <y>10</y>
         <width>40</width>
         <height>40</height>
@@ -453,6 +460,57 @@ QLabel {
       </property>
       <property name="text">
        <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_RemovePlaylist">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>10</y>
+        <width>40</width>
+        <height>40</height>
+       </rect>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>40</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    border: none;
+    border-radius: 20px; /* Adjust the border-radius for a smaller circle */
+    background-color: #86B6F6;
+    color: rgb(52, 51, 64);
+    min-width: 40px;    /* Adjust the size of the button */
+    max-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    padding: 0px;
+}
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="listWidget_Playlist">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>241</width>
+        <height>271</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
       </property>
      </widget>
     </widget>
@@ -509,7 +567,7 @@ border-radius: 10px;</string>
       </property>
      </widget>
     </widget>
-    <widget class="QFrame" name="frame_5">
+    <widget class="QFrame" name="frame_SongList">
      <property name="geometry">
       <rect>
        <x>320</x>
@@ -549,13 +607,13 @@ border-radius: 10px;</string>
       <enum>QFrame::Raised</enum>
      </property>
     </widget>
-    <widget class="QFrame" name="frame_7">
+    <widget class="QFrame" name="frame_InfoAndStats">
      <property name="geometry">
       <rect>
        <x>900</x>
        <y>100</y>
        <width>261</width>
-       <height>441</height>
+       <height>241</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -568,45 +626,12 @@ border-radius: 10px;</string>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QPushButton" name="pushButton_AddSong">
+     <widget class="QLabel" name="label_PlaylistName">
       <property name="geometry">
        <rect>
-        <x>170</x>
-        <y>10</y>
-        <width>40</width>
-        <height>40</height>
-       </rect>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>40</width>
-        <height>40</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-    border: none;
-    border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-    background-color: #86B6F6;
-    color: rgb(52, 51, 64);
-    min-width: 40px;    /* Adjust the size of the button */
-    max-width: 40px;
-    min-height: 40px;
-    max-height: 40px;
-    padding: 0px;
-}
-</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_3">
-      <property name="geometry">
-       <rect>
-        <x>90</x>
-        <y>20</y>
-        <width>59</width>
+        <x>20</x>
+        <y>140</y>
+        <width>141</width>
         <height>24</height>
        </rect>
       </property>
@@ -617,10 +642,96 @@ border-radius: 10px;</string>
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">font-size: 20px;</string>
+       <string notr="true">font-size: 20px;
+color: rgb(255,255,255);</string>
       </property>
       <property name="text">
-       <string>Songs</string>
+       <string>[playlist name]</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_PlaylistImage">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>111</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>[PLAYLIST PIC]</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_TrackQuantity">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>190</y>
+        <width>121</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>[number of songs]</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_Tracks">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>200</y>
+        <width>49</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Tracks</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="frame_Ambience">
+     <property name="geometry">
+      <rect>
+       <x>900</x>
+       <y>350</y>
+       <width>261</width>
+       <height>191</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #192655;
+border-radius: 10px;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLabel" name="label_Ambience">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>141</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>STHeiti</family>
+        <pointsize>-1</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font-size: 20px;
+color: rgb(255,255,255);</string>
+      </property>
+      <property name="text">
+       <string>Ambience Mode</string>
       </property>
      </widget>
     </widget>
@@ -632,7 +743,7 @@ border-radius: 10px;</string>
      <x>0</x>
      <y>0</y>
      <width>1150</width>
-     <height>38</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
