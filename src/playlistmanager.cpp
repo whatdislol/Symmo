@@ -16,14 +16,29 @@ void PlaylistManager::addPlaylist()
 	
 }
 
-QFileInfoList PlaylistManager::getAllSongsDirectory()
+void PlaylistManager::viewAllSongs()
 {
-    //assuming the music library is in the same directory as the executable
-    QString directory = "music_library/";
 
-    QStringList musicFilters;
-    musicFilters << "*.mp3" << "*.wav";
-
-    QDir musicDir(directory);
-    return musicDir.entryInfoList(musicFilters, QDir::Files);
 }
+
+void PlaylistManager::selectSongs(QListWidgetItem* song)
+{
+}
+
+int PlaylistManager::getPlaylistSize(const QString& folderPath)
+{
+	return 0;
+}
+
+void PlaylistManager::toNextSong()
+{
+}
+
+void PlaylistManager::toPreviousSong()
+{
+}
+
+void PlaylistManager::skipOnSongEnd()
+{
+}
+

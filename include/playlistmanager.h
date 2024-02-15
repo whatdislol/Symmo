@@ -7,6 +7,7 @@
 #include <QInputDialog>
 #include <QFileInfoList>
 #include <QDir>
+#include <QListWidgetItem>
 
 class PlaylistManager : public QObject
 {
@@ -16,7 +17,12 @@ public:
     ~PlaylistManager();
 
     void addPlaylist();
-    QFileInfoList getAllSongsDirectory();
+    void viewAllSongs();
+    void selectSongs(QListWidgetItem* song);
+    int getPlaylistSize(const QString& folderPath);
+    void toNextSong();
+    void toPreviousSong();
+    void skipOnSongEnd();
 };
 
 #endif // PLAYLISTMANAGER_H
