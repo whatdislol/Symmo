@@ -1,3 +1,5 @@
+// playlistmanager.cpp
+
 #include "playlistmanager.h"
 
 PlaylistManager::PlaylistManager(QObject* parent) 
@@ -22,7 +24,7 @@ void PlaylistManager::viewAllSongs()
     QString directory = "song_library/";
 
     QStringList musicFilters;
-    musicFilters << "*.mp3" << "*.wav";
+    musicFilters << "*.mp3";
 
     QDir musicDir(directory);
     QFileInfoList musicFiles = musicDir.entryInfoList(musicFilters, QDir::Files);
@@ -54,7 +56,7 @@ void PlaylistManager::selectSong(QListWidgetItem* song, AudioControl* audioContr
 
     QString fileName = song->text();
     fileName = fileName.left(fileName.lastIndexOf('.'));
-    emit onSongImport(fileName);
+    emit onSongStart(fileName);
 }
 
 int PlaylistManager::getTotalSongsCount()
@@ -73,9 +75,3 @@ void PlaylistManager::toPreviousSong()
 void PlaylistManager::skipOnSongEnd()
 {
 }
-
-void PlaylistManager::setSongName(const QString& name)
-{
-
-}
-

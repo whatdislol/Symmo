@@ -8,6 +8,7 @@
 #include <QStyle>
 #include <QSlider>
 #include "audiocontrol.h"
+#include "playlistmanager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -32,10 +33,13 @@ private slots:
     void updatePlayPauseIcon(bool isPaused);
     void on_actionAdd_File_triggered();
     void setupIcons();
+    void onSongStart(const QString& songName);
+    void addSongToPlaylist(QListWidgetItem* song);
 
 private:
     Ui::MainWindow* ui;
     AudioControl* m_audioControl;
+    PlaylistManager* m_playlistManager;
 };
 
 #endif // MAINWINDOW_H

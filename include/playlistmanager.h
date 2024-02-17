@@ -27,10 +27,10 @@ public:
 
 signals:
     void clearSongList();
-    void addSongToPlaylist(const QListWidgetItem* song);
+    void addSongToPlaylist(QListWidgetItem* song);
     void setPlaylistName(const QString& name);
     void setTrackQuantity(const int& quantity);
-    void onSongImport(const QString& songName);
+    void onSongStart(const QString& songName);
 };
 
 #endif // PLAYLISTMANAGER_H
