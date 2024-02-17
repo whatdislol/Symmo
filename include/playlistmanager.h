@@ -20,7 +20,7 @@ public:
     void addPlaylist();
     void viewAllSongs();
     void selectSong(QListWidgetItem* song, AudioControl* audioControl);
-    int getTotalSongsCount();
+    QString getTrackQuantity() const;
     void toNextSong();
     void toPreviousSong();
     void skipOnSongEnd();
@@ -29,8 +29,11 @@ signals:
     void clearSongList();
     void addSongToPlaylist(QListWidgetItem* song);
     void setPlaylistName(const QString& name);
-    void setTrackQuantity(const int& quantity);
+    void setTrackQuantity(const QString& quantity);
     void onSongStart(const QString& songName);
+
+private:
+    QString m_musicLibraryPath = "./music_library/";
 };
 
 #endif // PLAYLISTMANAGER_H

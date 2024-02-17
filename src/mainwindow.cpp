@@ -30,10 +30,10 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_audioControl, &AudioControl::muteStateChanged, this, &MainWindow::updateMuteIcon);
     connect(m_audioControl, &AudioControl::playPauseStateChanged, this, &MainWindow::updatePlayPauseIcon);
     // playlist manager
-    //connect(m_playlistManager, &PlaylistManager::clearSongList, ui->listWidget_SongsInPlaylist, &QListWidget::clear);
+    connect(m_playlistManager, &PlaylistManager::clearSongList, ui->listWidget_SongsInPlaylist, &QListWidget::clear);
     connect(m_playlistManager, &PlaylistManager::addSongToPlaylist, this, &MainWindow::addSongToPlaylist);
-    //connect(m_playlistManager, &PlaylistManager::setPlaylistName, ui->label_PlaylistName, &QLabel::setText);
-    //connect(m_playlistManager, &PlaylistManager::setTrackQuantity, ui->label_TrackQuantity, &QLabel::setText);
+    connect(m_playlistManager, &PlaylistManager::setPlaylistName, ui->label_PlaylistName, &QLabel::setText);
+    connect(m_playlistManager, &PlaylistManager::setTrackQuantity, ui->label_TrackQuantity, &QLabel::setText);
     connect(m_playlistManager, &PlaylistManager::onSongStart, this, &MainWindow::onSongStart);
 
     setupIcons();
