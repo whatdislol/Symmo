@@ -19,9 +19,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->toggleButton_Mute, &QPushButton::clicked, m_audioControl, &AudioControl::toggleMute);
     // playlist manager
     connect(ui->pushButton_ViewAllSongs, &QPushButton::clicked, m_playlistManager, &PlaylistManager::viewAllSongs);
-    connect(ui->listWidget_SongsInPlaylist, &QListWidget::itemClicked, this, [this](QListWidgetItem* item) {
-        m_playlistManager->selectSong(item, m_audioControl);
-        });
+    connect(ui->listWidget_SongsInPlaylist, &QListWidget::itemClicked, this, &MainWindow::loadSelectedSong);
    
     // CONNECT LOGIC SIGNALS TO METHODS
     // audio control
@@ -133,4 +131,11 @@ void MainWindow::onSongStart(const QString& songName)
 void MainWindow::addSongToPlaylist(QListWidgetItem* song)
 {
 	ui->listWidget_SongsInPlaylist->addItem(song);
+}
+
+void MainWindow::loadSelectedSong(QListWidgetItem* song)
+{
+    m_playlistManager->selectSong(song, m_audioControl);
+    QMediaPlayer* M_Player = m_audioControl->getMediaPlayer();
+    connect(M_Player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::onMediaStatusChanged);
 }

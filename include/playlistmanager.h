@@ -33,7 +33,7 @@ signals:
     void onSongStart(const QString& songName);
 
 private:
-    QString m_musicLibraryPath = "./music_library/";
+    QString m_musicLibraryPath = "C:/Users/neung/OneDrive/Desktop/KMITL_Courses/Y1S2/OOP/Project/Symmo/music_library";
 };
 
 #endif // PLAYLISTMANAGER_H

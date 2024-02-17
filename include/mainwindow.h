@@ -35,6 +35,7 @@ private slots:
     void setupIcons();
     void onSongStart(const QString& songName);
     void addSongToPlaylist(QListWidgetItem* song);
+    void loadSelectedSong(QListWidgetItem* song);
 
 private:
     Ui::MainWindow* ui;

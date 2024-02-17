@@ -15,7 +15,6 @@ PlaylistManager::~PlaylistManager()
 
 void PlaylistManager::addPlaylist()
 {
-	
 }
 
 void PlaylistManager::viewAllSongs()
