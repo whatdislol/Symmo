@@ -25,8 +25,8 @@ MainWindow::MainWindow(QWidget* parent) :
    
     // CONNECT LOGIC SIGNALS TO METHODS
     // audio control
-    connect(m_audioControl, &AudioControl::durationChanged, this, &MainWindow::durationChanged);
-    connect(m_audioControl, &AudioControl::positionChanged, this, &MainWindow::positionChanged);
+    connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::durationChanged, this, &MainWindow::durationChanged);
+    connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::positionChanged, this, &MainWindow::positionChanged);
     connect(m_audioControl, &AudioControl::muteStateChanged, this, &MainWindow::updateMuteIcon);
     connect(m_audioControl, &AudioControl::playPauseStateChanged, this, &MainWindow::updatePlayPauseIcon);
     // playlist manager

@@ -11,8 +11,6 @@ AudioControl::AudioControl(QObject* parent)
     m_totalDuration(0)
 {
     m_player->setAudioOutput(m_audioOutput);
-    connect(m_player, &QMediaPlayer::durationChanged, this, &AudioControl::durationChanged);
-    connect(m_player, &QMediaPlayer::positionChanged, this, &AudioControl::positionChanged);
 }
 
 AudioControl::~AudioControl()
