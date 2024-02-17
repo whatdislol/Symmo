@@ -50,34 +50,9 @@ void AudioControl::togglePlayPause()
     emit playPauseStateChanged(m_isPaused);
 }
 
-void AudioControl::loadMedia(const QUrl& url)
-{
-    m_player->setSource(url);
-}
-
-qint64 AudioControl::duration() const
-{
-    return m_player->duration();
-}
-
-qint64 AudioControl::position() const
-{
-    return m_player->position();
-}
-
 void AudioControl::setPosition(int position)
 {
     m_player->setPosition(static_cast<qint64>(position) * 1000);
-}
-
-bool AudioControl::isMuted() const
-{
-	return m_isMuted;
-}
-
-bool AudioControl::isPaused() const
-{
-	return m_isPaused;
 }
 
 QMediaPlayer* AudioControl::getMediaPlayer() const
