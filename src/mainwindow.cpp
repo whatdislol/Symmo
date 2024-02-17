@@ -32,7 +32,6 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_playlistManager, &PlaylistManager::addSongToPlaylist, this, &MainWindow::addSongToPlaylist);
     connect(m_playlistManager, &PlaylistManager::setPlaylistName, ui->label_PlaylistName, &QLabel::setText);
     connect(m_playlistManager, &PlaylistManager::setTrackQuantity, ui->label_TrackQuantity, &QLabel::setText);
-    connect(m_playlistManager, &PlaylistManager::onSongStart, this, &MainWindow::onSongStart);
 
     setupIcons();
 }
