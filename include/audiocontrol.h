@@ -17,7 +17,7 @@ public:
     void setVolume(int volume);
     void toggleMute();
     void togglePlayPause();
-    void loadMedia(const QUrl& url);
+    void loadMedia(const QUrl& url); //maybe not needed
     qint64 duration() const;
     qint64 position() const;
     void setPosition(int position);

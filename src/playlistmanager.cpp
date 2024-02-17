@@ -39,8 +39,22 @@ void PlaylistManager::viewAllSongs()
     emit setTrackQuantity(getTotalSongsCount()); // Set Track Quantity
 }
 
-void PlaylistManager::selectSongs(QListWidgetItem* song)
+void PlaylistManager::selectSong(QListWidgetItem* song, AudioControl* audioControl)
 {
+    QString filePath = "music_library/" + song->text() + ".mp3";
+    QMediaPlayer* m_player = audioControl->getMediaPlayer();
+    m_player->setSource(QUrl::fromLocalFile(filePath));
+
+    if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
+        m_player->play();
+    }
+    else {
+        qDebug() << "Error setting media source: " << m_player->errorString();
+    }
+
+    QString fileName = song->text();
+    fileName = fileName.left(fileName.lastIndexOf('.'));
+    emit onSongImport(fileName);
 }
 
 int PlaylistManager::getTotalSongsCount()
@@ -58,5 +72,10 @@ void PlaylistManager::toPreviousSong()
 
 void PlaylistManager::skipOnSongEnd()
 {
+}
+
+void PlaylistManager::setSongName(const QString& name)
+{
+
 }
 

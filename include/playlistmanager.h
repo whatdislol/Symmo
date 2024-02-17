@@ -8,6 +8,7 @@
 #include <QFileInfoList>
 #include <QDir>
 #include <QListWidgetItem>
+#include "audiocontrol.h"
 
 class PlaylistManager : public QObject
 {
@@ -18,7 +19,7 @@ public:
 
     void addPlaylist();
     void viewAllSongs();
-    void selectSongs(QListWidgetItem* song);
+    void selectSong(QListWidgetItem* song, AudioControl* audioControl);
     int getTotalSongsCount();
     void toNextSong();
     void toPreviousSong();
@@ -29,6 +30,7 @@ signals:
     void addSongToPlaylist(const QListWidgetItem* song);
     void setPlaylistName(const QString& name);
     void setTrackQuantity(const int& quantity);
+    void onSongImport(const QString& songName);
 };
 
 #endif // PLAYLISTMANAGER_H
