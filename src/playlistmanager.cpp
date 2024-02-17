@@ -42,6 +42,7 @@ void PlaylistManager::viewAllSongs()
 void PlaylistManager::selectSong(QListWidgetItem* song, AudioControl* audioControl)
 {
     QString filePath = m_musicLibraryPath + song->text() + ".mp3";
+    qDebug() << "Selected song: " << filePath;
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
     m_player->setSource(QUrl::fromLocalFile(filePath));
 

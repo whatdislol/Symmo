@@ -131,4 +131,5 @@ void MainWindow::loadSelectedSong(QListWidgetItem* song)
     m_playlistManager->selectSong(song, m_audioControl);
     QMediaPlayer* M_Player = m_audioControl->getMediaPlayer();
     connect(M_Player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::onMediaStatusChanged);
+    ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
 }
