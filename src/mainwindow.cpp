@@ -122,12 +122,6 @@ void MainWindow::setupIcons()
     ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
 }
 
-void MainWindow::onSongStart(const QString& songName)
-{
-    ui->label_fileName->setText(songName);
-    ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-}
-
 void MainWindow::addSongToPlaylist(QListWidgetItem* song)
 {
 	ui->listWidget_SongsInPlaylist->addItem(song);

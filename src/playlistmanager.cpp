@@ -51,10 +51,6 @@ void PlaylistManager::selectSong(QListWidgetItem* song, AudioControl* audioContr
     else {
         qDebug() << "Error setting media source: " << m_player->errorString();
     }
-
-    QString fileName = song->text();
-    fileName = fileName.left(fileName.lastIndexOf('.'));
-    emit onSongStart(fileName);
 }
 
 QString PlaylistManager::getTrackQuantity() const

@@ -30,7 +30,6 @@ signals:
     void addSongToPlaylist(QListWidgetItem* song);
     void setPlaylistName(const QString& name);
     void setTrackQuantity(const QString& quantity);
-    void onSongStart(const QString& songName);
 
 private:
     QString m_musicLibraryPath = "C:/Users/neung/OneDrive/Desktop/KMITL_Courses/Y1S2/OOP/Project/Symmo/music_library";

@@ -33,7 +33,6 @@ private slots:
     void updatePlayPauseIcon(bool isPaused);
     void on_actionAdd_File_triggered();
     void setupIcons();
-    void onSongStart(const QString& songName);
     void addSongToPlaylist(QListWidgetItem* song);
     void loadSelectedSong(QListWidgetItem* song);
 
