@@ -40,6 +40,7 @@ private:
     Ui::MainWindow* ui;
     AudioControl* m_audioControl;
     PlaylistManager* m_playlistManager;
+    Playlist* m_currentPlaylist;
 };
 
 #endif // MAINWINDOW_H

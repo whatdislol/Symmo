@@ -11,6 +11,7 @@ AudioControl::AudioControl(QObject* parent)
     m_totalDuration(0)
 {
     m_player->setAudioOutput(m_audioOutput);
+    setVolume(50);
 }
 
 AudioControl::~AudioControl()

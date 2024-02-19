@@ -9,6 +9,7 @@
 #include <QDir>
 #include <QListWidgetItem>
 #include "audiocontrol.h"
+#include "playlist.h"
 
 class PlaylistManager : public QObject
 {
@@ -18,21 +19,16 @@ public:
     ~PlaylistManager();
 
     void addPlaylist();
-    void viewAllSongs();
-    void selectSong(QListWidgetItem* song, AudioControl* audioControl);
-    QString getTrackQuantity() const;
-    void toNextSong();
-    void toPreviousSong();
-    void skipOnSongEnd();
+    
+    Playlist* getCurrentPlaylist() const;
+    Playlist* getDefaultPlaylist() const;
 
 signals:
-    void clearSongList();
-    void addSongToPlaylist(QListWidgetItem* song);
-    void setPlaylistName(const QString& name);
-    void setTrackQuantity(const QString& quantity);
+    
 
 private:
     QString m_musicLibraryPath = "C:/Users/neung/OneDrive/Desktop/KMITL_Courses/Y1S2/OOP/Project/Symmo/music_library/";
+    Playlist* m_defaultPlaylist;
 };
 
 #endif // PLAYLISTMANAGER_H

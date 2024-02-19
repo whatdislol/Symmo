@@ -3,9 +3,11 @@
 #include "playlistmanager.h"
 
 PlaylistManager::PlaylistManager(QObject* parent) 
-	: QObject(parent) 
+	: QObject(parent),
+    m_defaultPlaylist(new Playlist(this))
 {
-
+    m_defaultPlaylist->setPlaylistName("All Tracks");
+    m_defaultPlaylist->loadAllSongs();
 }
 
 PlaylistManager::~PlaylistManager()
@@ -17,59 +19,12 @@ void PlaylistManager::addPlaylist()
 {
 }
 
-void PlaylistManager::viewAllSongs()
+Playlist* PlaylistManager::getCurrentPlaylist() const
 {
-	emit clearSongList();
-
-    QStringList musicFilters;
-    musicFilters << "*.mp3";
-
-    QDir musicDir(m_musicLibraryPath);
-    QFileInfoList musicFiles = musicDir.entryInfoList(musicFilters, QDir::Files);
-
-    for (const QFileInfo& fileInfo : musicFiles) {
-        // Get the file name without extension
-        QString fileName = fileInfo.fileName();
-        fileName = fileName.left(fileName.lastIndexOf('.')); // Remove the file extension
-
-        QListWidgetItem* musicItem = new QListWidgetItem(fileName);
-        emit addSongToPlaylist(musicItem);
-    }
-    emit setPlaylistName("All Tracks");
-    emit setTrackQuantity(getTrackQuantity()); // Set Track Quantity
+    return nullptr;
 }
 
-void PlaylistManager::selectSong(QListWidgetItem* song, AudioControl* audioControl)
+Playlist* PlaylistManager::getDefaultPlaylist() const
 {
-    QString filePath = m_musicLibraryPath + song->text() + ".mp3";
-    qDebug() << "Selected song: " << filePath;
-    QMediaPlayer* m_player = audioControl->getMediaPlayer();
-    m_player->setSource(QUrl::fromLocalFile(filePath));
-
-    if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
-        m_player->play();
-    }
-    else {
-        qDebug() << "Error setting media source: " << m_player->errorString();
-    }
-}
-
-QString PlaylistManager::getTrackQuantity() const
-{
-    QDir folderDir(m_musicLibraryPath);
-    QFileInfoList fileInfoList = folderDir.entryInfoList(QDir::Files);
-
-    return QString::number(fileInfoList.size());
-}
-
-void PlaylistManager::toNextSong()
-{
-}
-
-void PlaylistManager::toPreviousSong()
-{
-}
-
-void PlaylistManager::skipOnSongEnd()
-{
+    return m_defaultPlaylist;
 }
