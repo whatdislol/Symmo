@@ -27,7 +27,6 @@ signals:
     
 
 private:
-    QString m_musicLibraryPath = "C:/Users/neung/OneDrive/Desktop/KMITL_Courses/Y1S2/OOP/Project/Symmo/music_library/";
     Playlist* m_defaultPlaylist;
 };
 
