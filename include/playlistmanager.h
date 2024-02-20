@@ -28,6 +28,7 @@ signals:
 
 private:
     Playlist* m_defaultPlaylist;
+    Playlist* m_currentPlaylist;
 };
 
 #endif // PLAYLISTMANAGER_H

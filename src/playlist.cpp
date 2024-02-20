@@ -50,17 +50,39 @@ QString Playlist::getTrackQuantity() const
     return QString::number(fileInfoList.size());
 }
 
-void Playlist::toNextSong()
+void Playlist::toNextSong(int index, AudioControl* audioControl)
 {
+    QString filePath = (index < m_songPaths.size()) ? m_songPaths[index + 1] : m_songPaths[0];
+    QMediaPlayer* m_player = audioControl->getMediaPlayer();
+    m_player->setSource(QUrl::fromLocalFile(filePath));
 
+    if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
+        m_player->play();
+    }
+    else {
+        qDebug() << "Error setting media source: " << m_player->errorString();
+    }
 }
 
-void Playlist::toPreviousSong()
+void Playlist::toPreviousSong(int index, AudioControl* audioControl)
 {
+    QString filePath = (index > 0) ? m_songPaths[index - 1] : m_songPaths[0];
+    QMediaPlayer* m_player = audioControl->getMediaPlayer();
+    m_player->setSource(QUrl::fromLocalFile(filePath));
+
+    if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
+        m_player->play();
+    }
+    else {
+        qDebug() << "Error setting media source: " << m_player->errorString();
+    }
 }
 
-void Playlist::skipOnSongEnd()
+void Playlist::skipOnSongEnd(int index, AudioControl* audioControl, QMediaPlayer::MediaStatus status)
 {
+	if (status == QMediaPlayer::EndOfMedia) {
+		toNextSong(index, audioControl);
+	}
 }
 
 void Playlist::addSong(const QString& songPath)

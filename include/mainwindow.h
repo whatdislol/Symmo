@@ -24,6 +24,8 @@ public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
+signals:
+
 private slots:
     void durationChanged(qint64 duration);
     void positionChanged(qint64 progress);
@@ -35,12 +37,13 @@ private slots:
     void setupIcons();
     void addSongToPlaylist(QListWidgetItem* song);
     void loadSelectedSong(QListWidgetItem* song);
+    void onSkipButtonClicked();
+    void onPreviousButtonClicked();
 
 private:
     Ui::MainWindow* ui;
     AudioControl* m_audioControl;
     PlaylistManager* m_playlistManager;
-    Playlist* m_currentPlaylist;
 };
 
 #endif // MAINWINDOW_H
