@@ -52,6 +52,7 @@ QString Playlist::getTrackQuantity() const
 
 void Playlist::toNextSong()
 {
+
 }
 
 void Playlist::toPreviousSong()
