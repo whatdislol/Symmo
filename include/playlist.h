@@ -8,6 +8,7 @@
 #include <QFileInfoList>
 #include <QDir>
 #include <QListWidgetItem>
+#include <QCoreApplication>
 #include "audiocontrol.h"
 
 class Playlist : public QObject
@@ -31,7 +32,8 @@ signals:
     void setTrackQuantity(const QString& quantity);
 
 private:
-    QString m_musicLibraryPath = "C:/Users/neung/OneDrive/Desktop/KMITL_Courses/Y1S2/OOP/Project/Symmo/music_library/";
+    QString getProjectRootPath() const;
+    QString m_musicLibraryPath;
 };
 
 #endif // PLAYLIST_H

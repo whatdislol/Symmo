@@ -3,7 +3,8 @@
 #include "playlist.h"
 
 Playlist::Playlist(QObject* parent) 
-	: QObject(parent)
+	: QObject(parent),
+    m_musicLibraryPath(getProjectRootPath() + "/music_library/")
 {
 }
 
@@ -66,4 +67,12 @@ void Playlist::toPreviousSong()
 
 void Playlist::skipOnSongEnd()
 {
+}
+
+QString Playlist::getProjectRootPath() const {
+    QString executablePath = QCoreApplication::applicationDirPath();
+    QDir currentDir(executablePath);
+    while (!currentDir.exists("CMakeLists.txt") && currentDir.cdUp());
+
+    return currentDir.absolutePath();
 }
