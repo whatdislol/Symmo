@@ -43,7 +43,6 @@ private:
     QString m_musicLibraryPath;
     QList<QString> m_songPaths;
     QString m_name;
-    QString m_currentSongPath;
 };
 
 #endif // PLAYLIST_H
