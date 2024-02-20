@@ -6,13 +6,19 @@ PlaylistManager::PlaylistManager(QObject* parent)
 	: QObject(parent),
     m_defaultPlaylist(new Playlist(this))
 {
-    m_defaultPlaylist->setPlaylistName("All Tracks");
-    m_defaultPlaylist->loadAllSongs();
+    m_defaultPlaylist->setName("All Tracks");
+    updateDefaultPlaylist();
 }
 
 PlaylistManager::~PlaylistManager()
 {
 
+}
+
+void PlaylistManager::updateDefaultPlaylist()
+{
+    emit clearSongList();
+	m_defaultPlaylist->addAllSongs();
 }
 
 void PlaylistManager::addPlaylist()

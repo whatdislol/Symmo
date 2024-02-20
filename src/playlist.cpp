@@ -4,7 +4,8 @@
 
 Playlist::Playlist(QObject* parent) 
 	: QObject(parent),
-    m_musicLibraryPath(getProjectRootPath() + "/music_library/")
+    m_musicLibraryPath(getProjectRootPath() + "/music_library/"),
+    m_name("Playlist")
 {
 }
 
@@ -12,10 +13,8 @@ Playlist::~Playlist()
 {
 }
 
-void Playlist::loadAllSongs()
+void Playlist::addAllSongs()
 {
-    emit clearSongList();
-
     QStringList musicFilters;
     musicFilters << "*.mp3";
 
@@ -23,21 +22,15 @@ void Playlist::loadAllSongs()
     QFileInfoList musicFiles = musicDir.entryInfoList(musicFilters, QDir::Files);
 
     for (const QFileInfo& fileInfo : musicFiles) {
-        // Get the file name without extension
-        QString fileName = fileInfo.fileName();
-        fileName = fileName.left(fileName.lastIndexOf('.')); // Remove the file extension
-
-        QListWidgetItem* musicItem = new QListWidgetItem(fileName);
-        emit addSongToPlaylist(musicItem);
+        QString songPath = fileInfo.absoluteFilePath();
+        addSong(songPath);
     }
-    emit setPlaylistName("All Tracks");
-    emit setTrackQuantity(getTrackQuantity()); // Set Track Quantity
+    updatePlaylistInfo();
 }
 
-void Playlist::selectSong(QListWidgetItem* song, AudioControl* audioControl)
+void Playlist::selectSong(QListWidgetItem* song, AudioControl* audioControl) const
 {
     QString filePath = m_musicLibraryPath + song->text() + ".mp3";
-    qDebug() << "Selected song: " << filePath;
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
     m_player->setSource(QUrl::fromLocalFile(filePath));
 
@@ -67,6 +60,49 @@ void Playlist::toPreviousSong()
 
 void Playlist::skipOnSongEnd()
 {
+}
+
+void Playlist::addSong(const QString& songPath)
+{
+    m_songPaths.append(songPath);
+    QFileInfo fileInfo(songPath);
+    QString baseName = fileInfo.baseName(); // Get the file name without extension
+    QListWidgetItem* musicItem = new QListWidgetItem(baseName);
+    emit addSongToPlaylist(musicItem);
+}
+
+void Playlist::removeSong(const QString& songPath)
+{
+    int index = m_songPaths.indexOf(songPath);
+
+    if (index != -1) {
+        // Remove the song path from m_songPaths
+        m_songPaths.removeAt(index);
+
+        // Emit a signal to notify the UI to remove the corresponding item from the playlist
+        emit songRemoved(index);
+    }
+}
+
+bool Playlist::containsSong(const QString& songPath) const
+{
+    return false;
+}
+
+QString Playlist::getName() const
+{
+    return QString();
+}
+
+void Playlist::setName(const QString& name)
+{
+    m_name = name;
+}
+
+void Playlist::updatePlaylistInfo()
+{
+	emit setTrackQuantity(getTrackQuantity());
+    emit setPlaylistName(m_name);
 }
 
 QString Playlist::getProjectRootPath() const {

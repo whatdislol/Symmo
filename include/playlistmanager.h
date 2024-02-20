@@ -18,13 +18,13 @@ public:
     explicit PlaylistManager(QObject* parent = nullptr);
     ~PlaylistManager();
 
+    void updateDefaultPlaylist();
     void addPlaylist();
-    
     Playlist* getCurrentPlaylist() const;
     Playlist* getDefaultPlaylist() const;
 
 signals:
-    
+    void clearSongList();
 
 private:
     Playlist* m_defaultPlaylist;

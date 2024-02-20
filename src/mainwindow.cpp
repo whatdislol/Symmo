@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget* parent) :
     ui(new Ui::MainWindow),
     m_audioControl(new AudioControl(this)),
     m_playlistManager(new PlaylistManager(this)),
+    // Note: Maybe remove this Playlist instance and handle it inside the PlaylistManager class
     m_currentPlaylist(m_playlistManager->getDefaultPlaylist())
 {
     ui->setupUi(this);
@@ -18,8 +19,9 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->slider_SongProgress, &QSlider::sliderMoved, m_audioControl, &AudioControl::setPosition);
     connect(ui->toggleButton_PlayPause, &QPushButton::clicked, m_audioControl, &AudioControl::togglePlayPause);
     connect(ui->toggleButton_Mute, &QPushButton::clicked, m_audioControl, &AudioControl::toggleMute);
+
     // playlist manager
-    connect(ui->pushButton_ViewAllSongs, &QPushButton::clicked, m_currentPlaylist, &Playlist::loadAllSongs);
+    connect(ui->pushButton_ViewAllSongs, &QPushButton::clicked, m_playlistManager, &PlaylistManager::updateDefaultPlaylist);
     connect(ui->listWidget_SongsInPlaylist, &QListWidget::itemClicked, this, &MainWindow::loadSelectedSong);
    
     // CONNECT LOGIC SIGNALS TO METHODS
@@ -28,20 +30,22 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::positionChanged, this, &MainWindow::positionChanged);
     connect(m_audioControl, &AudioControl::muteStateChanged, this, &MainWindow::updateMuteIcon);
     connect(m_audioControl, &AudioControl::playPauseStateChanged, this, &MainWindow::updatePlayPauseIcon);
+
     // playlist manager
-    connect(m_currentPlaylist, &Playlist::clearSongList, ui->listWidget_SongsInPlaylist, &QListWidget::clear);
+    connect(m_playlistManager, &PlaylistManager::clearSongList, ui->listWidget_SongsInPlaylist, &QListWidget::clear);
     connect(m_currentPlaylist, &Playlist::addSongToPlaylist, this, &MainWindow::addSongToPlaylist);
     connect(m_currentPlaylist, &Playlist::setPlaylistName, ui->label_PlaylistName, &QLabel::setText);
     connect(m_currentPlaylist, &Playlist::setTrackQuantity, ui->label_TrackQuantity, &QLabel::setText);
 
-    m_currentPlaylist->loadAllSongs();
     setupIcons();
+    m_playlistManager->updateDefaultPlaylist();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     delete m_audioControl;
+    delete m_playlistManager;
 }
 
 void MainWindow::durationChanged(qint64 duration)
@@ -121,6 +125,8 @@ void MainWindow::setupIcons()
 {
     ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+    ui->pushButton_Skip->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
+	ui->pushButton_Back->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
 }
 
 void MainWindow::addSongToPlaylist(QListWidgetItem* song)
