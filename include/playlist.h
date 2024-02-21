@@ -22,9 +22,9 @@ public:
     void addAllSongs();
     void selectSong(QListWidgetItem* song, AudioControl* audioControl) const;
     QString getTrackQuantity() const;
-    void toNextSong(int index, AudioControl* audiocontrol);
-    void toPreviousSong(int index, AudioControl* audioControl);
-    void skipOnSongEnd(int index, AudioControl* audioControl, QMediaPlayer::MediaStatus status);
+    void toNextSong(AudioControl* audiocontrol);
+    void toPreviousSong(AudioControl* audioControl);
+    void skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status);
     void addSong(const QString& songPath);
     void removeSong(const QString& songPath);
     bool containsSong(const QString& songPath) const;
@@ -40,6 +40,7 @@ signals:
 
 private:
     QString getProjectRootPath() const;
+    QString getCurrentSongPath(QMediaPlayer* m_player) const;
     QString m_musicLibraryPath;
     QList<QString> m_songPaths;
     QString m_name;

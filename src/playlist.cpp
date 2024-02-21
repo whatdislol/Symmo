@@ -50,10 +50,15 @@ QString Playlist::getTrackQuantity() const
     return QString::number(fileInfoList.size());
 }
 
-void Playlist::toNextSong(int index, AudioControl* audioControl)
+void Playlist::toNextSong(AudioControl* audioControl) //move to audiocontrol
 {
+    QMediaPlayer* m_player = audioControl->getMediaPlayer();
+    int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
+    qDebug() << "Index: " << getCurrentSongPath(m_player);
+    if (index == -1) {
+		return;
+	}
     QString filePath = (index < m_songPaths.size()) ? m_songPaths[index + 1] : m_songPaths[0];
-    QMediaPlayer* m_player = audioControl->getMediaPlayer();
     m_player->setSource(QUrl::fromLocalFile(filePath));
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
@@ -64,10 +69,14 @@ void Playlist::toNextSong(int index, AudioControl* audioControl)
     }
 }
 
-void Playlist::toPreviousSong(int index, AudioControl* audioControl)
+void Playlist::toPreviousSong(AudioControl* audioControl) //move to audiocontrol
 {
-    QString filePath = (index > 0) ? m_songPaths[index - 1] : m_songPaths[0];
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
+    int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
+    if (index == -1) {
+        return;
+    }
+    QString filePath = (index > 0) ? m_songPaths[index - 1] : m_songPaths[0];
     m_player->setSource(QUrl::fromLocalFile(filePath));
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
@@ -78,10 +87,10 @@ void Playlist::toPreviousSong(int index, AudioControl* audioControl)
     }
 }
 
-void Playlist::skipOnSongEnd(int index, AudioControl* audioControl, QMediaPlayer::MediaStatus status)
+void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status) //move to audiocontrol
 {
 	if (status == QMediaPlayer::EndOfMedia) {
-		toNextSong(index, audioControl);
+		toNextSong(audioControl);
 	}
 }
 
@@ -134,4 +143,11 @@ QString Playlist::getProjectRootPath() const {
     while (!currentDir.exists("CMakeLists.txt") && currentDir.cdUp());
 
     return currentDir.absolutePath();
+}
+
+QString Playlist::getCurrentSongPath(QMediaPlayer* m_player) const
+{
+    QUrl mediaUrl = m_player->source();
+    QFileInfo fileInfo(mediaUrl.toLocalFile());
+    return fileInfo.absoluteFilePath();
 }
