@@ -25,6 +25,8 @@ public:
     ~MainWindow();
 
 signals:
+    void playlistAdded(QString playlistName);
+    void getCurrentPlaylist(Playlist* playlist);
 
 private slots:
     void setMaxDuration(qint64 duration);
@@ -36,6 +38,7 @@ private slots:
     void on_actionAdd_File_triggered();
     void setupIcons();
     void addSongToPlaylist(QListWidgetItem* song);
+    void getNewPlaylistName();
 
 private:
     Ui::MainWindow* ui;

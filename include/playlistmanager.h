@@ -19,8 +19,7 @@ public:
     ~PlaylistManager();
 
     void updateDefaultPlaylist();
-    void addPlaylist();
-    void setCurrentPlaylist(Playlist* playlist);
+    void addPlaylist(QString name);
     Playlist* getCurrentPlaylist() const;
     Playlist* getDefaultPlaylist() const;
 
@@ -29,6 +28,7 @@ signals:
 
 private:
     Playlist* m_defaultPlaylist;
+    QList<Playlist*>* m_playlists;
     Playlist* m_currentPlaylist;
 };
 

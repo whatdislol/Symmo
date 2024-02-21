@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget* parent) :
             currentPlaylist->selectSong(song, m_audioControl);
         }
     });
+    connect(ui->pushButton_AddPlaylist, &QPushButton::clicked, this, &MainWindow::getNewPlaylistName);
     // playlist
     connect(ui->pushButton_Skip, &QPushButton::clicked, [=]() {
         if (currentPlaylist && m_audioControl) {
@@ -150,4 +151,15 @@ void MainWindow::setupIcons()
 void MainWindow::addSongToPlaylist(QListWidgetItem* song)
 {
 	ui->listWidget_SongsInPlaylist->addItem(song);
+}
+
+void MainWindow::getNewPlaylistName()
+{
+	QString newPlaylistName = QInputDialog::getText(this, tr("Add Playlist"), tr("Enter the name of the new playlist:"));
+    
+	if (!newPlaylistName.isEmpty()) {
+		QListWidgetItem* newPlaylist = new QListWidgetItem(newPlaylistName);
+		ui->listWidget_Playlist->addItem(newPlaylist);
+        emit playlistAdded(newPlaylistName);
+	}
 }

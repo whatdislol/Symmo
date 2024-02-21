@@ -5,7 +5,8 @@
 PlaylistManager::PlaylistManager(QObject* parent) 
 	: QObject(parent),
     m_defaultPlaylist(new Playlist(this)),
-    m_currentPlaylist(m_defaultPlaylist)
+    m_currentPlaylist(m_defaultPlaylist),
+    m_playlists(new QList<Playlist*>())
 {
     m_defaultPlaylist->setName("All Tracks");
     updateDefaultPlaylist();
@@ -22,8 +23,11 @@ void PlaylistManager::updateDefaultPlaylist()
 	m_defaultPlaylist->addAllSongs();
 }
 
-void PlaylistManager::addPlaylist()
+void PlaylistManager::addPlaylist(QString name)
 {
+    Playlist* playlist = new Playlist(this);
+	playlist->setName(name);
+	m_playlists->append(playlist);
 }
 
 Playlist* PlaylistManager::getCurrentPlaylist() const
