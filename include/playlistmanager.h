@@ -20,6 +20,7 @@ public:
 
     void updateDefaultPlaylist();
     void addPlaylist();
+    void setCurrentPlaylist(Playlist* playlist);
     Playlist* getCurrentPlaylist() const;
     Playlist* getDefaultPlaylist() const;
 

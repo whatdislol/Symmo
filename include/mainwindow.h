@@ -30,15 +30,12 @@ private slots:
     void durationChanged(qint64 duration);
     void positionChanged(qint64 progress);
     void updateDuration(qint64 duration);
-    void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void updatePlaybackUI(QMediaPlayer::MediaStatus status);
     void updateMuteIcon(bool isMuted);
     void updatePlayPauseIcon(bool isPaused);
     void on_actionAdd_File_triggered();
     void setupIcons();
     void addSongToPlaylist(QListWidgetItem* song);
-    void loadSelectedSong(QListWidgetItem* song);
-    void onSkipButtonClicked();
-    void onPreviousButtonClicked();
 
 private:
     Ui::MainWindow* ui;

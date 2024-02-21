@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget* parent) :
 {
     ui->setupUi(this);
     Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
+    QMediaPlayer* player = m_audioControl->getMediaPlayer();
 
     // CONNECT UI SIGNALS TO METHODS
     // audio control
@@ -20,10 +21,22 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->toggleButton_Mute, &QPushButton::clicked, m_audioControl, &AudioControl::toggleMute);
     // playlist manager
     connect(ui->pushButton_ViewAllSongs, &QPushButton::clicked, m_playlistManager, &PlaylistManager::updateDefaultPlaylist);
-    connect(ui->listWidget_SongsInPlaylist, &QListWidget::itemClicked, this, &MainWindow::loadSelectedSong);
+    connect(ui->listWidget_SongsInPlaylist, &QListWidget::itemClicked, [=](QListWidgetItem* song) {
+        if (currentPlaylist && m_audioControl) {
+            currentPlaylist->selectSong(song, m_audioControl);
+        }
+    });
     // playlist
-    connect(ui->pushButton_Skip, &QPushButton::clicked, this, &MainWindow::onSkipButtonClicked);
-    connect(ui->pushButton_Back, &QPushButton::clicked, this, &MainWindow::onPreviousButtonClicked);
+    connect(ui->pushButton_Skip, &QPushButton::clicked, [=]() {
+        if (currentPlaylist && m_audioControl) {
+            currentPlaylist->toNextSong(m_audioControl);
+        }
+    });
+    connect(ui->pushButton_Back, &QPushButton::clicked, [=]() {
+        if (currentPlaylist && m_audioControl) {
+            currentPlaylist->toPreviousSong(m_audioControl);
+        }
+    });
 
     // CONNECT LOGIC SIGNALS TO METHODS
     // audio control
@@ -31,6 +44,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::positionChanged, this, &MainWindow::positionChanged);
     connect(m_audioControl, &AudioControl::muteStateChanged, this, &MainWindow::updateMuteIcon);
     connect(m_audioControl, &AudioControl::playPauseStateChanged, this, &MainWindow::updatePlayPauseIcon);
+    connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::updatePlaybackUI);
     // playlist manager
     connect(m_playlistManager, &PlaylistManager::clearSongList, ui->listWidget_SongsInPlaylist, &QListWidget::clear);
     // playlist
@@ -79,22 +93,21 @@ void MainWindow::updateDuration(qint64 duration)
     }
 }
 
-void MainWindow::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
+void MainWindow::updatePlaybackUI(QMediaPlayer::MediaStatus status)
 {
     if (status == QMediaPlayer::LoadedMedia) {
         QMediaPlayer* M_Player = m_audioControl->getMediaPlayer();
         qint64 totalDuration = M_Player->duration() / 1000;
 
-        if (M_Player->mediaStatus() != QMediaPlayer::NoMedia) {
-            // Media loaded successfully
+        if (M_Player->mediaStatus() != QMediaPlayer::NoMedia) { // Media loaded successfully
             QUrl mediaUrl = M_Player->source();
             QFileInfo fileInfo(mediaUrl.toLocalFile());
             QString fileNameWithoutExtension = fileInfo.fileName();
             fileNameWithoutExtension = fileNameWithoutExtension.left(fileNameWithoutExtension.lastIndexOf('.')); // Remove the file extension
             ui->label_fileName->setText(fileNameWithoutExtension);
+            ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
             m_audioControl->setTotalDuration(totalDuration);
             updateDuration(0);
-            disconnect(M_Player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::onMediaStatusChanged);
         }
     }
 }
@@ -118,7 +131,6 @@ void MainWindow::on_actionAdd_File_triggered()
 
     if (!file_name.isEmpty()) {
         M_Player->setSource(QUrl::fromLocalFile(file_name));
-        connect(M_Player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::onMediaStatusChanged);
     }
 }
 
@@ -133,31 +145,4 @@ void MainWindow::setupIcons()
 void MainWindow::addSongToPlaylist(QListWidgetItem* song)
 {
 	ui->listWidget_SongsInPlaylist->addItem(song);
-}
-
-void MainWindow::loadSelectedSong(QListWidgetItem* song)
-{
-    Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
-    currentPlaylist->selectSong(song, m_audioControl);
-    QMediaPlayer* M_Player = m_audioControl->getMediaPlayer();
-    connect(M_Player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::onMediaStatusChanged);
-    ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-}
-
-void MainWindow::onSkipButtonClicked()
-{
-    Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
-    if (currentPlaylist) {
-        int currentIndex = ui->listWidget_SongsInPlaylist->currentRow();
-        currentPlaylist->toNextSong(currentIndex, m_audioControl);
-    }
-}
-
-void MainWindow::onPreviousButtonClicked()
-{
-    Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
-    if (currentPlaylist) {
-        int currentIndex = ui->listWidget_SongsInPlaylist->currentRow();
-        currentPlaylist->toPreviousSong(currentIndex, m_audioControl);
-    }
 }
