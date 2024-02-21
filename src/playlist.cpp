@@ -50,7 +50,7 @@ QString Playlist::getTrackQuantity() const
     return QString::number(fileInfoList.size());
 }
 
-void Playlist::toNextSong(AudioControl* audioControl) //move to audiocontrol
+void Playlist::toNextSong(AudioControl* audioControl)
 {
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
     int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
@@ -69,7 +69,7 @@ void Playlist::toNextSong(AudioControl* audioControl) //move to audiocontrol
     }
 }
 
-void Playlist::toPreviousSong(AudioControl* audioControl) //move to audiocontrol
+void Playlist::toPreviousSong(AudioControl* audioControl)
 {
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
     int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
@@ -87,7 +87,7 @@ void Playlist::toPreviousSong(AudioControl* audioControl) //move to audiocontrol
     }
 }
 
-void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status) //move to audiocontrol
+void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status)
 {
 	if (status == QMediaPlayer::EndOfMedia) {
 		toNextSong(audioControl);
