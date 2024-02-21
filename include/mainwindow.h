@@ -27,8 +27,8 @@ public:
 signals:
 
 private slots:
-    void durationChanged(qint64 duration);
-    void positionChanged(qint64 progress);
+    void setMaxDuration(qint64 duration);
+    void updateSongProgress(qint64 progress);
     void updateDuration(qint64 duration);
     void updatePlaybackUI(QMediaPlayer::MediaStatus status);
     void updateMuteIcon(bool isMuted);

@@ -40,11 +40,16 @@ MainWindow::MainWindow(QWidget* parent) :
 
     // CONNECT LOGIC SIGNALS TO METHODS
     // audio control
-    connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::durationChanged, this, &MainWindow::durationChanged);
-    connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::positionChanged, this, &MainWindow::positionChanged);
+    connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::durationChanged, this, &MainWindow::setMaxDuration);
+    connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::positionChanged, this, &MainWindow::updateSongProgress);
     connect(m_audioControl, &AudioControl::muteStateChanged, this, &MainWindow::updateMuteIcon);
     connect(m_audioControl, &AudioControl::playPauseStateChanged, this, &MainWindow::updatePlayPauseIcon);
     connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::updatePlaybackUI);
+    connect(player, &QMediaPlayer::mediaStatusChanged, [=](QMediaPlayer::MediaStatus status) {
+        if (currentPlaylist && m_audioControl) {
+            currentPlaylist->skipOnSongEnd(m_audioControl, status);
+        }
+    });
     // playlist manager
     connect(m_playlistManager, &PlaylistManager::clearSongList, ui->listWidget_SongsInPlaylist, &QListWidget::clear);
     // playlist
@@ -63,14 +68,14 @@ MainWindow::~MainWindow()
     delete m_playlistManager;
 }
 
-void MainWindow::durationChanged(qint64 duration)
+void MainWindow::setMaxDuration(qint64 duration)
 {
     qint64 totalDuration = duration / 1000;
     m_audioControl->setTotalDuration(totalDuration);
     ui->slider_SongProgress->setMaximum(totalDuration);
 }
 
-void MainWindow::positionChanged(qint64 progress)
+void MainWindow::updateSongProgress(qint64 progress)
 {
     if (!ui->slider_SongProgress->isSliderDown()) {
         ui->slider_SongProgress->setValue(progress / 1000);
