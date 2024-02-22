@@ -27,7 +27,6 @@ void Playlist::addAllSongs()
         addSong(songPath);
     }
     updatePlaylistInfo();
-    qDebug() << "songs in playlist: " << m_songPaths;
 }
 
 void Playlist::selectSong(QListWidgetItem* song, AudioControl* audioControl) const
