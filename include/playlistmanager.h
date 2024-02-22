@@ -22,6 +22,7 @@ public:
     void addPlaylist(QString name);
     Playlist* getCurrentPlaylist() const;
     Playlist* getDefaultPlaylist() const;
+    void selectPlaylist(QListWidgetItem* playlist);
 
 signals:
     void clearSongList();

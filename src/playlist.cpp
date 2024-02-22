@@ -45,10 +45,7 @@ void Playlist::selectSong(QListWidgetItem* song, AudioControl* audioControl) con
 
 QString Playlist::getTrackQuantity() const
 {
-    QDir folderDir(m_musicLibraryPath);
-    QFileInfoList fileInfoList = folderDir.entryInfoList(QDir::Files);
-
-    return QString::number(fileInfoList.size());
+    return QString::number(m_songPaths.size());
 }
 
 void Playlist::toNextSong(AudioControl* audioControl)
@@ -126,7 +123,7 @@ bool Playlist::containsSong(const QString& songPath) const
 
 QString Playlist::getName() const
 {
-    return QString();
+    return m_name;
 }
 
 void Playlist::setName(const QString& name)

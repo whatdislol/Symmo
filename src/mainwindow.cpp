@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget* parent) :
         }
     });
     connect(ui->pushButton_AddPlaylist, &QPushButton::clicked, this, &MainWindow::getNewPlaylistName);
+    connect(ui->listWidget_Playlist, &QListWidget::itemClicked, m_playlistManager, &PlaylistManager::selectPlaylist);
     // playlist
     connect(ui->pushButton_Skip, &QPushButton::clicked, [=]() {
         if (currentPlaylist && m_audioControl) {
@@ -53,6 +54,7 @@ MainWindow::MainWindow(QWidget* parent) :
     });
     // playlist manager
     connect(m_playlistManager, &PlaylistManager::clearSongList, ui->listWidget_SongsInPlaylist, &QListWidget::clear);
+    connect(this, &MainWindow::playlistAdded, m_playlistManager, &PlaylistManager::addPlaylist);
     // playlist
     connect(currentPlaylist, &Playlist::addSongToPlaylist, this, &MainWindow::addSongToPlaylist);
     connect(currentPlaylist, &Playlist::setPlaylistName, ui->label_PlaylistName, &QLabel::setText);

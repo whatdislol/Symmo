@@ -39,3 +39,16 @@ Playlist* PlaylistManager::getDefaultPlaylist() const
 {
     return m_defaultPlaylist;
 }
+
+void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
+{
+    emit clearSongList();
+    QString playlistName = playlist->text();
+    for (Playlist* pl : *m_playlists) {
+        if (pl->getName() == playlistName) {
+			m_currentPlaylist = pl; // Set current playlist 
+			break;
+		}
+	}
+    m_currentPlaylist->updatePlaylistInfo(); // does not update UI
+}

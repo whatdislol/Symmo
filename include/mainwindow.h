@@ -26,7 +26,6 @@ public:
 
 signals:
     void playlistAdded(QString playlistName);
-    void getCurrentPlaylist(Playlist* playlist);
 
 private slots:
     void setMaxDuration(qint64 duration);
