@@ -590,9 +590,9 @@
      <property name="geometry">
       <rect>
        <x>320</x>
-       <y>210</y>
+       <y>100</y>
        <width>571</width>
-       <height>331</height>
+       <height>441</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -611,9 +611,9 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>30</y>
+        <y>80</y>
         <width>531</width>
-        <height>281</height>
+        <height>341</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -623,57 +623,47 @@
 							</string>
       </property>
      </widget>
-    </widget>
-    <widget class="QFrame" name="frame_6">
-     <property name="geometry">
-      <rect>
-       <x>320</x>
-       <y>100</y>
-       <width>571</width>
-       <height>101</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">
-							background-color: #192655;
-							border-radius: 10px;
-						</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-    </widget>
-    <widget class="QFrame" name="frame_InfoAndStats">
-     <property name="geometry">
-      <rect>
-       <x>900</x>
-       <y>100</y>
-       <width>261</width>
-       <height>241</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">
-							background-color: #192655;
-							border-radius: 10px;
-						</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
+     <widget class="QPushButton" name="pushButton_AddSong">
+      <property name="geometry">
+       <rect>
+        <x>510</x>
+        <y>20</y>
+        <width>40</width>
+        <height>40</height>
+       </rect>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>40</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">
+								QPushButton {
+								border: none;
+								border-radius: 20px; /* Adjust the border-radius for a smaller circle */
+								background-color: #86B6F6;
+								color: rgb(52, 51, 64);
+								min-width: 40px;    /* Adjust the size of the button */
+								max-width: 40px;
+								min-height: 40px;
+								max-height: 40px;
+								padding: 0px;
+								}
+							</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
      <widget class="QLabel" name="label_PlaylistName">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>140</y>
-        <width>141</width>
-        <height>24</height>
+        <x>20</x>
+        <y>0</y>
+        <width>161</width>
+        <height>61</height>
        </rect>
       </property>
       <property name="font">
@@ -684,60 +674,44 @@
       </property>
       <property name="styleSheet">
        <string notr="true">
-								font-size: 20px;
-								color: rgb(255,255,255);
+font-size: 40px;
+color: rgb(255,255,255);
 							</string>
       </property>
       <property name="text">
-       <string>[playlist name]</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_PlaylistImage">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>30</y>
-        <width>111</width>
-        <height>101</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>[PLAYLIST PIC]</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
+       <string>Playlist</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_TrackQuantity">
       <property name="geometry">
        <rect>
-        <x>90</x>
-        <y>190</y>
-        <width>121</width>
-        <height>31</height>
+        <x>390</x>
+        <y>20</y>
+        <width>31</width>
+        <height>41</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">
-								color: rgb(255, 255, 255);
+       <string notr="true">font-size: 20px;
+color: rgb(255, 255, 255);
 							</string>
       </property>
       <property name="text">
-       <string>[number of songs]</string>
+       <string>0</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_Tracks">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>196</y>
-        <width>49</width>
-        <height>20</height>
+        <x>430</x>
+        <y>20</y>
+        <width>51</width>
+        <height>41</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">
-								color: rgb(255, 255, 255);
+       <string notr="true">font-size: 20px;
+color: rgb(255, 255, 255);
 							</string>
       </property>
       <property name="text">
@@ -749,9 +723,9 @@
      <property name="geometry">
       <rect>
        <x>900</x>
-       <y>350</y>
+       <y>100</y>
        <width>261</width>
-       <height>191</height>
+       <height>441</height>
       </rect>
      </property>
      <property name="styleSheet">
