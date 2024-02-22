@@ -98,11 +98,13 @@ void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStat
 
 void Playlist::addSong(const QString& songPath)
 {
-    m_songPaths.append(songPath);
-    QFileInfo fileInfo(songPath);
-    QString baseName = fileInfo.baseName(); // Get the file name without extension
-    QListWidgetItem* musicItem = new QListWidgetItem(baseName);
-    emit addSongToPlaylist(musicItem);
+    if (!m_songPaths.contains(songPath)) {
+        m_songPaths.append(songPath);
+        QFileInfo fileInfo(songPath);
+        QString baseName = fileInfo.baseName(); // Get the file name without extension
+        QListWidgetItem* musicItem = new QListWidgetItem(baseName);
+        emit addSongToPlaylist(musicItem);
+	}
 }
 
 void Playlist::removeSong(const QString& songPath)
