@@ -33,9 +33,7 @@ public:
     QList<QString> getSongPaths() const;
 
 signals:
-    void addSongToPlaylist(QListWidgetItem* song);
-    void setPlaylistName(const QString& name);
-    void setTrackQuantity(const QString& quantity);
+    void songAdded(QListWidgetItem* song);
     void songRemoved(const int& index);
 
 private:

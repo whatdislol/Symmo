@@ -57,10 +57,10 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(this, &MainWindow::playlistAdded, m_playlistManager, &PlaylistManager::addPlaylist);
     connect(m_playlistManager, &PlaylistManager::playlistDisplayUpdated, this, &MainWindow::updatePlaylistDisplay);
 	connect(m_playlistManager, &PlaylistManager::defaultPlaylistDisplayUpdated, this, &MainWindow::updatePlaylistInfo);
+    connect(m_playlistManager, &PlaylistManager::songImportButtonHidden, ui->pushButton_AddSong, &QPushButton::hide);
+	connect(m_playlistManager, &PlaylistManager::songImportButtonVisible, ui->pushButton_AddSong, &QPushButton::show);
     // playlist
-    connect(currentPlaylist, &Playlist::addSongToPlaylist, this, &MainWindow::addSongToPlaylist);
-    connect(currentPlaylist, &Playlist::setPlaylistName, ui->label_PlaylistName, &QLabel::setText);
-    connect(currentPlaylist, &Playlist::setTrackQuantity, ui->label_TrackQuantity, &QLabel::setText);
+    connect(currentPlaylist, &Playlist::songAdded, this, &MainWindow::addSongToPlaylist);
 
     setupIcons();
     //m_playlistManager->updateDefaultPlaylist();

@@ -23,6 +23,7 @@ void PlaylistManager::updateDefaultPlaylist()
 	m_defaultPlaylist->addAllSongs();
     m_currentPlaylist = m_defaultPlaylist;
 	emit defaultPlaylistDisplayUpdated();
+    emit songImportButtonHidden();
 }
 
 void PlaylistManager::addPlaylist(QString name)
@@ -53,4 +54,5 @@ void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
 		}
 	}
 	emit playlistDisplayUpdated();
+	emit songImportButtonVisible();
 }

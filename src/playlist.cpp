@@ -98,7 +98,7 @@ void Playlist::addSong(const QString& songPath)
         QFileInfo fileInfo(songPath);
         QString baseName = fileInfo.baseName(); // Get the file name without extension
         QListWidgetItem* musicItem = new QListWidgetItem(baseName);
-        emit addSongToPlaylist(musicItem);
+        emit songAdded(musicItem);
 	}
 }
 

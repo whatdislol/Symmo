@@ -28,6 +28,8 @@ signals:
     void songsDisplayCleared();
     void playlistDisplayUpdated();
     void defaultPlaylistDisplayUpdated();
+    void songImportButtonHidden();
+    void songImportButtonVisible();
 
 private:
     Playlist* m_defaultPlaylist;
