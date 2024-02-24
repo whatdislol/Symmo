@@ -11,6 +11,7 @@
 #include <QCoreApplication>
 #include <QList>
 #include "audiocontrol.h"
+#include "selectsongdialog.h"
 
 class Playlist : public QObject
 {
@@ -26,11 +27,13 @@ public:
     void toPreviousSong(AudioControl* audioControl);
     void skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status);
     void addSong(const QString& songPath);
+    void addMultipleSongs();
     void removeSong(const QString& songPath);
     bool containsSong(const QString& songPath) const;
     QString getName() const;
     void setName(const QString& name);
     QList<QString> getSongPaths() const;
+    QStringList getAllSongNames() const;
 
 signals:
     void songAdded(QListWidgetItem* song);

@@ -102,6 +102,11 @@ void Playlist::addSong(const QString& songPath)
 	}
 }
 
+void Playlist::addMultipleSongs()
+{
+    // Open a file dialog to select multiple songs
+}
+
 void Playlist::removeSong(const QString& songPath)
 {
     int index = m_songPaths.indexOf(songPath);
@@ -133,6 +138,19 @@ void Playlist::setName(const QString& name)
 QList<QString> Playlist::getSongPaths() const
 {
     return m_songPaths;
+}
+
+QStringList Playlist::getAllSongNames() const
+{
+    QStringList allSongs;
+    QDir musicDir(m_musicLibraryPath);
+    QStringList musicFilters;
+    musicFilters << "*.mp3";
+    QFileInfoList musicFiles = musicDir.entryInfoList(musicFilters, QDir::Files);
+    for (const QFileInfo& fileInfo : musicFiles) {
+        allSongs.append(fileInfo.fileName());
+    }
+    return allSongs;
 }
 
 QString Playlist::getProjectRootPath() const {
