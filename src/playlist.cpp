@@ -105,6 +105,7 @@ void Playlist::addSong(const QString& songPath)
 void Playlist::addMultipleSongs()
 {
     // Open a file dialog to select multiple songs
+    // Get list of songs from dialog then use for loop on addSong
 }
 
 void Playlist::removeSong(const QString& songPath)
