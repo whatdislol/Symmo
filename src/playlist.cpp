@@ -55,7 +55,7 @@ void Playlist::toNextSong(AudioControl* audioControl)
     if (index == -1) {
 		return;
 	}
-    QString filePath = (index < m_songPaths.size()) ? m_songPaths[index + 1] : m_songPaths[0];
+    QString filePath = (index + 1 < m_songPaths.size()) ? m_songPaths[index + 1] : m_songPaths[0];
     m_player->setSource(QUrl::fromLocalFile(filePath));
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
