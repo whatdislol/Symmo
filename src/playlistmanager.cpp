@@ -19,8 +19,10 @@ PlaylistManager::~PlaylistManager()
 
 void PlaylistManager::updateDefaultPlaylist()
 {
-    emit clearSongList();
+    emit songsDisplayCleared();
 	m_defaultPlaylist->addAllSongs();
+    m_currentPlaylist = m_defaultPlaylist;
+	emit defaultPlaylistDisplayUpdated();
 }
 
 void PlaylistManager::addPlaylist(QString name)
@@ -42,7 +44,7 @@ Playlist* PlaylistManager::getDefaultPlaylist() const
 
 void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
 {
-    emit clearSongList();
+    emit songsDisplayCleared();
     QString playlistName = playlist->text();
     for (Playlist* pl : *m_playlists) {
         if (pl->getName() == playlistName) {
@@ -50,5 +52,5 @@ void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
 			break;
 		}
 	}
-    m_currentPlaylist->updatePlaylistInfo(); // does not update UI
+	emit playlistDisplayUpdated();
 }

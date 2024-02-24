@@ -26,7 +26,6 @@ void Playlist::addAllSongs()
         QString songPath = fileInfo.absoluteFilePath();
         addSong(songPath);
     }
-    updatePlaylistInfo();
 }
 
 void Playlist::selectSong(QListWidgetItem* song, AudioControl* audioControl) const
@@ -131,10 +130,9 @@ void Playlist::setName(const QString& name)
     m_name = name;
 }
 
-void Playlist::updatePlaylistInfo()
+QList<QString> Playlist::getSongPaths() const
 {
-	emit setTrackQuantity(getTrackQuantity());
-    emit setPlaylistName(m_name);
+    return m_songPaths;
 }
 
 QString Playlist::getProjectRootPath() const {

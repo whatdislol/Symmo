@@ -30,7 +30,7 @@ public:
     bool containsSong(const QString& songPath) const;
     QString getName() const;
     void setName(const QString& name);
-    void updatePlaylistInfo();
+    QList<QString> getSongPaths() const;
 
 signals:
     void addSongToPlaylist(QListWidgetItem* song);

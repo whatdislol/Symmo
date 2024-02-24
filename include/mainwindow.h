@@ -38,6 +38,9 @@ private slots:
     void setupIcons();
     void addSongToPlaylist(QListWidgetItem* song);
     void getNewPlaylistName();
+    void updateSongsDisplay();
+    void updatePlaylistInfo();
+    void updatePlaylistDisplay();
 
 private:
     Ui::MainWindow* ui;

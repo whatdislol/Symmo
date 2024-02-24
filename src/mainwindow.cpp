@@ -53,8 +53,10 @@ MainWindow::MainWindow(QWidget* parent) :
         }
     });
     // playlist manager
-    connect(m_playlistManager, &PlaylistManager::clearSongList, ui->listWidget_SongsInPlaylist, &QListWidget::clear);
+    connect(m_playlistManager, &PlaylistManager::songsDisplayCleared, ui->listWidget_SongsInPlaylist, &QListWidget::clear);
     connect(this, &MainWindow::playlistAdded, m_playlistManager, &PlaylistManager::addPlaylist);
+    connect(m_playlistManager, &PlaylistManager::playlistDisplayUpdated, this, &MainWindow::updatePlaylistDisplay);
+	connect(m_playlistManager, &PlaylistManager::defaultPlaylistDisplayUpdated, this, &MainWindow::updatePlaylistInfo);
     // playlist
     connect(currentPlaylist, &Playlist::addSongToPlaylist, this, &MainWindow::addSongToPlaylist);
     connect(currentPlaylist, &Playlist::setPlaylistName, ui->label_PlaylistName, &QLabel::setText);
@@ -164,4 +166,33 @@ void MainWindow::getNewPlaylistName()
 		ui->listWidget_Playlist->addItem(newPlaylist);
         emit playlistAdded(newPlaylistName);
 	}
+}
+
+void MainWindow::updateSongsDisplay()
+{
+    Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
+    if (currentPlaylist) {
+        QList<QString> m_songPaths = currentPlaylist->getSongPaths();
+        for (QString songPath : m_songPaths) {
+			QFileInfo fileInfo(songPath);
+			QString baseName = fileInfo.baseName(); // Get the file name without extension
+			QListWidgetItem* musicItem = new QListWidgetItem(baseName);
+			ui->listWidget_SongsInPlaylist->addItem(musicItem);
+		}
+	}
+}
+
+void MainWindow::updatePlaylistInfo()
+{
+    Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
+    if (currentPlaylist) {
+        ui->label_PlaylistName->setText(currentPlaylist->getName());
+        ui->label_TrackQuantity->setText(currentPlaylist->getTrackQuantity());
+    }
+}
+
+void MainWindow::updatePlaylistDisplay()
+{
+    updateSongsDisplay();
+    updatePlaylistInfo();
 }

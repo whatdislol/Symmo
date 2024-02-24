@@ -25,7 +25,9 @@ public:
     void selectPlaylist(QListWidgetItem* playlist);
 
 signals:
-    void clearSongList();
+    void songsDisplayCleared();
+    void playlistDisplayUpdated();
+    void defaultPlaylistDisplayUpdated();
 
 private:
     Playlist* m_defaultPlaylist;
