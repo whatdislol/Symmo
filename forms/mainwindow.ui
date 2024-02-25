@@ -391,9 +391,9 @@
     </property>
     <property name="styleSheet">
      <string notr="true">
-							background-color: #192655;
-							border-radius: 10px;
-						</string>
+						background-color: #192655;
+						border-radius: 10px;
+					</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -418,9 +418,9 @@
      </property>
      <property name="styleSheet">
       <string notr="true">
-								font-size: 20px;
-								color: rgb(255,255,255);
-							</string>
+							font-size: 20px;
+							color: rgb(255,255,255);
+						</string>
      </property>
      <property name="text">
       <string>Ambience Mode</string>
@@ -438,9 +438,9 @@
     </property>
     <property name="styleSheet">
      <string notr="true">
-							background-color: #192655;
-							border-radius: 10px;
-						</string>
+						background-color: #192655;
+						border-radius: 10px;
+					</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -459,9 +459,9 @@
      </property>
      <property name="styleSheet">
       <string notr="true">
-								color: rgb(255, 255, 255);
-								font-size: 15px;
-							</string>
+							color: rgb(255, 255, 255);
+							font-size: 15px;
+						</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_AddSong">
@@ -481,18 +481,18 @@
      </property>
      <property name="styleSheet">
       <string notr="true">
-								QPushButton {
-								border: none;
-								border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-								background-color: #86B6F6;
-								color: rgb(52, 51, 64);
-								min-width: 40px;    /* Adjust the size of the button */
-								max-width: 40px;
-								min-height: 40px;
-								max-height: 40px;
-								padding: 0px;
-								}
-							</string>
+							QPushButton {
+							border: none;
+							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
+							background-color: #86B6F6;
+							color: rgb(52, 51, 64);
+							min-width: 40px;    /* Adjust the size of the button */
+							max-width: 40px;
+							min-height: 40px;
+							max-height: 40px;
+							padding: 0px;
+							}
+						</string>
      </property>
      <property name="text">
       <string/>
@@ -515,9 +515,9 @@
      </property>
      <property name="styleSheet">
       <string notr="true">
-font-size: 40px;
-color: rgb(255,255,255);
-							</string>
+							font-size: 40px;
+							color: rgb(255,255,255);
+						</string>
      </property>
      <property name="text">
       <string>Playlist</string>
@@ -533,9 +533,10 @@ color: rgb(255,255,255);
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font-size: 20px;
-color: rgb(255, 255, 255);
-							</string>
+      <string notr="true">
+							font-size: 20px;
+							color: rgb(255, 255, 255);
+						</string>
      </property>
      <property name="text">
       <string>0</string>
@@ -551,9 +552,10 @@ color: rgb(255, 255, 255);
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font-size: 20px;
-color: rgb(255, 255, 255);
-							</string>
+      <string notr="true">
+							font-size: 20px;
+							color: rgb(255, 255, 255);
+						</string>
      </property>
      <property name="text">
       <string>Tracks</string>
@@ -571,9 +573,9 @@ color: rgb(255, 255, 255);
     </property>
     <property name="styleSheet">
      <string notr="true">
-							background-color: #11235A;
-							border-radius: 10px;
-						</string>
+						background-color: #11235A;
+						border-radius: 10px;
+					</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -598,18 +600,18 @@ color: rgb(255, 255, 255);
      </property>
      <property name="styleSheet">
       <string notr="true">
-								QPushButton {
-								border: none;
-								border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-								background-color: #86B6F6;
-								color: rgb(52, 51, 64);
-								min-width: 40px;    /* Adjust the size of the button */
-								max-width: 40px;
-								min-height: 40px;
-								max-height: 40px;
-								padding: 0px;
-								}
-							</string>
+							QPushButton {
+							border: none;
+							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
+							background-color: #86B6F6;
+							color: rgb(52, 51, 64);
+							min-width: 40px;    /* Adjust the size of the button */
+							max-width: 40px;
+							min-height: 40px;
+							max-height: 40px;
+							padding: 0px;
+							}
+						</string>
      </property>
      <property name="text">
       <string/>
@@ -627,9 +629,9 @@ color: rgb(255, 255, 255);
     </property>
     <property name="styleSheet">
      <string notr="true">
-							background-color: #192655;
-							border-radius: 10px;
-						</string>
+						background-color: #192655;
+						border-radius: 10px;
+					</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -655,10 +657,10 @@ color: rgb(255, 255, 255);
      </property>
      <property name="styleSheet">
       <string notr="true">
-								font-size: 20px;
-								color: rgb(255, 255, 255);
+							font-size: 20px;
+							color: rgb(255, 255, 255);
 
-							</string>
+						</string>
      </property>
      <property name="text">
       <string>Playlist</string>
@@ -684,18 +686,18 @@ color: rgb(255, 255, 255);
      </property>
      <property name="styleSheet">
       <string notr="true">
-								QPushButton {
-								border: none;
-								border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-								background-color: #86B6F6;
-								color: rgb(52, 51, 64);
-								min-width: 40px;    /* Adjust the size of the button */
-								max-width: 40px;
-								min-height: 40px;
-								max-height: 40px;
-								padding: 0px;
-								}
-							</string>
+							QPushButton {
+							border: none;
+							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
+							background-color: #86B6F6;
+							color: rgb(52, 51, 64);
+							min-width: 40px;    /* Adjust the size of the button */
+							max-width: 40px;
+							min-height: 40px;
+							max-height: 40px;
+							padding: 0px;
+							}
+						</string>
      </property>
      <property name="text">
       <string/>
@@ -736,18 +738,18 @@ color: rgb(255, 255, 255);
      </property>
      <property name="styleSheet">
       <string notr="true">
-								QPushButton {
-								border: none;
-								border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-								background-color: #86B6F6;
-								color: rgb(52, 51, 64);
-								min-width: 40px;    /* Adjust the size of the button */
-								max-width: 40px;
-								min-height: 40px;
-								max-height: 40px;
-								padding: 0px;
-								}
-							</string>
+							QPushButton {
+							border: none;
+							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
+							background-color: #86B6F6;
+							color: rgb(52, 51, 64);
+							min-width: 40px;    /* Adjust the size of the button */
+							max-width: 40px;
+							min-height: 40px;
+							max-height: 40px;
+							padding: 0px;
+							}
+						</string>
      </property>
      <property name="text">
       <string/>

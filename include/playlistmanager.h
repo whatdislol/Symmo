@@ -13,7 +13,7 @@
 
 class PlaylistManager : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
     explicit PlaylistManager(QObject* parent = nullptr);
     ~PlaylistManager();
@@ -23,6 +23,11 @@ public:
     Playlist* getCurrentPlaylist() const;
     Playlist* getDefaultPlaylist() const;
     void selectPlaylist(QListWidgetItem* playlist);
+    void onAddMultipleSongs();
+    void onSelectSong(QListWidgetItem* song, AudioControl* audioControl);
+    void onToNextSong(AudioControl* audioControl);
+    void onToPreviousSong(AudioControl* audioControl);
+    void onSkipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status);
 
 signals:
     void songsDisplayCleared();

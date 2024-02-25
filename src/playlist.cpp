@@ -2,11 +2,12 @@
 
 #include "playlist.h"
 
-Playlist::Playlist(QObject* parent) 
-	: QObject(parent),
+Playlist::Playlist(QObject* parent)
+    : QObject(parent),
     m_musicLibraryPath(getProjectRootPath() + "/music_library/"),
     m_name("Playlist")
 {
+    qDebug() << "Existing song list (constructor)" << m_songPaths;
 }
 
 Playlist::~Playlist()
@@ -53,8 +54,8 @@ void Playlist::toNextSong(AudioControl* audioControl)
     int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
     qDebug() << "Index: " << getCurrentSongPath(m_player);
     if (index == -1) {
-		return;
-	}
+        return;
+    }
     QString filePath = (index + 1 < m_songPaths.size()) ? m_songPaths[index + 1] : m_songPaths[0];
     m_player->setSource(QUrl::fromLocalFile(filePath));
 
@@ -86,26 +87,50 @@ void Playlist::toPreviousSong(AudioControl* audioControl)
 
 void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status)
 {
-	if (status == QMediaPlayer::EndOfMedia) {
-		toNextSong(audioControl);
-	}
+    if (status == QMediaPlayer::EndOfMedia) {
+        toNextSong(audioControl);
+    }
 }
 
 void Playlist::addSong(const QString& songPath)
 {
+    qDebug() << m_name << "'s Existing songs:" << m_songPaths;
+    qDebug() << m_name << "'s Adding song: " << songPath;
     if (!m_songPaths.contains(songPath)) {
+        qDebug() << m_name << "'s Song added: " << songPath;
         m_songPaths.append(songPath);
         QFileInfo fileInfo(songPath);
         QString baseName = fileInfo.baseName(); // Get the file name without extension
         QListWidgetItem* musicItem = new QListWidgetItem(baseName);
         emit songAdded(musicItem);
-	}
+        qDebug() << m_name << "'s song name: " << baseName;
+    }
 }
 
 void Playlist::addMultipleSongs()
 {
-    // Open a file dialog to select multiple songs
-    // Get list of songs from dialog then use for loop on addSong
+    m_songSelectionDialog = new SelectSongDialog(m_musicLibraryPath);
+    qDebug() << "a";
+    // Connect the OK button of the dialog to the processSelectedSongs slot
+    connect(m_songSelectionDialog, &SelectSongDialog::accepted, this, &Playlist::processSelectedSongs);
+
+    qDebug() << "b";
+    m_songSelectionDialog->show();
+    qDebug() << "c";
+    m_songSelectionDialog->displaySongs();
+}
+
+void Playlist::processSelectedSongs()
+{
+    qDebug() << "d";
+    QStringList selectedSongPaths = m_songSelectionDialog->getSelectedSongPaths();
+    qDebug() << "e";
+    for (const QString& songPath : selectedSongPaths) {
+        addSong(songPath);
+    }
+    delete m_songSelectionDialog;
+    m_songSelectionDialog = nullptr;
+    qDebug() << m_name << "'s selected songs: " << selectedSongPaths;
 }
 
 void Playlist::removeSong(const QString& songPath)

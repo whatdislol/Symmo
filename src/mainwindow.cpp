@@ -19,26 +19,23 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->slider_SongProgress, &QSlider::sliderMoved, m_audioControl, &AudioControl::setPosition);
     connect(ui->toggleButton_PlayPause, &QPushButton::clicked, m_audioControl, &AudioControl::togglePlayPause);
     connect(ui->toggleButton_Mute, &QPushButton::clicked, m_audioControl, &AudioControl::toggleMute);
+
     // playlist manager
     connect(ui->pushButton_ViewAllSongs, &QPushButton::clicked, m_playlistManager, &PlaylistManager::updateDefaultPlaylist);
     connect(ui->listWidget_SongsInPlaylist, &QListWidget::itemClicked, [=](QListWidgetItem* song) {
-        if (currentPlaylist && m_audioControl) {
-            currentPlaylist->selectSong(song, m_audioControl);
-        }
-    });
+        m_playlistManager->onSelectSong(song, m_audioControl);
+        });
     connect(ui->pushButton_AddPlaylist, &QPushButton::clicked, this, &MainWindow::getNewPlaylistName);
     connect(ui->listWidget_Playlist, &QListWidget::itemClicked, m_playlistManager, &PlaylistManager::selectPlaylist);
+    connect(ui->pushButton_AddSong, &QPushButton::clicked, m_playlistManager, &PlaylistManager::onAddMultipleSongs);
+
     // playlist
     connect(ui->pushButton_Skip, &QPushButton::clicked, [=]() {
-        if (currentPlaylist && m_audioControl) {
-            currentPlaylist->toNextSong(m_audioControl);
-        }
-    });
+        m_playlistManager->onToNextSong(m_audioControl);
+        });
     connect(ui->pushButton_Back, &QPushButton::clicked, [=]() {
-        if (currentPlaylist && m_audioControl) {
-            currentPlaylist->toPreviousSong(m_audioControl);
-        }
-    });
+        m_playlistManager->onToPreviousSong(m_audioControl);
+        });
 
     // CONNECT LOGIC SIGNALS TO METHODS
     // audio control
@@ -48,17 +45,17 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_audioControl, &AudioControl::playPauseStateChanged, this, &MainWindow::updatePlayPauseIcon);
     connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::updatePlaybackUI);
     connect(player, &QMediaPlayer::mediaStatusChanged, [=](QMediaPlayer::MediaStatus status) {
-        if (currentPlaylist && m_audioControl) {
-            currentPlaylist->skipOnSongEnd(m_audioControl, status);
-        }
-    });
+        m_playlistManager->onSkipOnSongEnd(m_audioControl, status);
+        });
+
     // playlist manager
     connect(m_playlistManager, &PlaylistManager::songsDisplayCleared, ui->listWidget_SongsInPlaylist, &QListWidget::clear);
     connect(this, &MainWindow::playlistAdded, m_playlistManager, &PlaylistManager::addPlaylist);
     connect(m_playlistManager, &PlaylistManager::playlistDisplayUpdated, this, &MainWindow::updatePlaylistDisplay);
-	connect(m_playlistManager, &PlaylistManager::defaultPlaylistDisplayUpdated, this, &MainWindow::updatePlaylistInfo);
+    connect(m_playlistManager, &PlaylistManager::defaultPlaylistDisplayUpdated, this, &MainWindow::updatePlaylistInfo);
     connect(m_playlistManager, &PlaylistManager::songImportButtonHidden, ui->pushButton_AddSong, &QPushButton::hide);
-	connect(m_playlistManager, &PlaylistManager::songImportButtonVisible, ui->pushButton_AddSong, &QPushButton::show);
+    connect(m_playlistManager, &PlaylistManager::songImportButtonVisible, ui->pushButton_AddSong, &QPushButton::show);
+
     // playlist
     connect(currentPlaylist, &Playlist::songAdded, this, &MainWindow::addSongToPlaylist);
 
@@ -124,14 +121,14 @@ void MainWindow::updatePlaybackUI(QMediaPlayer::MediaStatus status)
 
 void MainWindow::updateMuteIcon(bool isMuted)
 {
-	QIcon volumeIcon = isMuted ? style()->standardIcon(QStyle::SP_MediaVolumeMuted) : style()->standardIcon(QStyle::SP_MediaVolume);
-	ui->toggleButton_Mute->setIcon(volumeIcon);
+    QIcon volumeIcon = isMuted ? style()->standardIcon(QStyle::SP_MediaVolumeMuted) : style()->standardIcon(QStyle::SP_MediaVolume);
+    ui->toggleButton_Mute->setIcon(volumeIcon);
 }
 
 void MainWindow::updatePlayPauseIcon(bool isPaused)
 {
-	QIcon playPauseIcon = isPaused ? style()->standardIcon(QStyle::SP_MediaPlay) : style()->standardIcon(QStyle::SP_MediaPause);
-	ui->toggleButton_PlayPause->setIcon(playPauseIcon);
+    QIcon playPauseIcon = isPaused ? style()->standardIcon(QStyle::SP_MediaPlay) : style()->standardIcon(QStyle::SP_MediaPause);
+    ui->toggleButton_PlayPause->setIcon(playPauseIcon);
 }
 
 void MainWindow::on_actionAdd_File_triggered()
@@ -149,37 +146,38 @@ void MainWindow::setupIcons()
     ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
     ui->pushButton_Skip->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
-	ui->pushButton_Back->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
+    ui->pushButton_Back->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
 }
 
 void MainWindow::addSongToPlaylist(QListWidgetItem* song)
 {
-	ui->listWidget_SongsInPlaylist->addItem(song);
+    ui->listWidget_SongsInPlaylist->addItem(song);
 }
 
 void MainWindow::getNewPlaylistName()
 {
-	QString newPlaylistName = QInputDialog::getText(this, tr("Add Playlist"), tr("Enter the name of the new playlist:"));
-    
-	if (!newPlaylistName.isEmpty()) {
-		QListWidgetItem* newPlaylist = new QListWidgetItem(newPlaylistName);
-		ui->listWidget_Playlist->addItem(newPlaylist);
+    QString newPlaylistName = QInputDialog::getText(this, tr("Add Playlist"), tr("Enter the name of the new playlist:"));
+
+    if (!newPlaylistName.isEmpty()) {
+        QListWidgetItem* newPlaylist = new QListWidgetItem(newPlaylistName);
+        ui->listWidget_Playlist->addItem(newPlaylist);
         emit playlistAdded(newPlaylistName);
-	}
+    }
 }
 
 void MainWindow::updateSongsDisplay()
 {
+    qDebug() << "updateSongsDisplay triggered";
     Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
     if (currentPlaylist) {
         QList<QString> m_songPaths = currentPlaylist->getSongPaths();
         for (QString songPath : m_songPaths) {
-			QFileInfo fileInfo(songPath);
-			QString baseName = fileInfo.baseName(); // Get the file name without extension
-			QListWidgetItem* musicItem = new QListWidgetItem(baseName);
-			ui->listWidget_SongsInPlaylist->addItem(musicItem);
-		}
-	}
+            QFileInfo fileInfo(songPath);
+            QString baseName = fileInfo.baseName(); // Get the file name without extension
+            QListWidgetItem* musicItem = new QListWidgetItem(baseName);
+            ui->listWidget_SongsInPlaylist->addItem(musicItem);
+        }
+    }
 }
 
 void MainWindow::updatePlaylistInfo()

@@ -35,6 +35,9 @@ public:
     QList<QString> getSongPaths() const;
     QStringList getAllSongNames() const;
 
+public slots:
+    void processSelectedSongs();
+
 signals:
     void songAdded(QListWidgetItem* song);
     void songRemoved(const int& index);
@@ -45,6 +48,7 @@ private:
     QString m_musicLibraryPath;
     QList<QString> m_songPaths;
     QString m_name;
+    SelectSongDialog* m_songSelectionDialog;
 };
 
 #endif // PLAYLIST_H
