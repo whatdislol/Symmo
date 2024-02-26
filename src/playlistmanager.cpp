@@ -3,15 +3,19 @@
 PlaylistManager::PlaylistManager(QObject* parent)
     : QObject(parent),
     m_defaultPlaylist(new Playlist(this)),
+    m_playlists(new QList<Playlist*>()),
     m_currentPlaylist(m_defaultPlaylist),
-    m_playlists(new QList<Playlist*>())
+    m_songSelectionDialog(new SelectSongDialog(m_currentPlaylist->getMusicLibraryPath()))
 {
+    connect(m_songSelectionDialog, &SelectSongDialog::accepted, this, &PlaylistManager::onAddMultipleSongs);
     m_defaultPlaylist->setName("All Tracks");
 }
 
 PlaylistManager::~PlaylistManager()
 {
-
+	delete m_defaultPlaylist;
+	delete m_playlists;
+	delete m_songSelectionDialog;
 }
 
 void PlaylistManager::updateDefaultPlaylist()
@@ -55,10 +59,10 @@ void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
     emit songImportButtonVisible();
 }
 
-void PlaylistManager::onAddMultipleSongs()
+void PlaylistManager::displaySongSelectionDialog()
 {
-    m_currentPlaylist->addMultipleSongs();
-    emit playlistDisplayUpdated();
+    m_songSelectionDialog->show();
+    m_songSelectionDialog->displaySongs();
 }
 
 void PlaylistManager::onSelectSong(QListWidgetItem* song, AudioControl* audioControl)
@@ -79,4 +83,11 @@ void PlaylistManager::onToPreviousSong(AudioControl* audioControl)
 void PlaylistManager::onSkipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status)
 {
     m_currentPlaylist->skipOnSongEnd(audioControl, status);
+}
+
+void PlaylistManager::onAddMultipleSongs()
+{
+    QStringList selectedSongPaths = m_songSelectionDialog->getSelectedSongPaths();
+    m_currentPlaylist->addMultipleSongs(selectedSongPaths);
+    emit playlistDisplayUpdated();
 }

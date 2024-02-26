@@ -24,18 +24,18 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->pushButton_ViewAllSongs, &QPushButton::clicked, m_playlistManager, &PlaylistManager::updateDefaultPlaylist);
     connect(ui->listWidget_SongsInPlaylist, &QListWidget::itemClicked, [=](QListWidgetItem* song) {
         m_playlistManager->onSelectSong(song, m_audioControl);
-        });
+    });
     connect(ui->pushButton_AddPlaylist, &QPushButton::clicked, this, &MainWindow::getNewPlaylistName);
     connect(ui->listWidget_Playlist, &QListWidget::itemClicked, m_playlistManager, &PlaylistManager::selectPlaylist);
-    connect(ui->pushButton_AddSong, &QPushButton::clicked, m_playlistManager, &PlaylistManager::onAddMultipleSongs);
+    connect(ui->pushButton_AddSong, &QPushButton::clicked, m_playlistManager, &PlaylistManager::displaySongSelectionDialog);
 
     // playlist
     connect(ui->pushButton_Skip, &QPushButton::clicked, [=]() {
         m_playlistManager->onToNextSong(m_audioControl);
-        });
+    });
     connect(ui->pushButton_Back, &QPushButton::clicked, [=]() {
         m_playlistManager->onToPreviousSong(m_audioControl);
-        });
+    });
 
     // CONNECT LOGIC SIGNALS TO METHODS
     // audio control
@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::updatePlaybackUI);
     connect(player, &QMediaPlayer::mediaStatusChanged, [=](QMediaPlayer::MediaStatus status) {
         m_playlistManager->onSkipOnSongEnd(m_audioControl, status);
-        });
+    });
 
     // playlist manager
     connect(m_playlistManager, &PlaylistManager::songsDisplayCleared, ui->listWidget_SongsInPlaylist, &QListWidget::clear);
@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(currentPlaylist, &Playlist::songAdded, this, &MainWindow::addSongToPlaylist);
 
     setupIcons();
-    //m_playlistManager->updateDefaultPlaylist();
+    m_playlistManager->updateDefaultPlaylist();
 }
 
 MainWindow::~MainWindow()

@@ -27,16 +27,17 @@ public:
     void toPreviousSong(AudioControl* audioControl);
     void skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status);
     void addSong(const QString& songPath);
-    void addMultipleSongs();
+    void addMultipleSongs(QStringList& selectedSongPaths);
     void removeSong(const QString& songPath);
     bool containsSong(const QString& songPath) const;
     QString getName() const;
     void setName(const QString& name);
     QList<QString> getSongPaths() const;
     QStringList getAllSongNames() const;
+    QString getMusicLibraryPath() const;
 
 public slots:
-    void processSelectedSongs();
+    
 
 signals:
     void songAdded(QListWidgetItem* song);
@@ -48,7 +49,6 @@ private:
     QString m_musicLibraryPath;
     QList<QString> m_songPaths;
     QString m_name;
-    SelectSongDialog* m_songSelectionDialog;
 };
 
 #endif // PLAYLIST_H

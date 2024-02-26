@@ -23,11 +23,12 @@ public:
     Playlist* getCurrentPlaylist() const;
     Playlist* getDefaultPlaylist() const;
     void selectPlaylist(QListWidgetItem* playlist);
-    void onAddMultipleSongs();
+    void displaySongSelectionDialog();
     void onSelectSong(QListWidgetItem* song, AudioControl* audioControl);
     void onToNextSong(AudioControl* audioControl);
     void onToPreviousSong(AudioControl* audioControl);
     void onSkipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status);
+    void onAddMultipleSongs();
 
 signals:
     void songsDisplayCleared();
@@ -40,6 +41,7 @@ private:
     Playlist* m_defaultPlaylist;
     QList<Playlist*>* m_playlists;
     Playlist* m_currentPlaylist;
+    SelectSongDialog* m_songSelectionDialog;
 };
 
 #endif // PLAYLISTMANAGER_H

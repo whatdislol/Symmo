@@ -107,29 +107,12 @@ void Playlist::addSong(const QString& songPath)
     }
 }
 
-void Playlist::addMultipleSongs()
+void Playlist::addMultipleSongs(QStringList& selectedSongPaths)
 {
-    m_songSelectionDialog = new SelectSongDialog(m_musicLibraryPath);
-    qDebug() << "a";
-    // Connect the OK button of the dialog to the processSelectedSongs slot
-    connect(m_songSelectionDialog, &SelectSongDialog::accepted, this, &Playlist::processSelectedSongs);
-
-    qDebug() << "b";
-    m_songSelectionDialog->show();
-    qDebug() << "c";
-    m_songSelectionDialog->displaySongs();
-}
-
-void Playlist::processSelectedSongs()
-{
-    qDebug() << "d";
-    QStringList selectedSongPaths = m_songSelectionDialog->getSelectedSongPaths();
     qDebug() << "e";
     for (const QString& songPath : selectedSongPaths) {
         addSong(songPath);
     }
-    delete m_songSelectionDialog;
-    m_songSelectionDialog = nullptr;
     qDebug() << m_name << "'s selected songs: " << selectedSongPaths;
 }
 
@@ -177,6 +160,11 @@ QStringList Playlist::getAllSongNames() const
         allSongs.append(fileInfo.fileName());
     }
     return allSongs;
+}
+
+QString Playlist::getMusicLibraryPath() const
+{
+    return m_musicLibraryPath;
 }
 
 QString Playlist::getProjectRootPath() const {
