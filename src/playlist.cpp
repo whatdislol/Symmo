@@ -52,7 +52,6 @@ void Playlist::toNextSong(AudioControl* audioControl)
 {
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
     int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
-    qDebug() << "Index: " << getCurrentSongPath(m_player);
     if (index == -1) {
         return;
     }
@@ -94,26 +93,20 @@ void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStat
 
 void Playlist::addSong(const QString& songPath)
 {
-    qDebug() << m_name << "'s Existing songs:" << m_songPaths;
-    qDebug() << m_name << "'s Adding song: " << songPath;
     if (!m_songPaths.contains(songPath)) {
-        qDebug() << m_name << "'s Song added: " << songPath;
         m_songPaths.append(songPath);
         QFileInfo fileInfo(songPath);
         QString baseName = fileInfo.baseName(); // Get the file name without extension
         QListWidgetItem* musicItem = new QListWidgetItem(baseName);
         emit songAdded(musicItem);
-        qDebug() << m_name << "'s song name: " << baseName;
     }
 }
 
 void Playlist::addMultipleSongs(QStringList& selectedSongPaths)
 {
-    qDebug() << "e";
     for (const QString& songPath : selectedSongPaths) {
         addSong(songPath);
     }
-    qDebug() << m_name << "'s selected songs: " << selectedSongPaths;
 }
 
 void Playlist::removeSong(const QString& songPath)

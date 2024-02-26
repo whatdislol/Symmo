@@ -46,7 +46,6 @@ Playlist* PlaylistManager::getDefaultPlaylist() const
 
 void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
 {
-    emit songsDisplayCleared();
     QString playlistName = playlist->text();
     for (Playlist* pl : *m_playlists) {
         if (pl->getName() == playlistName) {
@@ -54,7 +53,6 @@ void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
             break;
         }
     }
-    qDebug() << m_currentPlaylist->getName() << "'s song paths:" << m_currentPlaylist->getSongPaths();
     emit playlistDisplayUpdated();
     emit songImportButtonVisible();
 }

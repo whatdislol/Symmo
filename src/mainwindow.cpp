@@ -152,6 +152,7 @@ void MainWindow::setupIcons()
 void MainWindow::addSongToPlaylist(QListWidgetItem* song)
 {
     ui->listWidget_SongsInPlaylist->addItem(song);
+    qDebug() << "Song added to playlist: " << song->text();
 }
 
 void MainWindow::getNewPlaylistName()
@@ -167,13 +168,13 @@ void MainWindow::getNewPlaylistName()
 
 void MainWindow::updateSongsDisplay()
 {
-    qDebug() << "updateSongsDisplay triggered";
+    ui->listWidget_SongsInPlaylist->clear();
     Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
     if (currentPlaylist) {
         QList<QString> m_songPaths = currentPlaylist->getSongPaths();
         for (QString songPath : m_songPaths) {
             QFileInfo fileInfo(songPath);
-            QString baseName = fileInfo.baseName(); // Get the file name without extension
+            QString baseName = fileInfo.baseName();
             QListWidgetItem* musicItem = new QListWidgetItem(baseName);
             ui->listWidget_SongsInPlaylist->addItem(musicItem);
         }
