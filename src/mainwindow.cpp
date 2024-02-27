@@ -128,15 +128,15 @@ void MainWindow::updatePlaybackUI(QMediaPlayer::MediaStatus status)
     }
 }
 
-void MainWindow::updateMuteIcon(bool isMuted)
+void MainWindow::updateMuteIcon()
 {
-    QIcon volumeIcon = isMuted ? style()->standardIcon(QStyle::SP_MediaVolumeMuted) : style()->standardIcon(QStyle::SP_MediaVolume);
+    QIcon volumeIcon = m_audioControl->isMuted() ? style()->standardIcon(QStyle::SP_MediaVolumeMuted) : style()->standardIcon(QStyle::SP_MediaVolume);
     ui->toggleButton_Mute->setIcon(volumeIcon);
 }
 
-void MainWindow::updatePlayPauseIcon(bool isPaused)
+void MainWindow::updatePlayPauseIcon()
 {
-    QIcon playPauseIcon = isPaused ? style()->standardIcon(QStyle::SP_MediaPlay) : style()->standardIcon(QStyle::SP_MediaPause);
+    QIcon playPauseIcon = m_audioControl->isPlaying() ? style()->standardIcon(QStyle::SP_MediaPause) : style()->standardIcon(QStyle::SP_MediaPlay);
     ui->toggleButton_PlayPause->setIcon(playPauseIcon);
 }
 
@@ -226,7 +226,7 @@ void MainWindow::showContextMenu(const QPoint& pos)
 	QListWidgetItem* songItem = ui->listWidget_SongsInPlaylist->itemAt(pos);
     QListWidgetItem* playlistItem = ui->listWidget_Playlist->itemAt(pos);
 
-    if(!playlistItem || !songItem) {
+    if(!playlistItem && !songItem) {
         return;
     }
     int songIndex = ui->listWidget_SongsInPlaylist->row(songItem);
@@ -239,7 +239,6 @@ void MainWindow::showContextMenu(const QPoint& pos)
 
 	auto removePlaylistLambda = [=]() {
 		m_playlistManager->removePlaylist(playlistIndex);
-		updatePlaylistDisplay();
     };
 
 	QMenu playlistMenu;
@@ -255,3 +254,32 @@ void MainWindow::showContextMenu(const QPoint& pos)
 		songsMenu.exec(globalSongsPos);
 	}
 }
+/*
+void MainWindow::showContextMenu(const QPoint& pos)
+{
+    QPoint globalPlaylistPos = ui->listWidget_Playlist->mapToGlobal(pos);
+    QPoint globalSongsPos = ui->listWidget_SongsInPlaylist->mapToGlobal(pos);
+
+    Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
+    QListWidgetItem* songItem = ui->listWidget_SongsInPlaylist->itemAt(pos);
+    QListWidgetItem* playlistItem = ui->listWidget_Playlist->itemAt(pos);
+
+    if (playlistItem) {
+        QMenu playlistMenu;
+        QAction* removePlaylistAction = playlistMenu.addAction("Remove Playlist");
+        connect(removePlaylistAction, &QAction::triggered, [=]() {
+            m_playlistManager->removePlaylist(ui->listWidget_Playlist->row(playlistItem));
+        });
+        playlistMenu.exec(globalPlaylistPos);
+    } else if (songItem && selectedPlaylist != m_playlistManager->getDefaultPlaylist()) {
+        QMenu songsMenu;
+        QAction* removeSongAction = songsMenu.addAction("Remove from Playlist");
+        connect(removeSongAction, &QAction::triggered, [=]() {
+            selectedPlaylist->removeSong(ui->listWidget_SongsInPlaylist->row(songItem));
+            updatePlaylistDisplay();
+        });
+        songsMenu.exec(globalSongsPos);
+    }
+}
+
+*/

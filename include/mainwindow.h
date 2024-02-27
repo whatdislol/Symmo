@@ -33,8 +33,8 @@ private slots:
     void updateSongProgress(qint64 progress);
     void updateDuration(qint64 duration);
     void updatePlaybackUI(QMediaPlayer::MediaStatus status);
-    void updateMuteIcon(bool isMuted);
-    void updatePlayPauseIcon(bool isPaused);
+    void updateMuteIcon();
+    void updatePlayPauseIcon();
     void on_actionAdd_File_triggered();
     void setupIcons();
     void addSongWidgetItem(QListWidgetItem* song);
