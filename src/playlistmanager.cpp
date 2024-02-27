@@ -4,10 +4,12 @@ PlaylistManager::PlaylistManager(QObject* parent)
     : QObject(parent),
     m_defaultPlaylist(new Playlist(this)),
     m_playlists(new QList<Playlist*>()),
-    m_currentPlaylist(m_defaultPlaylist),
-    m_songSelectionDialog(new SelectSongDialog(m_currentPlaylist->getMusicLibraryPath()))
+    m_selectedPlaylist(m_defaultPlaylist),
+    m_activePlaylist(m_defaultPlaylist),
+    m_songSelectionDialog(new SelectSongDialog(m_selectedPlaylist->getMusicLibraryPath()))
 {
     connect(m_songSelectionDialog, &SelectSongDialog::accepted, this, &PlaylistManager::onAddMultipleSongs);
+    connect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
     m_defaultPlaylist->setName("All Tracks");
 }
 
@@ -20,18 +22,28 @@ PlaylistManager::~PlaylistManager()
 
 void PlaylistManager::updateDefaultPlaylist()
 {
+    disconnect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
     emit songsDisplayCleared();
     m_defaultPlaylist->addAllSongs();
-    m_currentPlaylist = m_defaultPlaylist;
+    m_selectedPlaylist = m_defaultPlaylist;
     emit defaultPlaylistDisplayUpdated();
     emit songImportButtonHidden();
+    connect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
 }
 
 void PlaylistManager::addPlaylist(QString name)
 {
+    for (Playlist* pl : *m_playlists) {
+        if (pl->getName() == name) {
+			return;
+		}
+	}
     Playlist* playlist = new Playlist(this);
-    playlist->setName(name);
-    m_playlists->append(playlist);
+	playlist->setName(name);
+	m_playlists->append(playlist);
+
+    QListWidgetItem* newPlaylist = new QListWidgetItem(name);
+    emit playlistAdded(newPlaylist);
 }
 
 void PlaylistManager::removePlaylist(const int& index)
@@ -41,9 +53,9 @@ void PlaylistManager::removePlaylist(const int& index)
 	emit playlistRemoved(index);
 }
 
-Playlist* PlaylistManager::getCurrentPlaylist() const
+Playlist* PlaylistManager::getSelectedPlaylist() const
 {
-    return m_currentPlaylist;
+    return m_selectedPlaylist;
 }
 
 Playlist* PlaylistManager::getDefaultPlaylist() const
@@ -53,13 +65,15 @@ Playlist* PlaylistManager::getDefaultPlaylist() const
 
 void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
 {
+    disconnect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
     QString playlistName = playlist->text();
     for (Playlist* pl : *m_playlists) {
         if (pl->getName() == playlistName) {
-            m_currentPlaylist = pl; // Set current playlist 
+            setSelectedPlaylist(pl);
             break;
         }
     }
+    connect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
     emit playlistDisplayUpdated();
     emit songImportButtonVisible();
 }
@@ -72,27 +86,37 @@ void PlaylistManager::displaySongSelectionDialog()
 
 void PlaylistManager::onSelectSong(QListWidgetItem* song, AudioControl* audioControl)
 {
-    m_currentPlaylist->selectSong(song, audioControl);
+    m_selectedPlaylist->selectSong(song, audioControl);
 }
 
 void PlaylistManager::onToNextSong(AudioControl* audioControl)
 {
-    m_currentPlaylist->toNextSong(audioControl);
+    m_activePlaylist->toNextSong(audioControl);
 }
 
 void PlaylistManager::onToPreviousSong(AudioControl* audioControl)
 {
-    m_currentPlaylist->toPreviousSong(audioControl);
+    m_activePlaylist->toPreviousSong(audioControl);
 }
 
 void PlaylistManager::onSkipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status)
 {
-    m_currentPlaylist->skipOnSongEnd(audioControl, status);
+    m_activePlaylist->skipOnSongEnd(audioControl, status);
 }
 
 void PlaylistManager::onAddMultipleSongs()
 {
     QStringList selectedSongPaths = m_songSelectionDialog->getSelectedSongPaths();
-    m_currentPlaylist->addMultipleSongs(selectedSongPaths);
+    m_selectedPlaylist->addMultipleSongs(selectedSongPaths);
     emit playlistDisplayUpdated();
+}
+
+void PlaylistManager::setSelectedPlaylist(Playlist* playlist)
+{
+	m_selectedPlaylist = playlist;
+}
+
+void PlaylistManager::setActivePlaylist(Playlist* playlist)
+{
+    m_activePlaylist = playlist;
 }

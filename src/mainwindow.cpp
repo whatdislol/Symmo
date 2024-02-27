@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget* parent) :
     m_playlistManager(new PlaylistManager(this))
 {
     ui->setupUi(this);
-    Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
+    Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
     QMediaPlayer* player = m_audioControl->getMediaPlayer();
 
     // CONNECT UI SIGNALS TO METHODS
@@ -62,10 +62,11 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_playlistManager, &PlaylistManager::songImportButtonHidden, ui->pushButton_AddSong, &QPushButton::hide);
     connect(m_playlistManager, &PlaylistManager::songImportButtonVisible, ui->pushButton_AddSong, &QPushButton::show);
     connect(m_playlistManager, &PlaylistManager::playlistRemoved, this, &MainWindow::removePlaylist);
+    connect(m_playlistManager, &PlaylistManager::playlistAdded, this, &MainWindow::addPlaylistWidgetItem);
 
     // playlist
-    connect(currentPlaylist, &Playlist::songAdded, this, &MainWindow::addSongToPlaylist);
-    //connect(currentPlaylist, &Playlist::songRemoved, this, &MainWindow::updateSongsDisplay);
+    connect(selectedPlaylist, &Playlist::songAdded, this, &MainWindow::addSongWidgetItem);
+    //connect(selectedPlaylist, &Playlist::songRemoved, this, &MainWindow::updateSongsDisplay);
 
     setupIcons();
     m_playlistManager->updateDefaultPlaylist();
@@ -157,29 +158,35 @@ void MainWindow::setupIcons()
     ui->pushButton_Back->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
 }
 
-void MainWindow::addSongToPlaylist(QListWidgetItem* song)
+void MainWindow::addSongWidgetItem(QListWidgetItem* song)
 {
     ui->listWidget_SongsInPlaylist->addItem(song);
     qDebug() << "Song added to playlist: " << song->text();
 }
 
+void MainWindow::addPlaylistWidgetItem(QListWidgetItem* playlist)
+{
+	ui->listWidget_Playlist->addItem(playlist);
+}
+
 void MainWindow::getNewPlaylistName()
 {
-    QString newPlaylistName = QInputDialog::getText(this, tr("Add Playlist"), tr("Enter the name of the new playlist:"));
+	QString newPlaylistName = QInputDialog::getText(this, tr("Add Playlist"), tr("Enter the name of the new playlist:"));
 
-    if (!newPlaylistName.isEmpty()) {
-        QListWidgetItem* newPlaylist = new QListWidgetItem(newPlaylistName);
-        ui->listWidget_Playlist->addItem(newPlaylist);
-        emit playlistAdded(newPlaylistName);
+    if (!newPlaylistName.isEmpty() && newPlaylistName.length() <= 16) {
+        m_playlistManager->addPlaylist(newPlaylistName);
     }
+    else {
+		QMessageBox::warning(this, "Invalid Playlist Name", "Playlist name must be between 1 and 16 characters.");
+	}
 }
 
 void MainWindow::updateSongsDisplay()
 {
     ui->listWidget_SongsInPlaylist->clear();
-    Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
-    if (currentPlaylist) {
-        QList<QString> m_songPaths = currentPlaylist->getSongPaths();
+    Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
+    if (selectedPlaylist) {
+        QList<QString> m_songPaths = selectedPlaylist->getSongPaths();
         for (QString songPath : m_songPaths) {
             QFileInfo fileInfo(songPath);
             QString baseName = fileInfo.baseName();
@@ -191,10 +198,10 @@ void MainWindow::updateSongsDisplay()
 
 void MainWindow::updatePlaylistInfo()
 {
-    Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
-    if (currentPlaylist) {
-        ui->label_PlaylistName->setText(currentPlaylist->getName());
-        ui->label_TrackQuantity->setText(currentPlaylist->getTrackQuantity());
+    Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
+    if (selectedPlaylist) {
+        ui->label_PlaylistName->setText(selectedPlaylist->getName());
+        ui->label_TrackQuantity->setText(selectedPlaylist->getTrackQuantity());
     }
 }
 
@@ -215,7 +222,7 @@ void MainWindow::showContextMenu(const QPoint& pos)
 	QPoint globalPlaylistPos = ui->listWidget_Playlist->mapToGlobal(pos);
 	QPoint globalSongsPos = ui->listWidget_SongsInPlaylist->mapToGlobal(pos);
 
-    Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
+    Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
 	QListWidgetItem* songItem = ui->listWidget_SongsInPlaylist->itemAt(pos);
     QListWidgetItem* playlistItem = ui->listWidget_Playlist->itemAt(pos);
 
@@ -226,7 +233,7 @@ void MainWindow::showContextMenu(const QPoint& pos)
     int playlistIndex = ui->listWidget_Playlist->row(playlistItem);
 
 	auto removeSongLambda = [=]() {
-		currentPlaylist->removeSong(songIndex);
+		selectedPlaylist->removeSong(songIndex);
         updatePlaylistDisplay();
 	};
 
@@ -244,7 +251,7 @@ void MainWindow::showContextMenu(const QPoint& pos)
 	if (ui->listWidget_Playlist->underMouse()) {
 		playlistMenu.exec(globalPlaylistPos);
 	}
-    else if (ui->listWidget_SongsInPlaylist->underMouse() && m_playlistManager->getDefaultPlaylist() != currentPlaylist) {
+    else if (ui->listWidget_SongsInPlaylist->underMouse() && m_playlistManager->getDefaultPlaylist() != selectedPlaylist) {
 		songsMenu.exec(globalSongsPos);
 	}
 }

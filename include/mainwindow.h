@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QStyle>
 #include <QSlider>
+#include <QMessageBox>
 #include "audiocontrol.h"
 #include "playlistmanager.h"
 
@@ -36,7 +37,8 @@ private slots:
     void updatePlayPauseIcon(bool isPaused);
     void on_actionAdd_File_triggered();
     void setupIcons();
-    void addSongToPlaylist(QListWidgetItem* song);
+    void addSongWidgetItem(QListWidgetItem* song);
+    void addPlaylistWidgetItem(QListWidgetItem* playlist);
     void getNewPlaylistName();
     void updateSongsDisplay();
     void updatePlaylistInfo();

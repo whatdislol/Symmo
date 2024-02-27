@@ -21,7 +21,7 @@ public:
     ~Playlist();
 
     void addAllSongs();
-    void selectSong(QListWidgetItem* song, AudioControl* audioControl) const;
+    void selectSong(QListWidgetItem* song, AudioControl* audioControl);
     QString getTrackQuantity() const;
     void toNextSong(AudioControl* audiocontrol);
     void toPreviousSong(AudioControl* audioControl);
@@ -29,19 +29,16 @@ public:
     void addSong(const QString& songPath);
     void addMultipleSongs(QStringList& selectedSongPaths);
     void removeSong(const int& index);
-    bool containsSong(const QString& songPath) const;
     QString getName() const;
     void setName(const QString& name);
     QList<QString> getSongPaths() const;
     QStringList getAllSongNames() const;
     QString getMusicLibraryPath() const;
 
-public slots:
-    
-
 signals:
     void songAdded(QListWidgetItem* song);
     void songRemoved(const int& index);
+    void songSelected(Playlist* playlist);
 
 private:
     QString getProjectRootPath() const;

@@ -29,7 +29,7 @@ void Playlist::addAllSongs()
     }
 }
 
-void Playlist::selectSong(QListWidgetItem* song, AudioControl* audioControl) const
+void Playlist::selectSong(QListWidgetItem* song, AudioControl* audioControl)
 {
     QString filePath = m_musicLibraryPath + song->text() + ".mp3";
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
@@ -37,6 +37,7 @@ void Playlist::selectSong(QListWidgetItem* song, AudioControl* audioControl) con
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
         m_player->play();
+        emit songSelected(this);
     }
     else {
         qDebug() << "Error setting media source: " << m_player->errorString();
@@ -121,11 +122,6 @@ void Playlist::removeSong(const int& index)
         // Emit a signal to notify the UI to remove the corresponding item from the playlist
         emit songRemoved(index);
     }
-}
-
-bool Playlist::containsSong(const QString& songPath) const
-{
-    return false;
 }
 
 QString Playlist::getName() const
