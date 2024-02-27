@@ -7,11 +7,11 @@ Playlist::Playlist(QObject* parent)
     m_musicLibraryPath(getProjectRootPath() + "/music_library/"),
     m_name("Playlist")
 {
-    qDebug() << "Existing song list (constructor)" << m_songPaths;
 }
 
 Playlist::~Playlist()
 {
+    m_songPaths.clear();
 }
 
 void Playlist::addAllSongs()
@@ -109,11 +109,12 @@ void Playlist::addMultipleSongs(QStringList& selectedSongPaths)
     }
 }
 
-void Playlist::removeSong(const QString& songPath)
+void Playlist::removeSong(const int& index)
 {
-    int index = m_songPaths.indexOf(songPath);
+    //int index = m_songPaths.indexOf(songPath);
 
     if (index != -1) {
+        qDebug() << "Removing song at index: " << index;
         // Remove the song path from m_songPaths
         m_songPaths.removeAt(index);
 

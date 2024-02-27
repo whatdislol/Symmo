@@ -28,7 +28,7 @@ public:
     void skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status);
     void addSong(const QString& songPath);
     void addMultipleSongs(QStringList& selectedSongPaths);
-    void removeSong(const QString& songPath);
+    void removeSong(const int& index);
     bool containsSong(const QString& songPath) const;
     QString getName() const;
     void setName(const QString& name);

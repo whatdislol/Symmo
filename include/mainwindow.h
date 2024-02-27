@@ -41,6 +41,8 @@ private slots:
     void updateSongsDisplay();
     void updatePlaylistInfo();
     void updatePlaylistDisplay();
+    void removePlaylist(const int& index);
+    void showContextMenu(const QPoint& pos);
 
 private:
     Ui::MainWindow* ui;

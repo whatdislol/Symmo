@@ -14,6 +14,12 @@ MainWindow::MainWindow(QWidget* parent) :
     QMediaPlayer* player = m_audioControl->getMediaPlayer();
 
     // CONNECT UI SIGNALS TO METHODS
+    // main window
+	ui->listWidget_SongsInPlaylist->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->listWidget_Playlist->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(ui->listWidget_SongsInPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+    connect(ui->listWidget_Playlist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+
     // audio control
     connect(ui->slider_SongVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setVolume);
     connect(ui->slider_SongProgress, &QSlider::sliderMoved, m_audioControl, &AudioControl::setPosition);
@@ -55,9 +61,11 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_playlistManager, &PlaylistManager::defaultPlaylistDisplayUpdated, this, &MainWindow::updatePlaylistInfo);
     connect(m_playlistManager, &PlaylistManager::songImportButtonHidden, ui->pushButton_AddSong, &QPushButton::hide);
     connect(m_playlistManager, &PlaylistManager::songImportButtonVisible, ui->pushButton_AddSong, &QPushButton::show);
+    connect(m_playlistManager, &PlaylistManager::playlistRemoved, this, &MainWindow::removePlaylist);
 
     // playlist
     connect(currentPlaylist, &Playlist::songAdded, this, &MainWindow::addSongToPlaylist);
+    //connect(currentPlaylist, &Playlist::songRemoved, this, &MainWindow::updateSongsDisplay);
 
     setupIcons();
     m_playlistManager->updateDefaultPlaylist();
@@ -194,4 +202,49 @@ void MainWindow::updatePlaylistDisplay()
 {
     updateSongsDisplay();
     updatePlaylistInfo();
+}
+
+void MainWindow::removePlaylist(const int& index)
+{
+	QListWidgetItem* item = ui->listWidget_Playlist->takeItem(index);
+	delete item;
+}
+
+void MainWindow::showContextMenu(const QPoint& pos)
+{
+	QPoint globalPlaylistPos = ui->listWidget_Playlist->mapToGlobal(pos);
+	QPoint globalSongsPos = ui->listWidget_SongsInPlaylist->mapToGlobal(pos);
+
+    Playlist* currentPlaylist = m_playlistManager->getCurrentPlaylist();
+	QListWidgetItem* songItem = ui->listWidget_SongsInPlaylist->itemAt(pos);
+    QListWidgetItem* playlistItem = ui->listWidget_Playlist->itemAt(pos);
+
+    if(!playlistItem || !songItem) {
+        return;
+    }
+    int songIndex = ui->listWidget_SongsInPlaylist->row(songItem);
+    int playlistIndex = ui->listWidget_Playlist->row(playlistItem);
+
+	auto removeSongLambda = [=]() {
+		currentPlaylist->removeSong(songIndex);
+        updatePlaylistDisplay();
+	};
+
+	auto removePlaylistLambda = [=]() {
+		m_playlistManager->removePlaylist(playlistIndex);
+		updatePlaylistDisplay();
+    };
+
+	QMenu playlistMenu;
+    playlistMenu.addAction("Remove Playlist", removePlaylistLambda); // RIGHT CLICK MENU SOMETIMES DOES NOT SHOW UP
+
+	QMenu songsMenu;
+	songsMenu.addAction("Remove from Playlist", removeSongLambda);
+
+	if (ui->listWidget_Playlist->underMouse()) {
+		playlistMenu.exec(globalPlaylistPos);
+	}
+    else if (ui->listWidget_SongsInPlaylist->underMouse() && m_playlistManager->getDefaultPlaylist() != currentPlaylist) {
+		songsMenu.exec(globalSongsPos);
+	}
 }

@@ -20,6 +20,7 @@ public:
 
     void updateDefaultPlaylist();
     void addPlaylist(QString name);
+    void removePlaylist(const int& index);
     Playlist* getCurrentPlaylist() const;
     Playlist* getDefaultPlaylist() const;
     void selectPlaylist(QListWidgetItem* playlist);
@@ -36,6 +37,7 @@ signals:
     void defaultPlaylistDisplayUpdated();
     void songImportButtonHidden();
     void songImportButtonVisible();
+    void playlistRemoved(const int& index);
 
 private:
     Playlist* m_defaultPlaylist;

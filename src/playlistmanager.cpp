@@ -34,6 +34,13 @@ void PlaylistManager::addPlaylist(QString name)
     m_playlists->append(playlist);
 }
 
+void PlaylistManager::removePlaylist(const int& index)
+{
+    delete m_playlists->at(index);
+	m_playlists->removeAt(index);
+	emit playlistRemoved(index);
+}
+
 Playlist* PlaylistManager::getCurrentPlaylist() const
 {
     return m_currentPlaylist;
