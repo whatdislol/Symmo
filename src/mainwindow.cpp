@@ -219,67 +219,34 @@ void MainWindow::removePlaylist(const int& index)
 
 void MainWindow::showContextMenu(const QPoint& pos)
 {
-	QPoint globalPlaylistPos = ui->listWidget_Playlist->mapToGlobal(pos);
-	QPoint globalSongsPos = ui->listWidget_SongsInPlaylist->mapToGlobal(pos);
-
-    Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
-	QListWidgetItem* songItem = ui->listWidget_SongsInPlaylist->itemAt(pos);
-    QListWidgetItem* playlistItem = ui->listWidget_Playlist->itemAt(pos);
-
-    if(!playlistItem && !songItem) {
-        return;
-    }
-    int songIndex = ui->listWidget_SongsInPlaylist->row(songItem);
-    int playlistIndex = ui->listWidget_Playlist->row(playlistItem);
-
-	auto removeSongLambda = [=]() {
-		selectedPlaylist->removeSong(songIndex);
-        updatePlaylistDisplay();
-	};
-
-	auto removePlaylistLambda = [=]() {
-		m_playlistManager->removePlaylist(playlistIndex);
-    };
-
-	QMenu playlistMenu;
-    playlistMenu.addAction("Remove Playlist", removePlaylistLambda); // RIGHT CLICK MENU SOMETIMES DOES NOT SHOW UP
-
-	QMenu songsMenu;
-	songsMenu.addAction("Remove from Playlist", removeSongLambda);
-
-	if (ui->listWidget_Playlist->underMouse()) {
-		playlistMenu.exec(globalPlaylistPos);
-	}
-    else if (ui->listWidget_SongsInPlaylist->underMouse() && m_playlistManager->getDefaultPlaylist() != selectedPlaylist) {
-		songsMenu.exec(globalSongsPos);
-	}
-}
-/*
-void MainWindow::showContextMenu(const QPoint& pos)
-{
-    QPoint globalPlaylistPos = ui->listWidget_Playlist->mapToGlobal(pos);
-    QPoint globalSongsPos = ui->listWidget_SongsInPlaylist->mapToGlobal(pos);
-
-    Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
+	QListWidgetItem* playlistItem = ui->listWidget_Playlist->itemAt(pos);
     QListWidgetItem* songItem = ui->listWidget_SongsInPlaylist->itemAt(pos);
-    QListWidgetItem* playlistItem = ui->listWidget_Playlist->itemAt(pos);
+    QPoint globalPlaylistPos = ui->listWidget_Playlist->mapToGlobal(pos);
+	QPoint globalSongsPos = ui->listWidget_SongsInPlaylist->mapToGlobal(pos);
+	Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
 
-    if (playlistItem) {
+    if (ui->listWidget_Playlist->underMouse()) {
+        if (!playlistItem) {
+            return;
+        }
+        int playlistIndex = ui->listWidget_Playlist->row(playlistItem);
         QMenu playlistMenu;
-        QAction* removePlaylistAction = playlistMenu.addAction("Remove Playlist");
-        connect(removePlaylistAction, &QAction::triggered, [=]() {
-            m_playlistManager->removePlaylist(ui->listWidget_Playlist->row(playlistItem));
-        });
+		QAction* removePlaylistAction = playlistMenu.addAction("Remove Playlist");
+		connect(removePlaylistAction, &QAction::triggered, [=]() {
+			m_playlistManager->removePlaylist(playlistIndex);
+			});
         playlistMenu.exec(globalPlaylistPos);
-    } else if (songItem && selectedPlaylist != m_playlistManager->getDefaultPlaylist()) {
+    } else if (ui->listWidget_SongsInPlaylist->underMouse() && m_playlistManager->getSelectedPlaylist() != m_playlistManager->getDefaultPlaylist()) {
+        if (!songItem) {
+            return;
+        }
+        int songIndex = ui->listWidget_SongsInPlaylist->row(songItem);
         QMenu songsMenu;
-        QAction* removeSongAction = songsMenu.addAction("Remove from Playlist");
-        connect(removeSongAction, &QAction::triggered, [=]() {
-            selectedPlaylist->removeSong(ui->listWidget_SongsInPlaylist->row(songItem));
-            updatePlaylistDisplay();
-        });
+		QAction* removeSongAction = songsMenu.addAction("Remove from Playlist");
+		connect(removeSongAction, &QAction::triggered, [=]() {
+			selectedPlaylist->removeSong(songIndex);
+			updatePlaylistDisplay();
+			});
         songsMenu.exec(globalSongsPos);
     }
 }
-
-*/

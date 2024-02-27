@@ -48,6 +48,7 @@ void PlaylistManager::addPlaylist(QString name)
 
 void PlaylistManager::removePlaylist(const int& index)
 {
+    changePlaylistDisplayOnRemove(index);
     delete m_playlists->at(index);
 	m_playlists->removeAt(index);
 	emit playlistRemoved(index);
@@ -119,4 +120,11 @@ void PlaylistManager::setSelectedPlaylist(Playlist* playlist)
 void PlaylistManager::setActivePlaylist(Playlist* playlist)
 {
     m_activePlaylist = playlist;
+}
+
+void PlaylistManager::changePlaylistDisplayOnRemove(const int& index)
+{
+    if (m_selectedPlaylist == m_playlists->at(index)) {
+		updateDefaultPlaylist();
+	}
 }

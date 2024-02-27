@@ -51,6 +51,7 @@ QString Playlist::getTrackQuantity() const
 
 void Playlist::toNextSong(AudioControl* audioControl)
 {
+    qDebug() << "toNextSong() called";
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
     int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
     if (index == -1) {
