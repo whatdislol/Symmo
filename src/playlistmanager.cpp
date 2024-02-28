@@ -167,6 +167,11 @@ void PlaylistManager::changePlaylistDisplayOnRemove(const int& index)
 	}
 }
 
+void PlaylistManager::setPlaylists(QList<Playlist*> playlists)
+{
+    m_playlists = playlists;
+}
+
 QList<Playlist*> PlaylistManager::getPlaylists()
 {
     return m_playlists;
