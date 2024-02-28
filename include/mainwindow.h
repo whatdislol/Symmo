@@ -48,13 +48,15 @@ private slots:
     void updatePlaylistDisplay();
     void removePlaylist(const int& index);
     void showContextMenu(const QPoint& pos);
-    //void saveToJSON(const QString& filePath);
-    //void loadFromJSON(const QString& filePath);
+    void saveToJSON(const QString& filePath);
+    void loadFromJSON(const QString& filePath);
 
 private:
     Ui::MainWindow* ui;
     AudioControl* m_audioControl;
     PlaylistManager* m_playlistManager;
+    QString getProjectRootPath() const;
+    QString m_dataPath;
 };
 
 #endif // MAINWINDOW_H

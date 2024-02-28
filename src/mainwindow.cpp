@@ -7,7 +7,8 @@ MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_audioControl(new AudioControl(this)),
-    m_playlistManager(new PlaylistManager(this))
+    m_playlistManager(new PlaylistManager(this)),
+    m_dataPath(getProjectRootPath() + "/data.json")
 {
     ui->setupUi(this);
     Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
@@ -66,14 +67,15 @@ MainWindow::MainWindow(QWidget* parent) :
 
     // playlist
     connect(selectedPlaylist, &Playlist::songAdded, this, &MainWindow::addSongWidgetItem);
-    //connect(selectedPlaylist, &Playlist::songRemoved, this, &MainWindow::updateSongsDisplay);
 
     setupIcons();
     m_playlistManager->updateDefaultPlaylist();
+    loadFromJSON(m_dataPath);
 }
 
 MainWindow::~MainWindow()
 {
+    saveToJSON(m_dataPath);
     delete ui;
     delete m_audioControl;
     delete m_playlistManager;
@@ -250,13 +252,12 @@ void MainWindow::showContextMenu(const QPoint& pos)
         songsMenu.exec(globalSongsPos);
     }
 }
-/*
 
 void MainWindow::saveToJSON(const QString &filePath)
 {
     QJsonArray playlistsArray;
 
-    for (Playlist* playlist : m_playlistManager->m_playlists) {
+    for (Playlist* playlist : m_playlistManager->getPlaylists()) {
         QJsonObject playlistObject;
         playlistObject["name"] = playlist->getName();
 
@@ -269,7 +270,14 @@ void MainWindow::saveToJSON(const QString &filePath)
         playlistsArray.append(playlistObject);
     }
 
-    // Write JSON data to file
+	QDir().mkpath(QFileInfo(filePath).path());
+
+	QJsonDocument jsonDoc(playlistsArray);
+	if (jsonDoc.isNull() || jsonDoc.isEmpty()) {
+		qDebug() << "Failed to serialize playlists data to JSON";
+		return;
+	}
+
     QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly)) {
         qDebug() << "Failed to open file for writing:" << file.errorString();
@@ -296,7 +304,7 @@ void MainWindow::loadFromJSON(const QString &filePath)
 
     // Deserialize JSON data and create playlists
     QJsonArray playlistsArray = doc.array();
-    m_playlistManager->m_playlists.clear();
+    QList<Playlist*> loadedPlaylists;
     for (const QJsonValue& playlistValue : playlistsArray) {
         QJsonObject playlistObject = playlistValue.toObject();
         QString playlistName = playlistObject["name"].toString();
@@ -308,9 +316,19 @@ void MainWindow::loadFromJSON(const QString &filePath)
             playlist->addSong(songValue.toString());
         }
 
-        m_playlistManager->m_playlists.append(playlist);
+        loadedPlaylists.append(playlist);
+        addPlaylistWidgetItem(new QListWidgetItem(playlistName));
     }
+    m_playlistManager->setPlaylists(loadedPlaylists);
 
     file.close();
 }
-*/
+
+QString MainWindow::getProjectRootPath() const
+{
+    QString executablePath = QCoreApplication::applicationDirPath();
+    QDir currentDir(executablePath);
+    while (!currentDir.exists("CMakeLists.txt") && currentDir.cdUp());
+
+    return currentDir.absolutePath();
+}
