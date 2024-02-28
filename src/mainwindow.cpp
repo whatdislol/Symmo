@@ -250,3 +250,67 @@ void MainWindow::showContextMenu(const QPoint& pos)
         songsMenu.exec(globalSongsPos);
     }
 }
+/*
+
+void MainWindow::saveToJSON(const QString &filePath)
+{
+    QJsonArray playlistsArray;
+
+    for (Playlist* playlist : m_playlistManager->m_playlists) {
+        QJsonObject playlistObject;
+        playlistObject["name"] = playlist->getName();
+
+        QJsonArray songsArray;
+        for (const QString& song : playlist->getSongPaths()) {
+            songsArray.append(song);
+        }
+        playlistObject["songs"] = songsArray;
+
+        playlistsArray.append(playlistObject);
+    }
+
+    // Write JSON data to file
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        qDebug() << "Failed to open file for writing:" << file.errorString();
+        return;
+    }
+    file.write(QJsonDocument(playlistsArray).toJson());
+    file.close();
+}
+
+void MainWindow::loadFromJSON(const QString &filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "Failed to open file for reading:" << file.errorString();
+        return;
+    }
+
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &error);
+    if (error.error != QJsonParseError::NoError) {
+        qDebug() << "Failed to parse JSON:" << error.errorString();
+        return;
+    }
+
+    // Deserialize JSON data and create playlists
+    QJsonArray playlistsArray = doc.array();
+    m_playlistManager->m_playlists.clear();
+    for (const QJsonValue& playlistValue : playlistsArray) {
+        QJsonObject playlistObject = playlistValue.toObject();
+        QString playlistName = playlistObject["name"].toString();
+        Playlist* playlist = new Playlist(this);
+        playlist->setName(playlistName);
+
+        QJsonArray songsArray = playlistObject["songs"].toArray();
+        for (const QJsonValue& songValue : songsArray) {
+            playlist->addSong(songValue.toString());
+        }
+
+        m_playlistManager->m_playlists.append(playlist);
+    }
+
+    file.close();
+}
+*/

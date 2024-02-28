@@ -8,6 +8,7 @@
 #include <QFileInfoList>
 #include <QDir>
 #include <QListWidgetItem>
+#include <QFileSystemWatcher>
 #include "audiocontrol.h"
 #include "playlist.h"
 
@@ -49,6 +50,7 @@ private:
     Playlist* m_selectedPlaylist;
     Playlist* m_activePlaylist;
     SelectSongDialog* m_songSelectionDialog;
+    QFileSystemWatcher m_watcher;
 };
 
 #endif // PLAYLISTMANAGER_H

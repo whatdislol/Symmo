@@ -8,6 +8,13 @@ PlaylistManager::PlaylistManager(QObject* parent)
     m_activePlaylist(m_defaultPlaylist),
     m_songSelectionDialog(new SelectSongDialog(m_selectedPlaylist->getMusicLibraryPath()))
 {
+    m_watcher.addPath(m_selectedPlaylist->getMusicLibraryPath());
+        
+    connect(&m_watcher, &QFileSystemWatcher::directoryChanged, [&](const QString& path) {
+        if (m_selectedPlaylist == m_defaultPlaylist) {
+			updateDefaultPlaylist();
+		}
+    });
     connect(m_songSelectionDialog, &SelectSongDialog::accepted, this, &PlaylistManager::onAddMultipleSongs);
     connect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
     m_defaultPlaylist->setName("All Tracks");

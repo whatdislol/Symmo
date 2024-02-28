@@ -8,6 +8,9 @@
 #include <QStyle>
 #include <QSlider>
 #include <QMessageBox>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 #include "audiocontrol.h"
 #include "playlistmanager.h"
 
@@ -45,6 +48,8 @@ private slots:
     void updatePlaylistDisplay();
     void removePlaylist(const int& index);
     void showContextMenu(const QPoint& pos);
+    //void saveToJSON(const QString& filePath);
+    //void loadFromJSON(const QString& filePath);
 
 private:
     Ui::MainWindow* ui;
