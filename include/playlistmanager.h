@@ -45,7 +45,7 @@ signals:
 
 private:
     Playlist* m_defaultPlaylist;
-    QList<Playlist*>* m_playlists;
+    QList<Playlist*> m_playlists;
     Playlist* m_selectedPlaylist;
     Playlist* m_activePlaylist;
     SelectSongDialog* m_songSelectionDialog;

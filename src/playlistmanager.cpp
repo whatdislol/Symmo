@@ -3,7 +3,7 @@
 PlaylistManager::PlaylistManager(QObject* parent)
     : QObject(parent),
     m_defaultPlaylist(new Playlist(this)),
-    m_playlists(new QList<Playlist*>()),
+    m_playlists(QList<Playlist*>()),
     m_selectedPlaylist(m_defaultPlaylist),
     m_activePlaylist(m_defaultPlaylist),
     m_songSelectionDialog(new SelectSongDialog(m_selectedPlaylist->getMusicLibraryPath()))
@@ -16,8 +16,10 @@ PlaylistManager::PlaylistManager(QObject* parent)
 PlaylistManager::~PlaylistManager()
 {
 	delete m_defaultPlaylist;
-	delete m_playlists;
+    delete m_activePlaylist;
+    delete m_selectedPlaylist;
 	delete m_songSelectionDialog;
+    m_playlists.clear();
 }
 
 void PlaylistManager::updateDefaultPlaylist()
@@ -33,14 +35,14 @@ void PlaylistManager::updateDefaultPlaylist()
 
 void PlaylistManager::addPlaylist(QString name)
 {
-    for (Playlist* pl : *m_playlists) {
+    for (Playlist* pl : m_playlists) {
         if (pl->getName() == name) {
 			return;
 		}
 	}
     Playlist* playlist = new Playlist(this);
 	playlist->setName(name);
-	m_playlists->append(playlist);
+	m_playlists.append(playlist);
 
     QListWidgetItem* newPlaylist = new QListWidgetItem(name);
     emit playlistAdded(newPlaylist);
@@ -49,8 +51,9 @@ void PlaylistManager::addPlaylist(QString name)
 void PlaylistManager::removePlaylist(const int& index)
 {
     changePlaylistDisplayOnRemove(index);
-    delete m_playlists->at(index);
-	m_playlists->removeAt(index);
+    m_activePlaylist = nullptr;
+    delete m_playlists.at(index);
+    m_playlists.removeAt(index);
 	emit playlistRemoved(index);
 }
 
@@ -68,7 +71,7 @@ void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
 {
     disconnect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
     QString playlistName = playlist->text();
-    for (Playlist* pl : *m_playlists) {
+    for (Playlist* pl : m_playlists) {
         if (pl->getName() == playlistName) {
             setSelectedPlaylist(pl);
             break;
@@ -92,17 +95,38 @@ void PlaylistManager::onSelectSong(QListWidgetItem* song, AudioControl* audioCon
 
 void PlaylistManager::onToNextSong(AudioControl* audioControl)
 {
-    m_activePlaylist->toNextSong(audioControl);
+    if (m_activePlaylist != nullptr) {
+		m_activePlaylist->toNextSong(audioControl);
+        qDebug() << "Next song";
+    }
+    else {
+        QMediaPlayer* player = audioControl->getMediaPlayer();
+        player->setPosition(0);
+        player->play();
+    }
 }
 
 void PlaylistManager::onToPreviousSong(AudioControl* audioControl)
 {
-    m_activePlaylist->toPreviousSong(audioControl);
+    if (m_activePlaylist != nullptr) {
+        m_activePlaylist->toPreviousSong(audioControl);
+    }
+    else {
+        QMediaPlayer* player = audioControl->getMediaPlayer();
+        player->setPosition(0);
+        player->play();
+    }
 }
 
 void PlaylistManager::onSkipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status)
 {
-    m_activePlaylist->skipOnSongEnd(audioControl, status);
+    if (m_activePlaylist != nullptr) {
+        m_activePlaylist->skipOnSongEnd(audioControl, status);
+    }
+    else {
+        QMediaPlayer* player = audioControl->getMediaPlayer();
+        player->setPosition(0);
+	}
 }
 
 void PlaylistManager::onAddMultipleSongs()
@@ -124,7 +148,9 @@ void PlaylistManager::setActivePlaylist(Playlist* playlist)
 
 void PlaylistManager::changePlaylistDisplayOnRemove(const int& index)
 {
-    if (m_selectedPlaylist == m_playlists->at(index)) {
+    if (m_selectedPlaylist == m_playlists.at(index)) {
 		updateDefaultPlaylist();
+        //setActivePlaylist(m_defaultPlaylist);
+        //m_activePlaylist->selectSong(nullptr, nullptr);
 	}
 }

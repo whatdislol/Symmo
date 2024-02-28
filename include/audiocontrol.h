@@ -17,16 +17,11 @@ public:
     void setVolume(int volume);
     void toggleMute();
     void togglePlayPause();
-    bool isMuted() const;
-    bool isPlaying() const;
     void setPosition(int position);
     QMediaPlayer* getMediaPlayer() const;
+    QAudioOutput* getAudioOutput() const;
     void setTotalDuration(qint64& duration);
     qint64 getTotalDuration() const;
-
-signals:
-    void muteStateChanged();
-    void playPauseStateChanged();
 
 private:
     QMediaPlayer* m_player;

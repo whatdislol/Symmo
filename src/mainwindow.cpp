@@ -47,8 +47,8 @@ MainWindow::MainWindow(QWidget* parent) :
     // audio control
     connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::durationChanged, this, &MainWindow::setMaxDuration);
     connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::positionChanged, this, &MainWindow::updateSongProgress);
-    connect(m_audioControl, &AudioControl::muteStateChanged, this, &MainWindow::updateMuteIcon);
-    connect(m_audioControl, &AudioControl::playPauseStateChanged, this, &MainWindow::updatePlayPauseIcon);
+    connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::playingChanged, this, &MainWindow::updatePlayPauseIcon);
+    connect(m_audioControl->getAudioOutput(), &QAudioOutput::mutedChanged, this, &MainWindow::updateMuteIcon);
     connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::updatePlaybackUI);
     connect(player, &QMediaPlayer::mediaStatusChanged, [=](QMediaPlayer::MediaStatus status) {
         m_playlistManager->onSkipOnSongEnd(m_audioControl, status);
@@ -128,15 +128,15 @@ void MainWindow::updatePlaybackUI(QMediaPlayer::MediaStatus status)
     }
 }
 
-void MainWindow::updateMuteIcon()
+void MainWindow::updateMuteIcon(bool muted)
 {
-    QIcon volumeIcon = m_audioControl->isMuted() ? style()->standardIcon(QStyle::SP_MediaVolumeMuted) : style()->standardIcon(QStyle::SP_MediaVolume);
+    QIcon volumeIcon = muted ? style()->standardIcon(QStyle::SP_MediaVolumeMuted) : style()->standardIcon(QStyle::SP_MediaVolume);
     ui->toggleButton_Mute->setIcon(volumeIcon);
 }
 
-void MainWindow::updatePlayPauseIcon()
+void MainWindow::updatePlayPauseIcon(bool playing)
 {
-    QIcon playPauseIcon = m_audioControl->isPlaying() ? style()->standardIcon(QStyle::SP_MediaPause) : style()->standardIcon(QStyle::SP_MediaPlay);
+    QIcon playPauseIcon = playing ? style()->standardIcon(QStyle::SP_MediaPause) : style()->standardIcon(QStyle::SP_MediaPlay);
     ui->toggleButton_PlayPause->setIcon(playPauseIcon);
 }
 

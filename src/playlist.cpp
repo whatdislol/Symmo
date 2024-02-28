@@ -51,7 +51,9 @@ QString Playlist::getTrackQuantity() const
 
 void Playlist::toNextSong(AudioControl* audioControl)
 {
-    qDebug() << "toNextSong() called";
+    if (m_songPaths.size() == 0) {
+		return;
+	}
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
     int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
     if (index == -1) {
@@ -70,6 +72,9 @@ void Playlist::toNextSong(AudioControl* audioControl)
 
 void Playlist::toPreviousSong(AudioControl* audioControl)
 {
+    if (m_songPaths.size() == 0) {
+        return;
+    }
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
     int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
     if (index == -1) {
@@ -114,6 +119,7 @@ void Playlist::addMultipleSongs(QStringList& selectedSongPaths)
 void Playlist::removeSong(const int& index)
 {
     //int index = m_songPaths.indexOf(songPath);
+    qDebug() << "Index: " << index;
 
     if (index != -1) {
         qDebug() << "Removing song at index: " << index;

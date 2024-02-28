@@ -25,34 +25,22 @@ void AudioControl::setVolume(int volume)
 
 void AudioControl::toggleMute()
 {
-    if (isMuted()) {
+    if (m_audioOutput->isMuted()) {
         m_audioOutput->setMuted(false);
     }
     else {
         m_audioOutput->setMuted(true);
     }
-    emit muteStateChanged();
 }
 
 void AudioControl::togglePlayPause()
 {
-    if (isPlaying()) {
+    if (m_player->isPlaying()) {
         m_player->pause();
     }
     else {
         m_player->play();
     }
-    emit playPauseStateChanged();
-}
-
-bool AudioControl::isMuted() const
-{
-    return m_audioOutput->isMuted();
-}
-
-bool AudioControl::isPlaying() const
-{
-    return m_player->isPlaying();
 }
 
 void AudioControl::setPosition(int position)
@@ -63,6 +51,11 @@ void AudioControl::setPosition(int position)
 QMediaPlayer* AudioControl::getMediaPlayer() const
 {
 	return m_player;
+}
+
+QAudioOutput* AudioControl::getAudioOutput() const
+{
+    return m_audioOutput;
 }
 
 void AudioControl::setTotalDuration(qint64& duration)
