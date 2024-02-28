@@ -34,6 +34,7 @@ public:
     void setSelectedPlaylist(Playlist* playlist);
     void setActivePlaylist(Playlist* playlist);
     void changePlaylistDisplayOnRemove(const int& index);
+    QList<Playlist*> getPlaylists();
 
 signals:
     void songsDisplayCleared();

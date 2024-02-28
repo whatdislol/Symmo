@@ -22,11 +22,18 @@ PlaylistManager::PlaylistManager(QObject* parent)
 
 PlaylistManager::~PlaylistManager()
 {
-	delete m_defaultPlaylist;
-    delete m_activePlaylist;
-    delete m_selectedPlaylist;
+    qDebug() << m_defaultPlaylist->getName() << m_selectedPlaylist->getName() << m_activePlaylist->getName();
+    for (Playlist* playlist : m_playlists) {
+        delete playlist;
+    }
+	m_playlists.clear();
+
+    m_activePlaylist = nullptr;
+    m_selectedPlaylist = nullptr;
+    m_defaultPlaylist = nullptr;
+    delete m_defaultPlaylist;
+
 	delete m_songSelectionDialog;
-    m_playlists.clear();
 }
 
 void PlaylistManager::updateDefaultPlaylist()
@@ -157,7 +164,10 @@ void PlaylistManager::changePlaylistDisplayOnRemove(const int& index)
 {
     if (m_selectedPlaylist == m_playlists.at(index)) {
 		updateDefaultPlaylist();
-        //setActivePlaylist(m_defaultPlaylist);
-        //m_activePlaylist->selectSong(nullptr, nullptr);
 	}
+}
+
+QList<Playlist*> PlaylistManager::getPlaylists()
+{
+    return m_playlists;
 }
