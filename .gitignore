@@ -56,3 +56,6 @@ compile_commands.json
 debug/
 saves/
 /build
+/music_library/*
+/data.json
+/data.json

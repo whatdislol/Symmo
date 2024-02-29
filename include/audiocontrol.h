@@ -17,27 +17,18 @@ public:
     void setVolume(int volume);
     void toggleMute();
     void togglePlayPause();
-    void loadMedia(const QUrl& url);
-    qint64 duration() const;
-    qint64 position() const;
     void setPosition(int position);
-    bool isMuted() const;
-    bool isPaused() const;
     QMediaPlayer* getMediaPlayer() const;
+    QAudioOutput* getAudioOutput() const;
     void setTotalDuration(qint64& duration);
     qint64 getTotalDuration() const;
 
 signals:
-    void durationChanged(qint64 duration);
-    void positionChanged(qint64 progress);
-    void muteStateChanged(bool m_isMuted);
-    void playPauseStateChanged(bool m_isPaused);
+    void isZeroVolume(bool muted);
 
 private:
     QMediaPlayer* m_player;
     QAudioOutput* m_audioOutput;
-    bool m_isMuted;
-    bool m_isPaused;
     qint64 m_totalDuration;
 };
 
