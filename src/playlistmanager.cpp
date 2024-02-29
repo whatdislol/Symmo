@@ -10,11 +10,7 @@ PlaylistManager::PlaylistManager(QObject* parent)
 {
     m_watcher.addPath(m_selectedPlaylist->getMusicLibraryPath());
         
-    connect(&m_watcher, &QFileSystemWatcher::directoryChanged, [&](const QString& path) {
-        if (m_selectedPlaylist == m_defaultPlaylist) {
-			updateDefaultPlaylist();
-		}
-    });
+    connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, &PlaylistManager::onMusicLibraryChanged);
     connect(m_songSelectionDialog, &SelectSongDialog::accepted, this, &PlaylistManager::onAddMultipleSongs);
     connect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
     m_defaultPlaylist->setName("All Tracks");
@@ -175,4 +171,39 @@ void PlaylistManager::setPlaylists(QList<Playlist*> playlists)
 QList<Playlist*> PlaylistManager::getPlaylists()
 {
     return m_playlists;
+}
+
+void PlaylistManager::onMusicLibraryChanged(const QString& path)
+{
+    QStringList currentPaths = getMusicLibraryAbsolutePaths(path);
+
+    for (Playlist* playlist : m_playlists) {
+        QStringList songPaths = playlist->getSongPaths();
+        for (const QString& songPath : songPaths) {
+            if (!currentPaths.contains(songPath)) {
+                qDebug() << "File removed:" << songPath;
+                int index = songPaths.indexOf(songPath);
+                playlist->removeSong(index);
+            }
+        }
+    }
+    if (m_selectedPlaylist == m_defaultPlaylist) {
+        updateDefaultPlaylist();
+    }
+    else {
+		emit playlistDisplayUpdated();
+	}
+}
+
+QStringList PlaylistManager::getMusicLibraryAbsolutePaths(const QString& path)
+{
+    QDir directory(path);
+    QStringList absoluteFilePaths;
+    QFileInfoList fileInfoList = directory.entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
+
+    for (const QFileInfo& fileInfo : fileInfoList) {
+        absoluteFilePaths.append(fileInfo.absoluteFilePath());
+    }
+
+    return absoluteFilePaths;
 }

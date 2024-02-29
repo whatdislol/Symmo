@@ -36,6 +36,7 @@ public:
     void changePlaylistDisplayOnRemove(const int& index);
     void setPlaylists(QList<Playlist*> playlists);
     QList<Playlist*> getPlaylists();
+    void onMusicLibraryChanged(const QString& path);
 
 signals:
     void songsDisplayCleared();
@@ -53,6 +54,7 @@ private:
     Playlist* m_activePlaylist;
     SelectSongDialog* m_songSelectionDialog;
     QFileSystemWatcher m_watcher;
+    QStringList getMusicLibraryAbsolutePaths(const QString& path);
 };
 
 #endif // PLAYLISTMANAGER_H
