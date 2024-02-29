@@ -22,20 +22,23 @@ void AudioControl::setVolume(int volume)
 {
     m_audioOutput->setVolume(volume / 100.0);
     if (volume == 0) {
+        m_audioOutput->setMuted(false);
 		emit isZeroVolume(true);
 	}
-    else {
+    else if (!m_audioOutput->isMuted()){
 		emit isZeroVolume(false);
 	}   
 }
 
 void AudioControl::toggleMute()
 {
-    if (m_audioOutput->isMuted()) {
-        m_audioOutput->setMuted(false);
-    }
-    else {
-        m_audioOutput->setMuted(true);
+    if (m_audioOutput->volume() != 0) {
+        if (m_audioOutput->isMuted()) {
+            m_audioOutput->setMuted(false);
+        }
+        else {
+            m_audioOutput->setMuted(true);
+        }
     }
 }
 
