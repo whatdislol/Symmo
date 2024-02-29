@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::positionChanged, this, &MainWindow::updateSongProgress);
     connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::playingChanged, this, &MainWindow::updatePlayPauseIcon);
     connect(m_audioControl->getAudioOutput(), &QAudioOutput::mutedChanged, this, &MainWindow::updateMuteIcon);
+    connect(m_audioControl, &AudioControl::isZeroVolume, this, &MainWindow::updateMuteIcon);
     connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::updatePlaybackUI);
     connect(player, &QMediaPlayer::mediaStatusChanged, [=](QMediaPlayer::MediaStatus status) {
         m_playlistManager->onSkipOnSongEnd(m_audioControl, status);

@@ -21,6 +21,12 @@ AudioControl::~AudioControl()
 void AudioControl::setVolume(int volume)
 {
     m_audioOutput->setVolume(volume / 100.0);
+    if (volume == 0) {
+		emit isZeroVolume(true);
+	}
+    else {
+		emit isZeroVolume(false);
+	}   
 }
 
 void AudioControl::toggleMute()

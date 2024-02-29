@@ -23,6 +23,9 @@ public:
     void setTotalDuration(qint64& duration);
     qint64 getTotalDuration() const;
 
+signals:
+    void isZeroVolume(bool muted);
+
 private:
     QMediaPlayer* m_player;
     QAudioOutput* m_audioOutput;
