@@ -49,52 +49,62 @@ QString Playlist::getTrackQuantity() const
     return QString::number(m_songPaths.size());
 }
 
-void Playlist::toNextSong(AudioControl* audioControl)
+void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
 {
     if (m_songPaths.size() == 0) {
 		return;
 	}
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
-    int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
-    if (index == -1) {
-        return;
-    }
-    QString filePath = (index + 1 < m_songPaths.size()) ? m_songPaths[index + 1] : m_songPaths[0];
-    m_player->setSource(QUrl::fromLocalFile(filePath));
-
-    if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
-        m_player->play();
+    int index;
+    if (!shuffled) {
+        index = m_songPaths.indexOf(getCurrentSongPath(m_player));
     }
     else {
-        qDebug() << "Error setting media source: " << m_player->errorString();
+        index = m_shuffledSongPaths.indexOf(getCurrentSongPath(m_player));
+    }
+    if (index != -1) {
+        QString filePath = (index + 1 < m_songPaths.size()) ? m_songPaths[index + 1] : m_songPaths[0];
+        m_player->setSource(QUrl::fromLocalFile(filePath));
+
+        if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
+            m_player->play();
+        }
+        else {
+            qDebug() << "Error setting media source: " << m_player->errorString();
+        }
     }
 }
 
-void Playlist::toPreviousSong(AudioControl* audioControl)
+void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
 {
     if (m_songPaths.size() == 0) {
         return;
     }
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
-    int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
-    if (index == -1) {
-        return;
-    }
-    QString filePath = (index > 0) ? m_songPaths[index - 1] : m_songPaths[0];
-    m_player->setSource(QUrl::fromLocalFile(filePath));
-
-    if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
-        m_player->play();
+    int index;
+    if (!shuffled) {
+        index = m_songPaths.indexOf(getCurrentSongPath(m_player));
     }
     else {
-        qDebug() << "Error setting media source: " << m_player->errorString();
+        index = m_shuffledSongPaths.indexOf(getCurrentSongPath(m_player));
+    }
+    if (index != -1) {
+        QString filePath = (index > 0) ? m_songPaths[index - 1] : m_songPaths[0];
+        m_player->setSource(QUrl::fromLocalFile(filePath));
+
+        if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
+            m_player->play();
+        }
+        else {
+            qDebug() << "Error setting media source: " << m_player->errorString();
+        }
     }
 }
 
-void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status)
+void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status, bool shuffled)
 {
     if (status == QMediaPlayer::EndOfMedia) {
-        toNextSong(audioControl);
+        toNextSong(audioControl, shuffled);
     }
 }
 
@@ -162,6 +172,18 @@ QStringList Playlist::getAllSongNames() const
 QString Playlist::getMusicLibraryPath() const
 {
     return m_musicLibraryPath;
+}
+
+void Playlist::shuffleFisherYates()
+{
+    std::mt19937 gen(time(0));
+    m_shuffledSongPaths = m_songPaths;
+	int n = m_shuffledSongPaths.size();
+    for (int i = n - 1; i > 0; --i) {
+        std::uniform_int_distribution<int> dist(0, i);
+        int j = dist(gen);
+        m_shuffledSongPaths.swapItemsAt(i, j);
+    }
 }
 
 QString Playlist::getProjectRootPath() const {
