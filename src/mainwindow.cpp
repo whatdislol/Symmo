@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->pushButton_AddPlaylist, &QPushButton::clicked, this, &MainWindow::getNewPlaylistName);
     connect(ui->listWidget_Playlist, &QListWidget::itemClicked, m_playlistManager, &PlaylistManager::selectPlaylist);
     connect(ui->pushButton_AddSong, &QPushButton::clicked, m_playlistManager, &PlaylistManager::displaySongSelectionDialog);
+    connect(ui->toggleButton_Shuffle, &QPushButton::clicked, m_playlistManager, &PlaylistManager::toggleShuffleStatus);
 
     // playlist
     connect(ui->pushButton_Skip, &QPushButton::clicked, [=]() {
@@ -65,6 +66,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_playlistManager, &PlaylistManager::songImportButtonVisible, ui->pushButton_AddSong, &QPushButton::show);
     connect(m_playlistManager, &PlaylistManager::playlistRemoved, this, &MainWindow::removePlaylist);
     connect(m_playlistManager, &PlaylistManager::playlistAdded, this, &MainWindow::addPlaylistWidgetItem);
+    connect(m_playlistManager, &PlaylistManager::updateShuffleStatus, this, &MainWindow::updateShuffleIcon);
 
     // playlist
     connect(selectedPlaylist, &Playlist::songAdded, this, &MainWindow::addSongWidgetItem);
@@ -72,6 +74,7 @@ MainWindow::MainWindow(QWidget* parent) :
     setupIcons();
     m_playlistManager->updateDefaultPlaylist();
     loadFromJSON(m_dataPath);
+    m_playlistManager->onMusicLibraryChanged(m_playlistManager->getMusicLibraryPath());
 }
 
 MainWindow::~MainWindow()
@@ -141,6 +144,12 @@ void MainWindow::updatePlayPauseIcon(bool playing)
 {
     QIcon playPauseIcon = playing ? style()->standardIcon(QStyle::SP_MediaPause) : style()->standardIcon(QStyle::SP_MediaPlay);
     ui->toggleButton_PlayPause->setIcon(playPauseIcon);
+}
+
+void MainWindow::updateShuffleIcon(bool shuffled)
+{
+	QIcon shuffleIcon = shuffled ? style()->standardIcon(QStyle::SP_MediaSeekForward) : style()->standardIcon(QStyle::SP_MediaSeekBackward);
+	ui->toggleButton_Shuffle->setIcon(shuffleIcon);
 }
 
 void MainWindow::on_actionAdd_File_triggered()
@@ -247,7 +256,8 @@ void MainWindow::showContextMenu(const QPoint& pos)
         QMenu songsMenu;
 		QAction* removeSongAction = songsMenu.addAction("Remove from Playlist");
 		connect(removeSongAction, &QAction::triggered, [=]() {
-			selectedPlaylist->removeSong(songIndex);
+            QString songPath = m_playlistManager->getMusicLibraryPath() + songItem->text() + ".mp3";
+			selectedPlaylist->removeSong(songPath);
 			updatePlaylistDisplay();
 			});
         songsMenu.exec(globalSongsPos);
@@ -259,6 +269,9 @@ void MainWindow::saveToJSON(const QString &filePath)
     QJsonArray playlistsArray;
 
     for (Playlist* playlist : m_playlistManager->getPlaylists()) {
+        if (playlist == m_playlistManager->getDefaultPlaylist()) {
+			continue;
+		}
         QJsonObject playlistObject;
         playlistObject["name"] = playlist->getName();
 
@@ -303,7 +316,6 @@ void MainWindow::loadFromJSON(const QString &filePath)
         return;
     }
 
-    // Deserialize JSON data and create playlists
     QJsonArray playlistsArray = doc.array();
     QList<Playlist*> loadedPlaylists;
     for (const QJsonValue& playlistValue : playlistsArray) {

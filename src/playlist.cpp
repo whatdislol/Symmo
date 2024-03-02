@@ -99,6 +99,10 @@ void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
             qDebug() << "Error setting media source: " << m_player->errorString();
         }
     }
+
+    if (shuffled) {
+		qDebug() << "Shuffled songs: " << m_shuffledSongPaths;
+	}
 }
 
 void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status, bool shuffled)
@@ -126,18 +130,10 @@ void Playlist::addMultipleSongs(QStringList& selectedSongPaths)
     }
 }
 
-void Playlist::removeSong(const int& index)
+void Playlist::removeSong(const QString& songPath)
 {
-    //int index = m_songPaths.indexOf(songPath);
-    qDebug() << "Index: " << index;
-
-    if (index != -1) {
-        qDebug() << "Removing song at index: " << index;
-        // Remove the song path from m_songPaths
-        m_songPaths.removeAt(index);
-
-        // Emit a signal to notify the UI to remove the corresponding item from the playlist
-        emit songRemoved(index);
+    if (songPath.size() > 0) {
+        m_songPaths.removeAll(songPath);
     }
 }
 

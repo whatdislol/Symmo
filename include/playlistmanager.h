@@ -34,9 +34,12 @@ public:
     void setSelectedPlaylist(Playlist* playlist);
     void setActivePlaylist(Playlist* playlist);
     void changePlaylistDisplayOnRemove(const int& index);
+    QString getMusicLibraryPath() const;
     void setPlaylists(QList<Playlist*> playlists);
     QList<Playlist*> getPlaylists();
     void onMusicLibraryChanged(const QString& path);
+    void toggleShuffleStatus();
+    void onShuffleFisherYates();
 
 signals:
     void songsDisplayCleared();
@@ -46,6 +49,7 @@ signals:
     void songImportButtonVisible();
     void playlistAdded(QListWidgetItem* playlist);
     void playlistRemoved(const int& index);
+    void updateShuffleStatus(bool shuffled);
 
 private:
     Playlist* m_defaultPlaylist;
@@ -54,6 +58,7 @@ private:
     Playlist* m_activePlaylist;
     SelectSongDialog* m_songSelectionDialog;
     QFileSystemWatcher m_watcher;
+    bool m_shuffled;
     QStringList getMusicLibraryAbsolutePaths(const QString& path);
 };
 

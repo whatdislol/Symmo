@@ -30,7 +30,7 @@ public:
     void skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status, bool shuffled);
     void addSong(const QString& songPath);
     void addMultipleSongs(QStringList& selectedSongPaths);
-    void removeSong(const int& index);
+    void removeSong(const QString& songPath);
     QString getName() const;
     void setName(const QString& name);
     QList<QString> getSongPaths() const;
@@ -42,7 +42,6 @@ public:
 
 signals:
     void songAdded(QListWidgetItem* song);
-    void songRemoved(const int& index);
     void songSelected(Playlist* playlist);
 
 private:
