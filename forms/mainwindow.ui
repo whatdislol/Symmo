@@ -145,7 +145,7 @@
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_Loop">
+    <widget class="QPushButton" name="toggleButton_Loop">
      <property name="geometry">
       <rect>
        <x>687</x>
@@ -179,7 +179,7 @@
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_Shuffle">
+    <widget class="QPushButton" name="toggleButton_Shuffle">
      <property name="geometry">
       <rect>
        <x>431</x>
@@ -371,8 +371,8 @@
     <zorder>toggleButton_PlayPause</zorder>
     <zorder>pushButton_Back</zorder>
     <zorder>pushButton_Skip</zorder>
-    <zorder>pushButton_Loop</zorder>
-    <zorder>pushButton_Shuffle</zorder>
+    <zorder>toggleButton_Loop</zorder>
+    <zorder>toggleButton_Shuffle</zorder>
     <zorder>toggleButton_Mute</zorder>
     <zorder>slider_SongVolume</zorder>
     <zorder>label_CurrentSongDuration</zorder>
