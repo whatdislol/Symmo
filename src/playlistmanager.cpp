@@ -201,7 +201,9 @@ void PlaylistManager::onMusicLibraryChanged(const QString& path)
 void PlaylistManager::toggleShuffleStatus()
 {
     m_shuffled = !m_shuffled;
-    m_activePlaylist->shuffleFisherYates();
+    if (m_shuffled) {
+		onShuffleFisherYates();
+	}
     emit updateShuffleStatus(m_shuffled);
 }
 

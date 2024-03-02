@@ -51,19 +51,17 @@ QString Playlist::getTrackQuantity() const
 
 void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
 {
-    if (m_songPaths.size() == 0) {
-		return;
-	}
+    if (m_songPaths.isEmpty()) {
+        return;
+    }
+
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
-    int index;
-    if (!shuffled) {
-        index = m_songPaths.indexOf(getCurrentSongPath(m_player));
-    }
-    else {
-        index = m_shuffledSongPaths.indexOf(getCurrentSongPath(m_player));
-    }
+    qint64 index;
+    QStringList& songPaths = (shuffled) ? m_shuffledSongPaths : m_songPaths;
+
+    index = songPaths.indexOf(getCurrentSongPath(m_player));
     if (index != -1) {
-        QString filePath = (index + 1 < m_songPaths.size()) ? m_songPaths[index + 1] : m_songPaths[0];
+        QString filePath = songPaths[(index + 1) % songPaths.size()]; // Use modulo operator for cyclic indexing
         m_player->setSource(QUrl::fromLocalFile(filePath));
 
         if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
@@ -77,19 +75,17 @@ void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
 
 void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
 {
-    if (m_songPaths.size() == 0) {
+    if (m_songPaths.isEmpty()) {
         return;
     }
+
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
-    int index;
-    if (!shuffled) {
-        index = m_songPaths.indexOf(getCurrentSongPath(m_player));
-    }
-    else {
-        index = m_shuffledSongPaths.indexOf(getCurrentSongPath(m_player));
-    }
+	qint64 index;
+	QStringList& songPaths = (shuffled) ? m_shuffledSongPaths : m_songPaths;
+
+	index = songPaths.indexOf(getCurrentSongPath(m_player));
     if (index != -1) {
-        QString filePath = (index > 0) ? m_songPaths[index - 1] : m_songPaths[0];
+        QString filePath = songPaths[index > 0 ? index - 1 : 0];
         m_player->setSource(QUrl::fromLocalFile(filePath));
 
         if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
@@ -99,11 +95,8 @@ void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
             qDebug() << "Error setting media source: " << m_player->errorString();
         }
     }
-
-    if (shuffled) {
-		qDebug() << "Shuffled songs: " << m_shuffledSongPaths;
-	}
 }
+
 
 void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status, bool shuffled)
 {
@@ -180,6 +173,8 @@ void Playlist::shuffleFisherYates()
         int j = dist(gen);
         m_shuffledSongPaths.swapItemsAt(i, j);
     }
+    qDebug() << "Shuffled songs: " << m_shuffledSongPaths;
+    qDebug() << "Original songs: " << m_songPaths;
 }
 
 QString Playlist::getProjectRootPath() const {
