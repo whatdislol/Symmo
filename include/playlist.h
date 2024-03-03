@@ -51,6 +51,7 @@ private:
     QString m_musicLibraryPath;
     QList<QString> m_songPaths;
     QList<QString> m_shuffledSongPaths;
+    qint64 m_currentShuffledSongIndex;
     QString m_name;
 };
 
