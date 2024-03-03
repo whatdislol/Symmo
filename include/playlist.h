@@ -12,6 +12,7 @@
 #include <QList>
 #include <random>
 #include <ctime>
+#include <algorithm>
 #include "audiocontrol.h"
 #include "selectsongdialog.h"
 
@@ -38,7 +39,7 @@ public:
     QString getMusicLibraryPath() const;
     void shuffleFisherYates();
     void shuffleTwo();
-    void shuffleThree();
+    void shuffleCTime();
 
 signals:
     void songAdded(QListWidgetItem* song);

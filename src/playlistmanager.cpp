@@ -7,7 +7,8 @@ PlaylistManager::PlaylistManager(QObject* parent)
     m_selectedPlaylist(m_defaultPlaylist),
     m_activePlaylist(m_defaultPlaylist),
     m_songSelectionDialog(new SelectSongDialog(m_selectedPlaylist->getMusicLibraryPath())),
-    m_shuffled(false)
+    m_shuffled(false),
+    m_shuffleMode(0)
 {
     m_watcher.addPath(m_selectedPlaylist->getMusicLibraryPath());
         
@@ -198,11 +199,35 @@ void PlaylistManager::onMusicLibraryChanged(const QString& path)
 	}
 }
 
+void PlaylistManager::setShuffleMode(const int& mode)
+{
+	m_shuffleMode = mode;
+}
+
+void PlaylistManager::shufflePlaylist()
+{
+    switch (m_shuffleMode) {
+		case 0:
+			onShuffleFisherYates();
+			break;
+		case 1:
+			onShuffleTwo();
+			break;
+		case 2:
+			onShuffleCTime();
+			break;
+        default:
+			break;
+	}
+    m_shuffled = true;
+    emit updateShuffleStatus(m_shuffled);
+}
+
 void PlaylistManager::toggleShuffleStatus()
 {
     m_shuffled = !m_shuffled;
     if (m_shuffled) {
-		onShuffleFisherYates();
+        shufflePlaylist();
 	}
     emit updateShuffleStatus(m_shuffled);
 }
@@ -210,6 +235,16 @@ void PlaylistManager::toggleShuffleStatus()
 void PlaylistManager::onShuffleFisherYates()
 {
     m_activePlaylist->shuffleFisherYates();
+}
+
+void PlaylistManager::onShuffleTwo()
+{
+    m_activePlaylist->shuffleTwo();
+}
+
+void PlaylistManager::onShuffleCTime()
+{
+	m_activePlaylist->shuffleCTime();
 }
 
 QStringList PlaylistManager::getMusicLibraryAbsolutePaths(const QString& path)

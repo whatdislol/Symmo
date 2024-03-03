@@ -18,8 +18,10 @@ MainWindow::MainWindow(QWidget* parent) :
     // main window
 	ui->listWidget_SongsInPlaylist->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->listWidget_Playlist->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->toggleButton_Shuffle->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(ui->listWidget_SongsInPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
     connect(ui->listWidget_Playlist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+    connect(ui->toggleButton_Shuffle, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 
     // audio control
     connect(ui->slider_SongVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setVolume);
@@ -235,7 +237,9 @@ void MainWindow::showContextMenu(const QPoint& pos)
     QListWidgetItem* songItem = ui->listWidget_SongsInPlaylist->itemAt(pos);
     QPoint globalPlaylistPos = ui->listWidget_Playlist->mapToGlobal(pos);
 	QPoint globalSongsPos = ui->listWidget_SongsInPlaylist->mapToGlobal(pos);
+    QPoint globalShufflePos = ui->toggleButton_Shuffle->mapToGlobal(pos);
 	Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
+
 
     if (ui->listWidget_Playlist->underMouse()) {
         if (!playlistItem) {
@@ -261,6 +265,28 @@ void MainWindow::showContextMenu(const QPoint& pos)
 			updatePlaylistDisplay();
 			});
         songsMenu.exec(globalSongsPos);
+    }
+    else if (ui->toggleButton_Shuffle->underMouse()) {
+        QMenu shuffleMenu;
+        QAction* shuffleFisherYates = shuffleMenu.addAction("Shuffle Fisher Yates");
+        connect(shuffleFisherYates, &QAction::triggered, [=]() {
+            m_playlistManager->setShuffleMode(0);
+            m_playlistManager->shufflePlaylist();
+            // update shuffle icon for FISHER YATES shuffle
+        });
+        QAction* shuffleTWO = shuffleMenu.addAction("Shuffle Two");
+		connect(shuffleTWO, &QAction::triggered, [=]() {
+			m_playlistManager->setShuffleMode(1);
+			m_playlistManager->shufflePlaylist();
+			// update shuffle icon for shuffle TWO
+		});
+        QAction* shuffleCTime = shuffleMenu.addAction("Shuffle CTime");
+		connect(shuffleCTime, &QAction::triggered, [=]() {
+			m_playlistManager->setShuffleMode(2);
+			m_playlistManager->shufflePlaylist();
+			// update shuffle icon for shuffle THREE
+		});
+        shuffleMenu.exec(globalShufflePos);
     }
 }
 

@@ -38,8 +38,12 @@ public:
     void setPlaylists(QList<Playlist*> playlists);
     QList<Playlist*> getPlaylists();
     void onMusicLibraryChanged(const QString& path);
+    void setShuffleMode(const int& mode);
+    void shufflePlaylist();
     void toggleShuffleStatus();
     void onShuffleFisherYates();
+    void onShuffleTwo();
+    void onShuffleCTime();
 
 signals:
     void songsDisplayCleared();
@@ -59,6 +63,7 @@ private:
     SelectSongDialog* m_songSelectionDialog;
     QFileSystemWatcher m_watcher;
     bool m_shuffled;
+    int m_shuffleMode;
     QStringList getMusicLibraryAbsolutePaths(const QString& path);
 };
 
