@@ -176,13 +176,13 @@ QString Playlist::getMusicLibraryPath() const
 
 void Playlist::shuffleFisherYates()
 {
-    std::mt19937 gen(time(0));
+    std::mt19937 gen(std::time(nullptr)); // Seed the random number generator
     m_shuffledSongPaths = m_songPaths;
     qDebug() << "Initial: " << m_shuffledSongPaths;
     qDebug() << "Fisher Yates Shuffle: ";
-	int n = m_shuffledSongPaths.size();
-    for (int i = 0; i < n; ++i) {
-        std::uniform_int_distribution<int> dist(i, n - 1);
+    int n = m_shuffledSongPaths.size();
+    for (int i = n - 1; i > 0; --i) {
+        std::uniform_int_distribution<int> dist(0, i);
         int j = dist(gen);
         m_shuffledSongPaths.swapItemsAt(i, j);
     }
