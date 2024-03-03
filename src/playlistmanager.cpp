@@ -102,6 +102,9 @@ void PlaylistManager::displaySongSelectionDialog()
 void PlaylistManager::onSelectSong(QListWidgetItem* song, AudioControl* audioControl)
 {
     m_selectedPlaylist->selectSong(song, audioControl);
+    if (m_shuffled) {
+		shufflePlaylist();
+    }
 }
 
 void PlaylistManager::onToNextSong(AudioControl* audioControl)
