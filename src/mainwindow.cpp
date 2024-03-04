@@ -268,21 +268,15 @@ void MainWindow::showContextMenu(const QPoint& pos)
     }
     else if (ui->toggleButton_Shuffle->underMouse()) {
         QMenu shuffleMenu;
-        QAction* shuffleFisherYates = shuffleMenu.addAction("Shuffle Fisher Yates");
+        QAction* shuffleFisherYates = shuffleMenu.addAction("Fisher-Yates");
         connect(shuffleFisherYates, &QAction::triggered, [=]() {
             m_playlistManager->setShuffleMode(0);
             m_playlistManager->shufflePlaylist();
             // update shuffle icon for FISHER YATES shuffle
         });
-        QAction* shuffleTWO = shuffleMenu.addAction("Shuffle Two");
-		connect(shuffleTWO, &QAction::triggered, [=]() {
+        QAction* shuffleRandom = shuffleMenu.addAction("Random");
+		connect(shuffleRandom, &QAction::triggered, [=]() {
 			m_playlistManager->setShuffleMode(1);
-			m_playlistManager->shufflePlaylist();
-			// update shuffle icon for shuffle TWO
-		});
-        QAction* shuffleCTime = shuffleMenu.addAction("Shuffle CTime");
-		connect(shuffleCTime, &QAction::triggered, [=]() {
-			m_playlistManager->setShuffleMode(2);
 			m_playlistManager->shufflePlaylist();
 			// update shuffle icon for shuffle THREE
 		});

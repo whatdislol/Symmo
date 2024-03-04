@@ -195,8 +195,9 @@ QString Playlist::getMusicLibraryPath() const
 
 void Playlist::shuffleFisherYates()
 {
-    std::mt19937 gen(std::time(nullptr)); // Seed the random number generator
+    m_currentShuffledSongIndex = 0;
     m_shuffledSongPaths = m_songPaths;
+    std::mt19937 gen(std::time(nullptr)); // Seed the random number generator
     qDebug() << "Initial: " << m_shuffledSongPaths;
     int n = m_shuffledSongPaths.size();
     for (int i = n - 1; i > 0; --i) {
@@ -204,8 +205,6 @@ void Playlist::shuffleFisherYates()
         int j = dist(gen);
         m_shuffledSongPaths.swapItemsAt(i, j);
     }
-
-    m_currentShuffledSongIndex = 0;
     
     qDebug() << "Fisher Yates Shuffled: ";
     for (auto& song : m_shuffledSongPaths) {
@@ -213,14 +212,9 @@ void Playlist::shuffleFisherYates()
     }
 }
 
-void Playlist::shuffleTwo()
+void Playlist::shuffleRandom()
 {
-    m_shuffledSongPaths = m_songPaths;
     m_currentShuffledSongIndex = 0;
-}
-
-void Playlist::shuffleCTime()
-{
     m_shuffledSongPaths = m_songPaths;
     qDebug() << "Initial: " << m_shuffledSongPaths;
     qDebug() << "Ctime Shuffle:";
@@ -228,14 +222,14 @@ void Playlist::shuffleCTime()
     std::mt19937 gen(std::time(nullptr));
 
     for (int i = 0; i < m_shuffledSongPaths.size(); ++i) {
-        int randomIndex = std::uniform_int_distribution<int>(0, m_shuffledSongPaths.size() - 1)(gen);
-        QString randomSong = m_shuffledSongPaths[randomIndex];
+        QString randomSong;
+        do {
+            int randomIndex = std::uniform_int_distribution<int>(0, m_shuffledSongPaths.size() - 1)(gen);
+            randomSong = m_songPaths[randomIndex];
+        } while ((m_shuffledSongPaths[i - 1] == randomSong) && i > 0);
         m_shuffledSongPaths[i] = randomSong;
-        qDebug() << m_shuffledSongPaths[i];
     }
-
-    m_currentShuffledSongIndex = 0;
-
+    
     qDebug() << "CTime Shuffled: ";
     for (auto& song : m_shuffledSongPaths) {
         qDebug() << song;

@@ -42,8 +42,7 @@ public:
     void shufflePlaylist();
     void toggleShuffleStatus();
     void onShuffleFisherYates();
-    void onShuffleTwo();
-    void onShuffleCTime();
+    void onShuffleRandom();
 
 signals:
     void songsDisplayCleared();

@@ -38,8 +38,7 @@ public:
     QStringList getAllSongNames() const;
     QString getMusicLibraryPath() const;
     void shuffleFisherYates();
-    void shuffleTwo();
-    void shuffleCTime();
+    void shuffleRandom();
 
 signals:
     void songAdded(QListWidgetItem* song);

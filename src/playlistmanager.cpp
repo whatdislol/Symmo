@@ -214,10 +214,7 @@ void PlaylistManager::shufflePlaylist()
 			onShuffleFisherYates();
 			break;
 		case 1:
-			onShuffleTwo();
-			break;
-		case 2:
-			onShuffleCTime();
+			onShuffleRandom();
 			break;
         default:
 			break;
@@ -240,14 +237,9 @@ void PlaylistManager::onShuffleFisherYates()
     m_activePlaylist->shuffleFisherYates();
 }
 
-void PlaylistManager::onShuffleTwo()
+void PlaylistManager::onShuffleRandom()
 {
-    m_activePlaylist->shuffleTwo();
-}
-
-void PlaylistManager::onShuffleCTime()
-{
-	m_activePlaylist->shuffleCTime();
+	m_activePlaylist->shuffleRandom();
 }
 
 QStringList PlaylistManager::getMusicLibraryAbsolutePaths(const QString& path)
