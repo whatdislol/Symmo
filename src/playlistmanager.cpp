@@ -80,6 +80,10 @@ Playlist* PlaylistManager::getDefaultPlaylist() const
 
 void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
 {
+    if (!m_selectedPlaylist) {
+        return;
+    }
+
     disconnect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
     QString playlistName = playlist->text();
     for (Playlist* pl : m_playlists) {
@@ -91,6 +95,7 @@ void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
     connect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
     emit playlistDisplayUpdated();
     emit songImportButtonVisible();
+    emit searchBarCleared();
 }
 
 void PlaylistManager::displaySongSelectionDialog()

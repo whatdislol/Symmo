@@ -50,6 +50,7 @@ signals:
     void defaultPlaylistDisplayUpdated();
     void songImportButtonHidden();
     void songImportButtonVisible();
+    void searchBarCleared();
     void playlistAdded(QListWidgetItem* playlist);
     void playlistRemoved(const int& index);
     void updateShuffleStatus(bool shuffled);
