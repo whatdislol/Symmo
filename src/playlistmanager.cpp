@@ -6,7 +6,9 @@ PlaylistManager::PlaylistManager(QObject* parent)
     m_playlists(QList<Playlist*>()),
     m_selectedPlaylist(m_defaultPlaylist),
     m_activePlaylist(m_defaultPlaylist),
-    m_songSelectionDialog(new SelectSongDialog(m_selectedPlaylist->getMusicLibraryPath()))
+    m_songSelectionDialog(new SelectSongDialog(m_selectedPlaylist->getMusicLibraryPath())),
+    m_shuffled(false),
+    m_shuffleMode(0)
 {
     m_watcher.addPath(m_selectedPlaylist->getMusicLibraryPath());
         
@@ -18,7 +20,6 @@ PlaylistManager::PlaylistManager(QObject* parent)
 
 PlaylistManager::~PlaylistManager()
 {
-    qDebug() << m_defaultPlaylist->getName() << m_selectedPlaylist->getName() << m_activePlaylist->getName();
     for (Playlist* playlist : m_playlists) {
         delete playlist;
     }
@@ -79,6 +80,10 @@ Playlist* PlaylistManager::getDefaultPlaylist() const
 
 void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
 {
+    if (!m_selectedPlaylist) {
+        return;
+    }
+
     disconnect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
     QString playlistName = playlist->text();
     for (Playlist* pl : m_playlists) {
@@ -90,6 +95,7 @@ void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
     connect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
     emit playlistDisplayUpdated();
     emit songImportButtonVisible();
+    emit searchBarCleared();
 }
 
 void PlaylistManager::displaySongSelectionDialog()
@@ -101,13 +107,15 @@ void PlaylistManager::displaySongSelectionDialog()
 void PlaylistManager::onSelectSong(QListWidgetItem* song, AudioControl* audioControl)
 {
     m_selectedPlaylist->selectSong(song, audioControl);
+    if (m_shuffled) {
+		shufflePlaylist();
+    }
 }
 
 void PlaylistManager::onToNextSong(AudioControl* audioControl)
 {
     if (m_activePlaylist != nullptr) {
-		m_activePlaylist->toNextSong(audioControl);
-        qDebug() << "Next song";
+		m_activePlaylist->toNextSong(audioControl, m_shuffled);
     }
     else {
         QMediaPlayer* player = audioControl->getMediaPlayer();
@@ -119,7 +127,7 @@ void PlaylistManager::onToNextSong(AudioControl* audioControl)
 void PlaylistManager::onToPreviousSong(AudioControl* audioControl)
 {
     if (m_activePlaylist != nullptr) {
-        m_activePlaylist->toPreviousSong(audioControl);
+        m_activePlaylist->toPreviousSong(audioControl, m_shuffled);
     }
     else {
         QMediaPlayer* player = audioControl->getMediaPlayer();
@@ -131,7 +139,7 @@ void PlaylistManager::onToPreviousSong(AudioControl* audioControl)
 void PlaylistManager::onSkipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status)
 {
     if (m_activePlaylist != nullptr) {
-        m_activePlaylist->skipOnSongEnd(audioControl, status);
+        m_activePlaylist->skipOnSongEnd(audioControl, status, m_shuffled);
     }
     else {
         QMediaPlayer* player = audioControl->getMediaPlayer();
@@ -163,6 +171,11 @@ void PlaylistManager::changePlaylistDisplayOnRemove(const int& index)
 	}
 }
 
+QString PlaylistManager::getMusicLibraryPath() const
+{
+    return m_defaultPlaylist->getMusicLibraryPath();
+}
+
 void PlaylistManager::setPlaylists(QList<Playlist*> playlists)
 {
     m_playlists = playlists;
@@ -181,18 +194,57 @@ void PlaylistManager::onMusicLibraryChanged(const QString& path)
         QStringList songPaths = playlist->getSongPaths();
         for (const QString& songPath : songPaths) {
             if (!currentPaths.contains(songPath)) {
-                qDebug() << "File removed:" << songPath;
-                int index = songPaths.indexOf(songPath);
-                playlist->removeSong(index);
+                playlist->removeSong(songPath);
             }
         }
     }
+
     if (m_selectedPlaylist == m_defaultPlaylist) {
         updateDefaultPlaylist();
     }
     else {
 		emit playlistDisplayUpdated();
 	}
+}
+
+void PlaylistManager::setShuffleMode(const int& mode)
+{
+	m_shuffleMode = mode;
+}
+
+void PlaylistManager::shufflePlaylist()
+{
+    switch (m_shuffleMode) {
+		case 0:
+			onShuffleFisherYates();
+			break;
+		case 1:
+			onShuffleRandom();
+			break;
+        default:
+			break;
+	}
+    m_shuffled = true;
+    emit updateShuffleStatus(m_shuffled);
+}
+
+void PlaylistManager::toggleShuffleStatus()
+{
+    m_shuffled = !m_shuffled;
+    if (m_shuffled) {
+        shufflePlaylist();
+	}
+    emit updateShuffleStatus(m_shuffled);
+}
+
+void PlaylistManager::onShuffleFisherYates()
+{
+    m_activePlaylist->shuffleFisherYates();
+}
+
+void PlaylistManager::onShuffleRandom()
+{
+	m_activePlaylist->shuffleRandom();
 }
 
 QStringList PlaylistManager::getMusicLibraryAbsolutePaths(const QString& path)

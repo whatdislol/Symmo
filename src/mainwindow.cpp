@@ -18,8 +18,12 @@ MainWindow::MainWindow(QWidget* parent) :
     // main window
 	ui->listWidget_SongsInPlaylist->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->listWidget_Playlist->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->toggleButton_Shuffle->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(ui->listWidget_SongsInPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
     connect(ui->listWidget_Playlist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+    connect(ui->toggleButton_Shuffle, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+    connect(ui->lineEdit_SearchBar, &QLineEdit::textChanged, this, &MainWindow::filterSearchResults);
+    connect(ui->pushButton_ClearSearch, &QPushButton::clicked, ui->lineEdit_SearchBar, &QLineEdit::clear);
 
     // audio control
     connect(ui->slider_SongVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setVolume);
@@ -35,6 +39,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->pushButton_AddPlaylist, &QPushButton::clicked, this, &MainWindow::getNewPlaylistName);
     connect(ui->listWidget_Playlist, &QListWidget::itemClicked, m_playlistManager, &PlaylistManager::selectPlaylist);
     connect(ui->pushButton_AddSong, &QPushButton::clicked, m_playlistManager, &PlaylistManager::displaySongSelectionDialog);
+    connect(ui->toggleButton_Shuffle, &QPushButton::clicked, m_playlistManager, &PlaylistManager::toggleShuffleStatus);
 
     // playlist
     connect(ui->pushButton_Skip, &QPushButton::clicked, [=]() {
@@ -65,6 +70,8 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_playlistManager, &PlaylistManager::songImportButtonVisible, ui->pushButton_AddSong, &QPushButton::show);
     connect(m_playlistManager, &PlaylistManager::playlistRemoved, this, &MainWindow::removePlaylist);
     connect(m_playlistManager, &PlaylistManager::playlistAdded, this, &MainWindow::addPlaylistWidgetItem);
+    connect(m_playlistManager, &PlaylistManager::updateShuffleStatus, this, &MainWindow::updateShuffleIcon);
+    connect(m_playlistManager, &PlaylistManager::searchBarCleared, ui->lineEdit_SearchBar, &QLineEdit::clear);
 
     // playlist
     connect(selectedPlaylist, &Playlist::songAdded, this, &MainWindow::addSongWidgetItem);
@@ -72,6 +79,7 @@ MainWindow::MainWindow(QWidget* parent) :
     setupIcons();
     m_playlistManager->updateDefaultPlaylist();
     loadFromJSON(m_dataPath);
+    m_playlistManager->onMusicLibraryChanged(m_playlistManager->getMusicLibraryPath());
 }
 
 MainWindow::~MainWindow()
@@ -143,14 +151,10 @@ void MainWindow::updatePlayPauseIcon(bool playing)
     ui->toggleButton_PlayPause->setIcon(playPauseIcon);
 }
 
-void MainWindow::on_actionAdd_File_triggered()
+void MainWindow::updateShuffleIcon(bool shuffled)
 {
-    QString file_name = QFileDialog::getOpenFileName(this, "Open a file", "", "Audio File (*.mp3)");
-    QMediaPlayer* M_Player = m_audioControl->getMediaPlayer();
-
-    if (!file_name.isEmpty()) {
-        M_Player->setSource(QUrl::fromLocalFile(file_name));
-    }
+	QIcon shuffleIcon = shuffled ? style()->standardIcon(QStyle::SP_MediaSeekForward) : style()->standardIcon(QStyle::SP_MediaSeekBackward);
+	ui->toggleButton_Shuffle->setIcon(shuffleIcon);
 }
 
 void MainWindow::setupIcons()
@@ -220,13 +224,35 @@ void MainWindow::removePlaylist(const int& index)
 	delete item;
 }
 
+void MainWindow::filterSearchResults(const QString& searchQuery)
+{
+    if (searchQuery.isEmpty()) {
+		updatePlaylistDisplay();
+		return;
+	}
+
+	Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
+    if (selectedPlaylist) {
+		QList<QString> songNames = selectedPlaylist->getSongNames();
+		ui->listWidget_SongsInPlaylist->clear();
+        for (QString& songName : songNames) {
+            if (songName.contains(searchQuery)) {
+				QListWidgetItem* songItem = new QListWidgetItem(songName);
+				ui->listWidget_SongsInPlaylist->addItem(songItem);
+			}
+		}
+	}
+}
+
 void MainWindow::showContextMenu(const QPoint& pos)
 {
 	QListWidgetItem* playlistItem = ui->listWidget_Playlist->itemAt(pos);
     QListWidgetItem* songItem = ui->listWidget_SongsInPlaylist->itemAt(pos);
     QPoint globalPlaylistPos = ui->listWidget_Playlist->mapToGlobal(pos);
 	QPoint globalSongsPos = ui->listWidget_SongsInPlaylist->mapToGlobal(pos);
+    QPoint globalShufflePos = ui->toggleButton_Shuffle->mapToGlobal(pos);
 	Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
+
 
     if (ui->listWidget_Playlist->underMouse()) {
         if (!playlistItem) {
@@ -247,10 +273,27 @@ void MainWindow::showContextMenu(const QPoint& pos)
         QMenu songsMenu;
 		QAction* removeSongAction = songsMenu.addAction("Remove from Playlist");
 		connect(removeSongAction, &QAction::triggered, [=]() {
-			selectedPlaylist->removeSong(songIndex);
+            QString songPath = m_playlistManager->getMusicLibraryPath() + songItem->text() + ".mp3";
+			selectedPlaylist->removeSong(songPath);
 			updatePlaylistDisplay();
 			});
         songsMenu.exec(globalSongsPos);
+    }
+    else if (ui->toggleButton_Shuffle->underMouse()) {
+        QMenu shuffleMenu;
+        QAction* shuffleFisherYates = shuffleMenu.addAction("Fisher-Yates");
+        connect(shuffleFisherYates, &QAction::triggered, [=]() {
+            m_playlistManager->setShuffleMode(0);
+            m_playlistManager->shufflePlaylist();
+            // update shuffle icon for FISHER YATES shuffle
+        });
+        QAction* shuffleRandom = shuffleMenu.addAction("Random");
+		connect(shuffleRandom, &QAction::triggered, [=]() {
+			m_playlistManager->setShuffleMode(1);
+			m_playlistManager->shufflePlaylist();
+			// update shuffle icon for shuffle THREE
+		});
+        shuffleMenu.exec(globalShufflePos);
     }
 }
 
@@ -259,6 +302,9 @@ void MainWindow::saveToJSON(const QString &filePath)
     QJsonArray playlistsArray;
 
     for (Playlist* playlist : m_playlistManager->getPlaylists()) {
+        if (playlist == m_playlistManager->getDefaultPlaylist()) {
+			continue;
+		}
         QJsonObject playlistObject;
         playlistObject["name"] = playlist->getName();
 
@@ -303,7 +349,6 @@ void MainWindow::loadFromJSON(const QString &filePath)
         return;
     }
 
-    // Deserialize JSON data and create playlists
     QJsonArray playlistsArray = doc.array();
     QList<Playlist*> loadedPlaylists;
     for (const QJsonValue& playlistValue : playlistsArray) {

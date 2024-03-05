@@ -5,7 +5,8 @@
 Playlist::Playlist(QObject* parent)
     : QObject(parent),
     m_musicLibraryPath(getProjectRootPath() + "/music_library/"),
-    m_name("Playlist")
+    m_name("Playlist"),
+    m_currentShuffledSongIndex(0)
 {
 }
 
@@ -49,17 +50,35 @@ QString Playlist::getTrackQuantity() const
     return QString::number(m_songPaths.size());
 }
 
-void Playlist::toNextSong(AudioControl* audioControl)
+void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
 {
-    if (m_songPaths.size() == 0) {
-		return;
-	}
-    QMediaPlayer* m_player = audioControl->getMediaPlayer();
-    int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
-    if (index == -1) {
+    if (m_songPaths.isEmpty()) {
         return;
     }
-    QString filePath = (index + 1 < m_songPaths.size()) ? m_songPaths[index + 1] : m_songPaths[0];
+
+    QMediaPlayer* m_player = audioControl->getMediaPlayer();
+    QStringList songPaths;
+
+    QString currentSongPath = getCurrentSongPath(m_player);
+    qint64 index;
+    QString filePath;
+    if (shuffled) {
+        songPaths = m_shuffledSongPaths;
+        index = m_currentShuffledSongIndex;
+        ++m_currentShuffledSongIndex;
+    }
+    else {
+        songPaths = m_songPaths;
+        index = songPaths.indexOf(currentSongPath);
+    }
+
+    if (index != -1) {
+        filePath = songPaths[(index + 1) % songPaths.size()];
+    }
+    else if (shuffled) {
+        filePath = m_shuffledSongPaths.first();
+    }
+
     m_player->setSource(QUrl::fromLocalFile(filePath));
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
@@ -70,17 +89,35 @@ void Playlist::toNextSong(AudioControl* audioControl)
     }
 }
 
-void Playlist::toPreviousSong(AudioControl* audioControl)
+void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
 {
-    if (m_songPaths.size() == 0) {
+    if (m_songPaths.isEmpty()) {
         return;
     }
+
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
-    int index = m_songPaths.indexOf(getCurrentSongPath(m_player));
-    if (index == -1) {
-        return;
+    QStringList songPaths;
+
+    QString currentSongPath = getCurrentSongPath(m_player);
+    qint64 index;
+    QString filePath;
+    if (shuffled) {
+        songPaths = m_shuffledSongPaths;
+        index = m_currentShuffledSongIndex;
+        --m_currentShuffledSongIndex;
     }
-    QString filePath = (index > 0) ? m_songPaths[index - 1] : m_songPaths[0];
+    else {
+        songPaths = m_songPaths;
+        index = songPaths.indexOf(currentSongPath);
+    }
+
+    if (index != -1) {
+        filePath = songPaths[(index > 0) ? index - 1 : 0];
+    }
+    else if (shuffled) {
+        filePath = m_shuffledSongPaths.first();
+    }
+
     m_player->setSource(QUrl::fromLocalFile(filePath));
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
@@ -91,10 +128,10 @@ void Playlist::toPreviousSong(AudioControl* audioControl)
     }
 }
 
-void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status)
+void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status, bool shuffled)
 {
     if (status == QMediaPlayer::EndOfMedia) {
-        toNextSong(audioControl);
+        toNextSong(audioControl, shuffled);
     }
 }
 
@@ -103,7 +140,7 @@ void Playlist::addSong(const QString& songPath)
     if (!m_songPaths.contains(songPath)) {
         m_songPaths.append(songPath);
         QFileInfo fileInfo(songPath);
-        QString baseName = fileInfo.baseName(); // Get the file name without extension
+        QString baseName = fileInfo.baseName();
         QListWidgetItem* musicItem = new QListWidgetItem(baseName);
         emit songAdded(musicItem);
     }
@@ -116,18 +153,10 @@ void Playlist::addMultipleSongs(QStringList& selectedSongPaths)
     }
 }
 
-void Playlist::removeSong(const int& index)
+void Playlist::removeSong(const QString& songPath)
 {
-    //int index = m_songPaths.indexOf(songPath);
-    qDebug() << "Index: " << index;
-
-    if (index != -1) {
-        qDebug() << "Removing song at index: " << index;
-        // Remove the song path from m_songPaths
-        m_songPaths.removeAt(index);
-
-        // Emit a signal to notify the UI to remove the corresponding item from the playlist
-        emit songRemoved(index);
+    if (songPath.size() > 0) {
+        m_songPaths.removeAll(songPath);
     }
 }
 
@@ -146,22 +175,63 @@ QList<QString> Playlist::getSongPaths() const
     return m_songPaths;
 }
 
-QStringList Playlist::getAllSongNames() const
+QStringList Playlist::getSongNames() const
 {
-    QStringList allSongs;
-    QDir musicDir(m_musicLibraryPath);
-    QStringList musicFilters;
-    musicFilters << "*.mp3";
-    QFileInfoList musicFiles = musicDir.entryInfoList(musicFilters, QDir::Files);
-    for (const QFileInfo& fileInfo : musicFiles) {
-        allSongs.append(fileInfo.fileName());
+    QStringList songNames;
+    for (const QString& songPath : m_songPaths) {
+        QFileInfo fileInfo(songPath);
+        QString fileName = fileInfo.baseName();
+        songNames.append(fileName);
     }
-    return allSongs;
+    return songNames;
 }
 
 QString Playlist::getMusicLibraryPath() const
 {
     return m_musicLibraryPath;
+}
+
+void Playlist::shuffleFisherYates()
+{
+    m_currentShuffledSongIndex = 0;
+    m_shuffledSongPaths = m_songPaths;
+    std::mt19937 gen(std::time(nullptr)); // Seed the random number generator
+    qDebug() << "Initial: " << m_shuffledSongPaths;
+    int n = m_shuffledSongPaths.size();
+    for (int i = n - 1; i > 0; --i) {
+        std::uniform_int_distribution<int> dist(0, i);
+        int j = dist(gen);
+        m_shuffledSongPaths.swapItemsAt(i, j);
+    }
+    
+    qDebug() << "Fisher Yates Shuffled: ";
+    for (auto& song : m_shuffledSongPaths) {
+        qDebug() << song;
+    }
+}
+
+void Playlist::shuffleRandom()
+{
+    m_currentShuffledSongIndex = 0;
+    m_shuffledSongPaths = m_songPaths;
+    qDebug() << "Initial: " << m_shuffledSongPaths;
+    qDebug() << "Ctime Shuffle:";
+
+    std::mt19937 gen(std::time(nullptr));
+
+    for (int i = 0; i < m_shuffledSongPaths.size(); ++i) {
+        QString randomSong;
+        do {
+            int randomIndex = std::uniform_int_distribution<int>(0, m_shuffledSongPaths.size() - 1)(gen);
+            randomSong = m_songPaths[randomIndex];
+        } while ((m_shuffledSongPaths[i - 1] == randomSong) && i > 0);
+        m_shuffledSongPaths[i] = randomSong;
+    }
+    
+    qDebug() << "CTime Shuffled: ";
+    for (auto& song : m_shuffledSongPaths) {
+        qDebug() << song;
+    }
 }
 
 QString Playlist::getProjectRootPath() const {
