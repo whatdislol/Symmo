@@ -35,7 +35,7 @@ public:
     QString getName() const;
     void setName(const QString& name);
     QList<QString> getSongPaths() const;
-    QStringList getAllSongNames() const;
+    QStringList getSongNames() const;
     QString getMusicLibraryPath() const;
     void shuffleFisherYates();
     void shuffleRandom();

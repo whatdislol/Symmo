@@ -175,17 +175,15 @@ QList<QString> Playlist::getSongPaths() const
     return m_songPaths;
 }
 
-QStringList Playlist::getAllSongNames() const
+QStringList Playlist::getSongNames() const
 {
-    QStringList allSongs;
-    QDir musicDir(m_musicLibraryPath);
-    QStringList musicFilters;
-    musicFilters << "*.mp3";
-    QFileInfoList musicFiles = musicDir.entryInfoList(musicFilters, QDir::Files);
-    for (const QFileInfo& fileInfo : musicFiles) {
-        allSongs.append(fileInfo.fileName());
+    QStringList songNames;
+    for (const QString& songPath : m_songPaths) {
+        QFileInfo fileInfo(songPath);
+        QString fileName = fileInfo.baseName();
+        songNames.append(fileName);
     }
-    return allSongs;
+    return songNames;
 }
 
 QString Playlist::getMusicLibraryPath() const
