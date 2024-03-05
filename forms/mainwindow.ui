@@ -562,7 +562,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="QFrame" name="frame_4">
+   <widget class="QFrame" name="frame_Search">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -586,7 +586,7 @@
     <widget class="QPushButton" name="pushButton_Search">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>10</y>
        <width>40</width>
        <height>40</height>
@@ -616,6 +616,65 @@
      <property name="text">
       <string/>
      </property>
+    </widget>
+    <widget class="QFrame" name="frame_SearchBox">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>10</y>
+       <width>211</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: white;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLineEdit" name="lineEdit_SearchBar">
+      <property name="geometry">
+       <rect>
+        <x>12</x>
+        <y>10</y>
+        <width>161</width>
+        <height>24</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_ClearSearch">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>10</y>
+        <width>21</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">
+							QPushButton {
+							border: none;
+							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
+							background-color: white;
+							color: rgb(52, 51, 64);
+							padding: 0px;
+							}
+						</string>
+      </property>
+      <property name="text">
+       <string>X</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QFrame" name="frame_Playlist">
@@ -756,23 +815,6 @@
      </property>
     </widget>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1150</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionAdd_File"/>
-   </widget>
-   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionAdd_File">
