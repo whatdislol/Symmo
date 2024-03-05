@@ -291,7 +291,7 @@ void MainWindow::showContextMenu(const QPoint& pos)
 		connect(shuffleRandom, &QAction::triggered, [=]() {
 			m_playlistManager->setShuffleMode(1);
 			m_playlistManager->shufflePlaylist();
-			// update shuffle icon for shuffle THREE
+            // update shuffle icon for RANDOM shuffle
 		});
         shuffleMenu.exec(globalShufflePos);
     }
