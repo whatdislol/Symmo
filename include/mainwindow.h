@@ -44,9 +44,10 @@ private slots:
     void addSongWidgetItem(QListWidgetItem* song);
     void addPlaylistWidgetItem(QListWidgetItem* playlist);
     void getNewPlaylistName();
+    void updatePlaylistsDisplay(const int& index, const QString& name);
     void updateSongsDisplay();
     void updatePlaylistInfo();
-    void updatePlaylistDisplay();
+    void updateOnPlaylistSelected();
     void removePlaylist(const int& index);
     void filterSearchResults(const QString& searchQuery);
     void showContextMenu(const QPoint& pos);

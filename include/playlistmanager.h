@@ -37,6 +37,7 @@ public:
     QString getMusicLibraryPath() const;
     void setPlaylists(QList<Playlist*> playlists);
     QList<Playlist*> getPlaylists();
+    void renamePlaylist(const int& index, const QString& name);
     void onMusicLibraryChanged(const QString& path);
     void setShuffleMode(const int& mode);
     void shufflePlaylist();
@@ -54,6 +55,7 @@ signals:
     void playlistAdded(QListWidgetItem* playlist);
     void playlistRemoved(const int& index);
     void updateShuffleStatus(bool shuffled);
+    void playlistRenamed(const int& index, const QString& name);
 
 private:
     Playlist* m_defaultPlaylist;

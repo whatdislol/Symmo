@@ -66,18 +66,15 @@ void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
         songPaths = m_shuffledSongPaths;
         index = m_currentShuffledSongIndex;
         ++m_currentShuffledSongIndex;
+        if (m_currentShuffledSongIndex >= m_shuffledSongPaths.size()) {
+            m_currentShuffledSongIndex = 0;
+        }
     }
     else {
         songPaths = m_songPaths;
         index = songPaths.indexOf(currentSongPath);
     }
-
-    if (index != -1) {
-        filePath = songPaths[(index + 1) % songPaths.size()];
-    }
-    else if (shuffled) {
-        filePath = m_shuffledSongPaths.first();
-    }
+    filePath = songPaths[(index + 1) % songPaths.size()];
 
     m_player->setSource(QUrl::fromLocalFile(filePath));
 
@@ -105,18 +102,15 @@ void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
         songPaths = m_shuffledSongPaths;
         index = m_currentShuffledSongIndex;
         --m_currentShuffledSongIndex;
+        if (m_currentShuffledSongIndex < 0) {
+            m_currentShuffledSongIndex = 0;
+        }
     }
     else {
         songPaths = m_songPaths;
         index = songPaths.indexOf(currentSongPath);
     }
-
-    if (index != -1) {
-        filePath = songPaths[(index > 0) ? index - 1 : 0];
-    }
-    else if (shuffled) {
-        filePath = m_shuffledSongPaths.first();
-    }
+    filePath = songPaths[(index > 0) ? index - 1 : 0];
 
     m_player->setSource(QUrl::fromLocalFile(filePath));
 

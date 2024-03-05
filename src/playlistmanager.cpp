@@ -46,6 +46,9 @@ void PlaylistManager::updateDefaultPlaylist()
 
 void PlaylistManager::addPlaylist(QString name)
 {
+    if (name.isEmpty() && name.length() > 16 && name != "All Tracks") {
+        return;
+    }
     for (Playlist* pl : m_playlists) {
         if (pl->getName() == name) {
 			return;
@@ -184,6 +187,19 @@ void PlaylistManager::setPlaylists(QList<Playlist*> playlists)
 QList<Playlist*> PlaylistManager::getPlaylists()
 {
     return m_playlists;
+}
+
+void PlaylistManager::renamePlaylist(const int& index, const QString& name)
+{
+    for (Playlist* pl : m_playlists) {
+        if (pl->getName() == name) {
+            // cannot rename to an existing playlist name
+            return;
+        }
+    }
+	m_playlists.at(index)->setName(name);
+	emit playlistRenamed(index, name);
+    emit playlistDisplayUpdated();
 }
 
 void PlaylistManager::onMusicLibraryChanged(const QString& path)
