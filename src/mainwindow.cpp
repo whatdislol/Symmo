@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget* parent) :
 	connect(ui->listWidget_SongsInPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
     connect(ui->listWidget_Playlist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
     connect(ui->toggleButton_Shuffle, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+    connect(ui->lineEdit_SearchBar, &QLineEdit::textChanged, this, &MainWindow::filterSearchResults);
+    connect(ui->pushButton_ClearSearch, &QPushButton::clicked, ui->lineEdit_SearchBar, &QLineEdit::clear);
 
     // audio control
     connect(ui->slider_SongVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setVolume);
@@ -69,6 +71,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_playlistManager, &PlaylistManager::playlistRemoved, this, &MainWindow::removePlaylist);
     connect(m_playlistManager, &PlaylistManager::playlistAdded, this, &MainWindow::addPlaylistWidgetItem);
     connect(m_playlistManager, &PlaylistManager::updateShuffleStatus, this, &MainWindow::updateShuffleIcon);
+    connect(m_playlistManager, &PlaylistManager::searchBarCleared, ui->lineEdit_SearchBar, &QLineEdit::clear);
 
     // playlist
     connect(selectedPlaylist, &Playlist::songAdded, this, &MainWindow::addSongWidgetItem);
@@ -154,16 +157,6 @@ void MainWindow::updateShuffleIcon(bool shuffled)
 	ui->toggleButton_Shuffle->setIcon(shuffleIcon);
 }
 
-void MainWindow::on_actionAdd_File_triggered()
-{
-    QString file_name = QFileDialog::getOpenFileName(this, "Open a file", "", "Audio File (*.mp3)");
-    QMediaPlayer* M_Player = m_audioControl->getMediaPlayer();
-
-    if (!file_name.isEmpty()) {
-        M_Player->setSource(QUrl::fromLocalFile(file_name));
-    }
-}
-
 void MainWindow::setupIcons()
 {
     ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
@@ -229,6 +222,26 @@ void MainWindow::removePlaylist(const int& index)
 {
 	QListWidgetItem* item = ui->listWidget_Playlist->takeItem(index);
 	delete item;
+}
+
+void MainWindow::filterSearchResults(const QString& searchQuery)
+{
+    if (searchQuery.isEmpty()) {
+		updatePlaylistDisplay();
+		return;
+	}
+
+	Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
+    if (selectedPlaylist) {
+		QList<QString> songNames = selectedPlaylist->getSongNames();
+		ui->listWidget_SongsInPlaylist->clear();
+        for (QString& songName : songNames) {
+            if (songName.contains(searchQuery)) {
+				QListWidgetItem* songItem = new QListWidgetItem(songName);
+				ui->listWidget_SongsInPlaylist->addItem(songItem);
+			}
+		}
+	}
 }
 
 void MainWindow::showContextMenu(const QPoint& pos)

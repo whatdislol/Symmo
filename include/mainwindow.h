@@ -11,6 +11,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QMenu>
 #include "audiocontrol.h"
 #include "playlistmanager.h"
 
@@ -39,7 +40,6 @@ private slots:
     void updateMuteIcon(bool muted);
     void updatePlayPauseIcon(bool playing);
     void updateShuffleIcon(bool shuffled);
-    void on_actionAdd_File_triggered();
     void setupIcons();
     void addSongWidgetItem(QListWidgetItem* song);
     void addPlaylistWidgetItem(QListWidgetItem* playlist);
@@ -48,6 +48,7 @@ private slots:
     void updatePlaylistInfo();
     void updatePlaylistDisplay();
     void removePlaylist(const int& index);
+    void filterSearchResults(const QString& searchQuery);
     void showContextMenu(const QPoint& pos);
     void saveToJSON(const QString& filePath);
     void loadFromJSON(const QString& filePath);
