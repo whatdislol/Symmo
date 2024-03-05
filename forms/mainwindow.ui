@@ -404,9 +404,9 @@
     <widget class="QLabel" name="label_Ambience">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>60</x>
        <y>20</y>
-       <width>171</width>
+       <width>141</width>
        <height>24</height>
       </rect>
      </property>
