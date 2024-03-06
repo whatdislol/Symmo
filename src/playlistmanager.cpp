@@ -7,6 +7,7 @@ PlaylistManager::PlaylistManager(QObject* parent)
     m_selectedPlaylist(m_defaultPlaylist),
     m_activePlaylist(m_defaultPlaylist),
     m_songSelectionDialog(new SelectSongDialog(m_selectedPlaylist->getMusicLibraryPath())),
+    m_looped(false),
     m_shuffled(false),
     m_shuffleMode(0)
 {
@@ -139,10 +140,15 @@ void PlaylistManager::onToPreviousSong(AudioControl* audioControl)
     }
 }
 
-void PlaylistManager::onSkipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status)
+void PlaylistManager::onSkipOnSongEnd(AudioControl* audioControl)
 {
     if (m_activePlaylist != nullptr) {
-        m_activePlaylist->skipOnSongEnd(audioControl, status, m_shuffled);
+        if (!m_looped) {
+            m_activePlaylist->skipOnSongEnd(audioControl, m_shuffled);
+        }
+        else {
+            loop(audioControl);
+        }
     }
     else {
         QMediaPlayer* player = audioControl->getMediaPlayer();
@@ -261,6 +267,23 @@ void PlaylistManager::onShuffleFisherYates()
 void PlaylistManager::onShuffleRandom()
 {
 	m_activePlaylist->shuffleRandom();
+}
+
+void PlaylistManager::loop(AudioControl* audioControl) const
+{
+    QMediaPlayer::MediaStatus status = audioControl->getMediaPlayer()->mediaStatus();
+    if (m_looped && status == QMediaPlayer::EndOfMedia) {
+        QMediaPlayer* m_player = audioControl->getMediaPlayer();
+        m_player->setPosition(0);
+        m_player->play();
+        qDebug() << "Looping";
+    }
+}
+
+void PlaylistManager::toggleLoopStatus()
+{
+	m_looped = !m_looped;
+    emit updateLoopStatus(m_looped);
 }
 
 QStringList PlaylistManager::getMusicLibraryAbsolutePaths(const QString& path)

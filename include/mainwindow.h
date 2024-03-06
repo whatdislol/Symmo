@@ -40,6 +40,7 @@ private slots:
     void updateMuteIcon(bool muted);
     void updatePlayPauseIcon(bool playing);
     void updateShuffleIcon(bool shuffled);
+    void updateLoopIcon(bool looped);
     void setupIcons();
     void addSongWidgetItem(QListWidgetItem* song);
     void addPlaylistWidgetItem(QListWidgetItem* playlist);

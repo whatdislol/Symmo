@@ -122,8 +122,9 @@ void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
     }
 }
 
-void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status, bool shuffled)
+void Playlist::skipOnSongEnd(AudioControl* audioControl, bool shuffled)
 {
+    QMediaPlayer::MediaStatus status = audioControl->getMediaPlayer()->mediaStatus();
     if (status == QMediaPlayer::EndOfMedia) {
         toNextSong(audioControl, shuffled);
     }

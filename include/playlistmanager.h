@@ -29,7 +29,7 @@ public:
     void onSelectSong(QListWidgetItem* song, AudioControl* audioControl);
     void onToNextSong(AudioControl* audioControl);
     void onToPreviousSong(AudioControl* audioControl);
-    void onSkipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status);
+    void onSkipOnSongEnd(AudioControl* audioControl);
     void onAddMultipleSongs();
     void setSelectedPlaylist(Playlist* playlist);
     void setActivePlaylist(Playlist* playlist);
@@ -44,6 +44,8 @@ public:
     void toggleShuffleStatus();
     void onShuffleFisherYates();
     void onShuffleRandom();
+    void loop(AudioControl* audioControl) const;
+    void toggleLoopStatus();
 
 signals:
     void songsDisplayCleared();
@@ -55,6 +57,7 @@ signals:
     void playlistAdded(QListWidgetItem* playlist);
     void playlistRemoved(const int& index);
     void updateShuffleStatus(bool shuffled);
+    void updateLoopStatus(bool looped);
     void playlistRenamed(const int& index, const QString& name);
 
 private:
@@ -65,6 +68,7 @@ private:
     SelectSongDialog* m_songSelectionDialog;
     QFileSystemWatcher m_watcher;
     bool m_shuffled;
+    bool m_looped;
     int m_shuffleMode;
     QStringList getMusicLibraryAbsolutePaths(const QString& path);
 };

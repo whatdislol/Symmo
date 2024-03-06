@@ -5,10 +5,13 @@
 AudioControl::AudioControl(QObject* parent) 
     : QObject(parent),
     m_player(new QMediaPlayer(this)),
+    m_ambiencePlayer(new QMediaPlayer(this)),
     m_audioOutput(new QAudioOutput(this)),
+    m_ambienceOutput(new QAudioOutput(this)),
     m_totalDuration(0)
 {
     m_player->setAudioOutput(m_audioOutput);
+    m_ambiencePlayer->setAudioOutput(m_ambienceOutput);
     setVolume(50);
 }
 
@@ -16,6 +19,8 @@ AudioControl::~AudioControl()
 {
     delete m_player;
     delete m_audioOutput;
+    delete m_ambiencePlayer;
+    delete m_ambienceOutput;
 }
 
 void AudioControl::setVolume(int volume)
@@ -75,4 +80,29 @@ void AudioControl::setTotalDuration(qint64& duration)
 qint64 AudioControl::getTotalDuration() const
 {
 	return m_totalDuration;
+}
+
+void AudioControl::setAmbienceVolume(int volume)
+{
+	m_ambienceOutput->setVolume(volume / 100.0);
+}
+
+void AudioControl::playAmbience(int index)
+{
+    if (index == -1) {
+		m_ambiencePlayer->stop();
+		return;
+	}
+
+	m_ambiencePlayer->setSource(QUrl::fromLocalFile(m_ambiencePaths[index]));
+	m_ambiencePlayer->play();
+}
+
+QString AudioControl::getProjectRootPath() const
+{
+    QString executablePath = QCoreApplication::applicationDirPath();
+    QDir currentDir(executablePath);
+    while (!currentDir.exists("CMakeLists.txt") && currentDir.cdUp());
+
+    return currentDir.absolutePath();
 }

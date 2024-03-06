@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->listWidget_Playlist, &QListWidget::itemClicked, m_playlistManager, &PlaylistManager::selectPlaylist);
     connect(ui->pushButton_AddSong, &QPushButton::clicked, m_playlistManager, &PlaylistManager::displaySongSelectionDialog);
     connect(ui->toggleButton_Shuffle, &QPushButton::clicked, m_playlistManager, &PlaylistManager::toggleShuffleStatus);
+    connect(ui->toggleButton_Loop, &QPushButton::clicked, m_playlistManager, &PlaylistManager::toggleLoopStatus);
 
     // playlist
     connect(ui->pushButton_Skip, &QPushButton::clicked, [=]() {
@@ -57,8 +58,8 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_audioControl->getAudioOutput(), &QAudioOutput::mutedChanged, this, &MainWindow::updateMuteIcon);
     connect(m_audioControl, &AudioControl::isZeroVolume, this, &MainWindow::updateMuteIcon);
     connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::updatePlaybackUI);
-    connect(player, &QMediaPlayer::mediaStatusChanged, [=](QMediaPlayer::MediaStatus status) {
-        m_playlistManager->onSkipOnSongEnd(m_audioControl, status);
+    connect(player, &QMediaPlayer::mediaStatusChanged, [=]() {
+        m_playlistManager->onSkipOnSongEnd(m_audioControl);
     });
 
     // playlist manager
@@ -73,6 +74,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_playlistManager, &PlaylistManager::updateShuffleStatus, this, &MainWindow::updateShuffleIcon);
     connect(m_playlistManager, &PlaylistManager::searchBarCleared, ui->lineEdit_SearchBar, &QLineEdit::clear);
     connect(m_playlistManager, &PlaylistManager::playlistRenamed, this, &MainWindow::updatePlaylistsDisplay);
+    connect(m_playlistManager, &PlaylistManager::updateLoopStatus, this, &MainWindow::updateLoopIcon);
 
     // playlist
     connect(selectedPlaylist, &Playlist::songAdded, this, &MainWindow::addSongWidgetItem);
@@ -156,6 +158,12 @@ void MainWindow::updateShuffleIcon(bool shuffled)
 {
 	QIcon shuffleIcon = shuffled ? style()->standardIcon(QStyle::SP_MediaSeekForward) : style()->standardIcon(QStyle::SP_MediaSeekBackward);
 	ui->toggleButton_Shuffle->setIcon(shuffleIcon);
+}
+
+void MainWindow::updateLoopIcon(bool looped)
+{
+    QIcon loopIcon = looped ? style()->standardIcon(QStyle::SP_MediaVolumeMuted) : style()->standardIcon(QStyle::SP_MediaVolume);
+    ui->toggleButton_Loop->setIcon(loopIcon);
 }
 
 void MainWindow::setupIcons()

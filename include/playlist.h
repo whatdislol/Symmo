@@ -28,7 +28,7 @@ public:
     QString getTrackQuantity() const;
     void toNextSong(AudioControl* audiocontrol, bool shuffled);
     void toPreviousSong(AudioControl* audioControl, bool shuffled);
-    void skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status, bool shuffled);
+    void skipOnSongEnd(AudioControl* audioControl, bool shuffled);
     void addSong(const QString& songPath);
     void addMultipleSongs(QStringList& selectedSongPaths);
     void removeSong(const QString& songPath);
