@@ -9,6 +9,7 @@
 #include <QDir>
 #include <QListWidgetItem>
 #include <QFileSystemWatcher>
+#include <QMessageBox>
 #include "audiocontrol.h"
 #include "playlist.h"
 
