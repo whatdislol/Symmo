@@ -12,6 +12,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QMenu>
+#include <QMovie>
 #include "audiocontrol.h"
 #include "playlistmanager.h"
 
@@ -41,7 +42,7 @@ private slots:
     void updatePlayPauseIcon(bool playing);
     void updateShuffleIcon(bool shuffled);
     void updateLoopIcon(bool looped);
-    void setupIcons();
+    void setupUI();
     void addSongWidgetItem(QListWidgetItem* song);
     void addPlaylistWidgetItem(QListWidgetItem* playlist);
     void getNewPlaylistName();
@@ -49,7 +50,10 @@ private slots:
     void updateSongsDisplay();
     void updatePlaylistInfo();
     void updateOnPlaylistSelected();
+    void updateGif();
+    void updateGifState(QMediaPlayer::PlaybackState state);
     void removePlaylist(const int& index);
+    void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
     void filterSearchResults(const QString& searchQuery);
     void showContextMenu(const QPoint& pos);
     void saveToJSON(const QString& filePath);
@@ -61,6 +65,7 @@ private:
     PlaylistManager* m_playlistManager;
     QString getProjectRootPath() const;
     QString m_dataPath;
+    QMovie* m_gif;
 };
 
 #endif // MAINWINDOW_H

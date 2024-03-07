@@ -8,7 +8,8 @@ MainWindow::MainWindow(QWidget* parent) :
     ui(new Ui::MainWindow),
     m_audioControl(new AudioControl(this)),
     m_playlistManager(new PlaylistManager(this)),
-    m_dataPath(getProjectRootPath() + "/data.json")
+    m_dataPath(getProjectRootPath() + "/data.json"),
+    m_gif(new QMovie(getProjectRootPath() + "/gifs/none.gif"))
 {
     ui->setupUi(this);
     Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
@@ -30,6 +31,8 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->slider_SongProgress, &QSlider::sliderMoved, m_audioControl, &AudioControl::setPosition);
     connect(ui->toggleButton_PlayPause, &QPushButton::clicked, m_audioControl, &AudioControl::togglePlayPause);
     connect(ui->toggleButton_Mute, &QPushButton::clicked, m_audioControl, &AudioControl::toggleMute);
+    connect(ui->comboBox_AmbienceBox, &QComboBox::currentIndexChanged, m_audioControl, &AudioControl::playAmbience);
+    connect(ui->slider_AmbienceVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setAmbienceVolume);
 
     // playlist manager
     connect(ui->pushButton_ViewAllSongs, &QPushButton::clicked, m_playlistManager, &PlaylistManager::updateDefaultPlaylist);
@@ -52,15 +55,14 @@ MainWindow::MainWindow(QWidget* parent) :
 
     // CONNECT LOGIC SIGNALS TO METHODS
     // audio control
-    connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::durationChanged, this, &MainWindow::setMaxDuration);
-    connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::positionChanged, this, &MainWindow::updateSongProgress);
-    connect(m_audioControl->getMediaPlayer(), &QMediaPlayer::playingChanged, this, &MainWindow::updatePlayPauseIcon);
+    connect(player, &QMediaPlayer::durationChanged, this, &MainWindow::setMaxDuration);
+    connect(player, &QMediaPlayer::positionChanged, this, &MainWindow::updateSongProgress);
+    connect(player, &QMediaPlayer::playingChanged, this, &MainWindow::updatePlayPauseIcon);
     connect(m_audioControl->getAudioOutput(), &QAudioOutput::mutedChanged, this, &MainWindow::updateMuteIcon);
     connect(m_audioControl, &AudioControl::isZeroVolume, this, &MainWindow::updateMuteIcon);
-    connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::updatePlaybackUI);
-    connect(player, &QMediaPlayer::mediaStatusChanged, [=]() {
-        m_playlistManager->onSkipOnSongEnd(m_audioControl);
-    });
+    connect(m_audioControl, &AudioControl::gifUpdated, this, &MainWindow::updateGif);
+    connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::onMediaStatusChanged);
+    connect(player, &QMediaPlayer::playbackStateChanged, this, &MainWindow::updateGifState);
 
     // playlist manager
     connect(m_playlistManager, &PlaylistManager::songsDisplayCleared, ui->listWidget_SongsInPlaylist, &QListWidget::clear);
@@ -79,10 +81,12 @@ MainWindow::MainWindow(QWidget* parent) :
     // playlist
     connect(selectedPlaylist, &Playlist::songAdded, this, &MainWindow::addSongWidgetItem);
 
-    setupIcons();
+    setupUI();
     m_playlistManager->updateDefaultPlaylist();
     loadFromJSON(m_dataPath);
     m_playlistManager->onMusicLibraryChanged(m_playlistManager->getMusicLibraryPath());
+    ui->slider_AmbienceVolume->setValue(20);
+    updateGif();
 }
 
 MainWindow::~MainWindow()
@@ -91,6 +95,7 @@ MainWindow::~MainWindow()
     delete ui;
     delete m_audioControl;
     delete m_playlistManager;
+    delete m_gif;
 }
 
 void MainWindow::setMaxDuration(qint64 duration)
@@ -133,7 +138,7 @@ void MainWindow::updatePlaybackUI(QMediaPlayer::MediaStatus status)
             QUrl mediaUrl = M_Player->source();
             QFileInfo fileInfo(mediaUrl.toLocalFile());
             QString fileNameWithoutExtension = fileInfo.fileName();
-            fileNameWithoutExtension = fileNameWithoutExtension.left(fileNameWithoutExtension.lastIndexOf('.')); // Remove the file extension
+            fileNameWithoutExtension = fileNameWithoutExtension.left(fileNameWithoutExtension.lastIndexOf('.'));
             ui->label_fileName->setText(fileNameWithoutExtension);
             ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
             m_audioControl->setTotalDuration(totalDuration);
@@ -166,12 +171,14 @@ void MainWindow::updateLoopIcon(bool looped)
     ui->toggleButton_Loop->setIcon(loopIcon);
 }
 
-void MainWindow::setupIcons()
+void MainWindow::setupUI()
 {
     ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
     ui->pushButton_Skip->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
     ui->pushButton_Back->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
+    ui->label_Gif->setMovie(m_gif);
+    m_gif->setScaledSize(ui->label_Gif->size());
 }
 
 void MainWindow::addSongWidgetItem(QListWidgetItem* song)
@@ -226,10 +233,37 @@ void MainWindow::updateOnPlaylistSelected()
     updatePlaylistInfo();
 }
 
+void MainWindow::updateGif()
+{
+	QString selectedText = ui->comboBox_AmbienceBox->currentText();
+	QString gifPath = getProjectRootPath() + "/gifs/" + selectedText.toLower() + ".gif";
+    m_gif->stop();
+    m_gif->setFileName(gifPath);
+    m_gif->start();
+    updateGifState(m_audioControl->getMediaPlayer()->playbackState());
+}
+
+void MainWindow::updateGifState(QMediaPlayer::PlaybackState state)
+{
+    qDebug() << "GIF state updated";
+	if (state == QMediaPlayer::PlayingState) {
+		m_gif->start();
+	}
+	else {
+		m_gif->stop();
+	}
+}
+
 void MainWindow::removePlaylist(const int& index)
 {
 	QListWidgetItem* item = ui->listWidget_Playlist->takeItem(index);
 	delete item;
+}
+
+void MainWindow::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
+{
+    updatePlaybackUI(status);
+    m_playlistManager->onSkipOnSongEnd(m_audioControl);
 }
 
 void MainWindow::filterSearchResults(const QString& searchQuery)
