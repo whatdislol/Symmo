@@ -276,7 +276,6 @@ void PlaylistManager::loop(AudioControl* audioControl) const
         QMediaPlayer* m_player = audioControl->getMediaPlayer();
         m_player->setPosition(0);
         m_player->play();
-        qDebug() << "Looping";
     }
 }
 
