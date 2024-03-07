@@ -34,10 +34,12 @@ void Playlist::selectSong(QListWidgetItem* song, AudioControl* audioControl)
 {
     QString filePath = m_musicLibraryPath + song->text() + ".mp3";
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
+    QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
     m_player->setSource(QUrl::fromLocalFile(filePath));
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
         m_player->play();
+        m_ambiencePlayer->play();
         emit songSelected(this);
     }
     else {
@@ -57,6 +59,7 @@ void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
     }
 
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
+	QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
     QStringList songPaths;
 
     QString currentSongPath = getCurrentSongPath(m_player);
@@ -80,6 +83,7 @@ void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
         m_player->play();
+		m_ambiencePlayer->play();
     }
     else {
         qDebug() << "Error setting media source: " << m_player->errorString();
@@ -93,6 +97,7 @@ void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
     }
 
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
+	QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
     QStringList songPaths;
 
     QString currentSongPath = getCurrentSongPath(m_player);
@@ -116,6 +121,7 @@ void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
         m_player->play();
+		m_ambiencePlayer->play();
     }
     else {
         qDebug() << "Error setting media source: " << m_player->errorString();
