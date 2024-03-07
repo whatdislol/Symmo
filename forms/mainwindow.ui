@@ -386,7 +386,7 @@
       <x>880</x>
       <y>20</y>
       <width>261</width>
-      <height>441</height>
+      <height>301</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -424,6 +424,80 @@
      </property>
      <property name="text">
       <string>Ambience Mode</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_AmbienceBox">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>260</y>
+       <width>91</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: &quot;light gray&quot;;
+border-radius: 5px;
+</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>None</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Rain</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Campfire</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QSlider" name="slider_AmbienceVolume">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>260</y>
+       <width>111</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+							QSlider::groove:horizontal {
+							border: none;
+							background-color: rgb(200, 200, 200);
+							height: 10px;
+							border-radius: 5px;
+							}
+							QSlider::handle:horizontal {
+							background-color: rgb(0, 120, 215);
+							width: 20px;
+							border-radius: 10px;
+							}
+						</string>
+     </property>
+     <property name="value">
+      <number>50</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_Gif">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>70</y>
+       <width>221</width>
+       <height>161</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </widget>
@@ -814,6 +888,26 @@
       <string/>
      </property>
     </widget>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>330</y>
+      <width>261</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #192655;
+border-radius: 10px;</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
