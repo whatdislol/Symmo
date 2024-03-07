@@ -13,6 +13,7 @@ AudioControl::AudioControl(QObject* parent)
     m_player->setAudioOutput(m_audioOutput);
     setVolume(50);
     m_ambiencePlayer->setAudioOutput(m_ambienceOutput);
+    m_ambiencePlayer->setLoops(QMediaPlayer::Infinite);
     setAmbienceVolume(20);
     m_ambiencePaths = {
         "", 
@@ -33,9 +34,11 @@ void AudioControl::setVolume(int volume)
     m_audioOutput->setVolume(volume / 100.0);
     if (volume == 0) {
         m_audioOutput->setMuted(false);
+		m_ambienceOutput->setMuted(true);
 		emit isZeroVolume(true);
 	}
     else if (!m_audioOutput->isMuted()){
+		m_ambienceOutput->setMuted(false);
 		emit isZeroVolume(false);
 	}   
 }
@@ -45,9 +48,11 @@ void AudioControl::toggleMute()
     if (m_audioOutput->volume() != 0) {
         if (m_audioOutput->isMuted()) {
             m_audioOutput->setMuted(false);
+			m_ambienceOutput->setMuted(false);
         }
         else {
             m_audioOutput->setMuted(true);
+			m_ambienceOutput->setMuted(true);
         }
     }
 }
@@ -56,9 +61,11 @@ void AudioControl::togglePlayPause()
 {
     if (m_player->isPlaying()) {
         m_player->pause();
+        m_ambiencePlayer->pause();
     }
     else {
         m_player->play();
+        m_ambiencePlayer->play();
     }
 }
 
@@ -75,6 +82,11 @@ QMediaPlayer* AudioControl::getMediaPlayer() const
 QAudioOutput* AudioControl::getAudioOutput() const
 {
     return m_audioOutput;
+}
+
+QMediaPlayer* AudioControl::getAmbiencePlayer() const
+{
+    return m_ambiencePlayer;
 }
 
 void AudioControl::setTotalDuration(qint64& duration)
@@ -94,16 +106,11 @@ void AudioControl::setAmbienceVolume(int volume)
 
 void AudioControl::playAmbience(int index)
 {
-	emit gifUpdated();
-    if (index == 0) {
-        m_ambiencePlayer->pause();
-        qDebug() << "Ambience stopped";
-		return;
-	}
-
     m_ambiencePlayer->setSource(QUrl::fromLocalFile(m_ambiencePaths[index]));
-    m_ambiencePlayer->play();
-    qDebug() << "Ambience: " << m_ambiencePaths[index];
+    if (m_player->isPlaying()) {
+        m_ambiencePlayer->play();
+    }
+    emit gifUpdated();
 }
 
 QString AudioControl::getProjectRootPath() const

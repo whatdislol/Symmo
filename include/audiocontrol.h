@@ -22,6 +22,7 @@ public:
     void setPosition(int position);
     QMediaPlayer* getMediaPlayer() const;
     QAudioOutput* getAudioOutput() const;
+    QMediaPlayer* getAmbiencePlayer() const;
     void setTotalDuration(qint64& duration);
     qint64 getTotalDuration() const;
     void setAmbienceVolume(int volume);
