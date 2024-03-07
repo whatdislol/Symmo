@@ -5,21 +5,26 @@
 AudioControl::AudioControl(QObject* parent) 
     : QObject(parent),
     m_player(new QMediaPlayer(this)),
-    m_ambiencePlayer(new QMediaPlayer(this)),
     m_audioOutput(new QAudioOutput(this)),
+    m_ambiencePlayer(new QMediaPlayer(this)),
     m_ambienceOutput(new QAudioOutput(this)),
     m_totalDuration(0)
 {
     m_player->setAudioOutput(m_audioOutput);
-    m_ambiencePlayer->setAudioOutput(m_ambienceOutput);
     setVolume(50);
+    m_ambiencePlayer->setAudioOutput(m_ambienceOutput);
+    setAmbienceVolume(20);
+    m_ambiencePaths = {
+        "", 
+        getProjectRootPath() + "/ambience_sounds/rain.mp3",
+        getProjectRootPath() + "/ambience_sounds/campfire.mp3"
+    };
 }
 
 AudioControl::~AudioControl()
 {
     delete m_player;
     delete m_audioOutput;
-    delete m_ambiencePlayer;
     delete m_ambienceOutput;
 }
 
@@ -84,18 +89,21 @@ qint64 AudioControl::getTotalDuration() const
 
 void AudioControl::setAmbienceVolume(int volume)
 {
-	m_ambienceOutput->setVolume(volume / 100.0);
+	m_ambienceOutput->setVolume(volume / 200.0);
 }
 
 void AudioControl::playAmbience(int index)
 {
-    if (index == -1) {
-		m_ambiencePlayer->stop();
+	emit gifUpdated();
+    if (index == 0) {
+        m_ambiencePlayer->pause();
+        qDebug() << "Ambience stopped";
 		return;
 	}
 
-	m_ambiencePlayer->setSource(QUrl::fromLocalFile(m_ambiencePaths[index]));
-	m_ambiencePlayer->play();
+    m_ambiencePlayer->setSource(QUrl::fromLocalFile(m_ambiencePaths[index]));
+    m_ambiencePlayer->play();
+    qDebug() << "Ambience: " << m_ambiencePaths[index];
 }
 
 QString AudioControl::getProjectRootPath() const

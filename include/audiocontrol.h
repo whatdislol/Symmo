@@ -29,6 +29,7 @@ public:
 
 signals:
     void isZeroVolume(bool muted);
+    void gifUpdated();
 
 private:
     QMediaPlayer* m_player;
