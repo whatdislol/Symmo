@@ -47,11 +47,13 @@ void PlaylistManager::updateDefaultPlaylist()
 
 void PlaylistManager::addPlaylist(QString name)
 {
-    if (name.isEmpty() && name.length() > 16 && name != "All Tracks") {
-        return;
-    }
+	if (name.trimmed().isEmpty() || name.trimmed().length() > 16 || name == "All Tracks") {
+		QMessageBox::warning(nullptr, "Warning", "Invalid playlist name. Please enter a name between 1 and 16 characters.");
+		return;
+	}
     for (Playlist* pl : m_playlists) {
         if (pl->getName() == name) {
+            QMessageBox::warning(nullptr, "Warning", "Invalid playlist name. This name already exists.");
 			return;
 		}
 	}
@@ -65,6 +67,15 @@ void PlaylistManager::addPlaylist(QString name)
 
 void PlaylistManager::removePlaylist(const int& index)
 {
+	QMessageBox::StandardButton reply;
+	reply = QMessageBox::question(nullptr, "Confirmation", "Are you sure you want to remove this playlist?",
+		QMessageBox::Yes | QMessageBox::No);
+
+	if (reply == QMessageBox::No) {
+		// User clicked No, do nothing
+		return;
+	}
+
     changePlaylistDisplayOnRemove(index);
     m_activePlaylist = nullptr;
     delete m_playlists.at(index);
@@ -197,9 +208,13 @@ QList<Playlist*> PlaylistManager::getPlaylists()
 
 void PlaylistManager::renamePlaylist(const int& index, const QString& name)
 {
+	if (name.trimmed().isEmpty() || name.trimmed().length() > 16 || name == "All Tracks") {
+		QMessageBox::warning(nullptr, "Warning", "Invalid playlist name. Please enter a name between 1 and 16 characters.");
+		return;
+	}
     for (Playlist* pl : m_playlists) {
         if (pl->getName() == name) {
-            // cannot rename to an existing playlist name
+			QMessageBox::warning(nullptr, "Warning", "Invalid playlist name. This name already exists.");
             return;
         }
     }
