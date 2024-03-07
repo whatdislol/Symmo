@@ -194,7 +194,11 @@ void MainWindow::addPlaylistWidgetItem(QListWidgetItem* playlist)
 
 void MainWindow::getNewPlaylistName()
 {
-	QString newPlaylistName = QInputDialog::getText(this, tr("Add Playlist"), tr("Enter the name of the new playlist:"));
+	bool ok;
+	QString newPlaylistName = QInputDialog::getText(nullptr, "New Playlist", "Enter playlist name:", QLineEdit::Normal, "", &ok);
+	if (!ok) {
+		return;
+	}
     m_playlistManager->addPlaylist(newPlaylistName);
 }
 
@@ -303,7 +307,11 @@ void MainWindow::showContextMenu(const QPoint& pos)
         QMenu playlistMenu;
 		QAction* renamePlaylistAction = playlistMenu.addAction("Rename");
 		connect(renamePlaylistAction, &QAction::triggered, [=]() {
-			QString newPlaylistName = QInputDialog::getText(this, tr("New Playlist Name"), tr("Enter the name of the new playlist:"));
+			bool ok;
+			QString newPlaylistName = QInputDialog::getText(nullptr, "Rename Playlist", "Enter new playlist name:", QLineEdit::Normal, "", &ok);
+			if (!ok) {
+				return;
+			}
 			m_playlistManager->renamePlaylist(playlistIndex, newPlaylistName);
 		});
 		QAction* removePlaylistAction = playlistMenu.addAction("Remove Playlist");
@@ -327,13 +335,13 @@ void MainWindow::showContextMenu(const QPoint& pos)
     }
     else if (ui->toggleButton_Shuffle->underMouse()) {
         QMenu shuffleMenu;
-        QAction* shuffleFisherYates = shuffleMenu.addAction("Fisher-Yates");
+        QAction* shuffleFisherYates = shuffleMenu.addAction("Non-Duplicate Shuffle");
         connect(shuffleFisherYates, &QAction::triggered, [=]() {
             m_playlistManager->setShuffleMode(0);
             m_playlistManager->shufflePlaylist();
             // update shuffle icon for FISHER YATES shuffle
         });
-        QAction* shuffleRandom = shuffleMenu.addAction("Random");
+        QAction* shuffleRandom = shuffleMenu.addAction("Random Shuffle");
 		connect(shuffleRandom, &QAction::triggered, [=]() {
 			m_playlistManager->setShuffleMode(1);
 			m_playlistManager->shufflePlaylist();
@@ -362,10 +370,15 @@ void MainWindow::saveToJSON(const QString &filePath)
 
         playlistsArray.append(playlistObject);
     }
+	// Save the position of the slider
+	QJsonObject positionObject;
+	positionObject["position"] = ui->slider_SongVolume->value();
 
 	QDir().mkpath(QFileInfo(filePath).path());
 
-	QJsonDocument jsonDoc(playlistsArray);
+	QJsonDocument jsonDoc;
+	jsonDoc.setArray(playlistsArray);
+	jsonDoc.setObject(positionObject);
 	if (jsonDoc.isNull() || jsonDoc.isEmpty()) {
 		qDebug() << "Failed to serialize playlists data to JSON";
 		return;
@@ -376,7 +389,7 @@ void MainWindow::saveToJSON(const QString &filePath)
         qDebug() << "Failed to open file for writing:" << file.errorString();
         return;
     }
-    file.write(QJsonDocument(playlistsArray).toJson());
+	file.write(jsonDoc.toJson());
     file.close();
 }
 
@@ -412,6 +425,12 @@ void MainWindow::loadFromJSON(const QString &filePath)
         addPlaylistWidgetItem(new QListWidgetItem(playlistName));
     }
     m_playlistManager->setPlaylists(loadedPlaylists);
+	int position = 50;
+	if (doc.isObject() && doc.object().contains("position")) {
+		position = doc.object()["position"].toInt();
+	}
+	ui->slider_SongVolume->setSliderPosition(position);
+    m_audioControl->setVolume(position);
 
     file.close();
 }
