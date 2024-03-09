@@ -13,7 +13,6 @@
 #include <QJsonObject>
 #include <QMenu>
 #include <QMovie>
-#include <QHBoxLayout>
 #include <QFontDataBase>
 #include <QFont>
 #include "audiocontrol.h"
