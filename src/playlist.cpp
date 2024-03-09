@@ -212,6 +212,19 @@ void Playlist::shuffleRandom()
     }
 }
 
+QString Playlist::getNextSongName(AudioControl* audioControl, bool shuffled) const
+{
+    QString nextSongPath;
+    if (shuffled) {
+        nextSongPath = m_shuffledSongPaths[(m_currentShuffledSongIndex + 1) % m_shuffledSongPaths.size()];
+    }
+    else {
+        QMediaPlayer* m_player = audioControl->getMediaPlayer();
+        nextSongPath = m_songPaths[(m_songPaths.indexOf(getCurrentSongPath(m_player)) + 1) % m_songPaths.size()];
+	}
+    return QFileInfo(nextSongPath).baseName();
+}
+
 QString Playlist::getProjectRootPath() const {
     QString executablePath = QCoreApplication::applicationDirPath();
     QDir currentDir(executablePath);

@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(m_playlistManager, &PlaylistManager::songImportButtonVisible, ui->pushButton_AddSong, &QPushButton::show);
     connect(m_playlistManager, &PlaylistManager::playlistRemoved, this, &MainWindow::removePlaylist);
     connect(m_playlistManager, &PlaylistManager::playlistAdded, this, &MainWindow::addPlaylistWidgetItem);
-    connect(m_playlistManager, &PlaylistManager::updateShuffleStatus, this, &MainWindow::updateShuffleIcon);
+    connect(m_playlistManager, &PlaylistManager::updateShuffleStatus, this, &MainWindow::onShuffleStatusChanged);
     connect(m_playlistManager, &PlaylistManager::searchBarCleared, ui->lineEdit_SearchBar, &QLineEdit::clear);
     connect(m_playlistManager, &PlaylistManager::playlistRenamed, this, &MainWindow::updatePlaylistsDisplay);
     connect(m_playlistManager, &PlaylistManager::updateLoopStatus, this, &MainWindow::updateLoopIcon);
@@ -147,6 +147,11 @@ void MainWindow::updatePlaybackUI(QMediaPlayer::MediaStatus status)
             updateDuration(0);
         }
     }
+}
+
+void MainWindow::updateNextSongName()
+{
+    ui->label_nextFileName->setText(m_playlistManager->onGetNextSongName(m_audioControl));
 }
 
 void MainWindow::updateMuteIcon(bool muted)
@@ -295,6 +300,13 @@ void MainWindow::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
 {
     updatePlaybackUI(status);
     m_playlistManager->onSkipOnSongEnd(m_audioControl);
+    updateNextSongName();
+}
+
+void MainWindow::onShuffleStatusChanged(bool shuffled)
+{
+    updateShuffleIcon(shuffled);
+    updateNextSongName();
 }
 
 void MainWindow::filterSearchResults(const QString& searchQuery)

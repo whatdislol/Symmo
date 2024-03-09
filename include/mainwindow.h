@@ -40,6 +40,7 @@ private slots:
     void updateSongProgress(qint64 progress);
     void updateDuration(qint64 duration);
     void updatePlaybackUI(QMediaPlayer::MediaStatus status);
+    void updateNextSongName();
     void updateMuteIcon(bool muted);
     void updatePlayPauseIcon(bool playing);
     void updateShuffleIcon(bool shuffled);
@@ -57,6 +58,7 @@ private slots:
     void updateGifState(QMediaPlayer::PlaybackState state);
     void removePlaylist(const int& index);
     void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void onShuffleStatusChanged(bool shuffled);
     void filterSearchResults(const QString& searchQuery);
     void showContextMenu(const QPoint& pos);
     void saveToJSON(const QString& filePath);

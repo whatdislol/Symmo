@@ -31,6 +31,7 @@ public:
     void onToNextSong(AudioControl* audioControl);
     void onToPreviousSong(AudioControl* audioControl);
     void onSkipOnSongEnd(AudioControl* audioControl);
+    QString onGetNextSongName(AudioControl* audioControl) const;
     void onAddMultipleSongs();
     void setSelectedPlaylist(Playlist* playlist);
     void setActivePlaylist(Playlist* playlist);

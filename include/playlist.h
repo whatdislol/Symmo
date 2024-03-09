@@ -39,6 +39,7 @@ public:
     QString getMusicLibraryPath() const;
     void shuffleFisherYates();
     void shuffleRandom();
+    QString getNextSongName(AudioControl* audioControl, bool shuffled) const;
 
 signals:
     void songAdded(QListWidgetItem* song);
