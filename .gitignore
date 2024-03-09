@@ -60,4 +60,6 @@ saves/
 *mp3
 *wav
 /build
+/music_library/*
+!music_library/.gitkeep
 /data.json
