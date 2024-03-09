@@ -134,7 +134,7 @@ void MainWindow::updatePlaybackUI(QMediaPlayer::MediaStatus status)
         QMediaPlayer* M_Player = m_audioControl->getMediaPlayer();
         qint64 totalDuration = M_Player->duration() / 1000;
 
-        if (M_Player->mediaStatus() != QMediaPlayer::NoMedia) { // Media loaded successfully
+        if (M_Player->mediaStatus() != QMediaPlayer::NoMedia) {
             QUrl mediaUrl = M_Player->source();
             QFileInfo fileInfo(mediaUrl.toLocalFile());
             QString fileNameWithoutExtension = fileInfo.fileName();
@@ -149,7 +149,7 @@ void MainWindow::updatePlaybackUI(QMediaPlayer::MediaStatus status)
 
 void MainWindow::updateMuteIcon(bool muted)
 {
-    QIcon volumeIcon = muted ? QIcon(getProjectRootPath() + "/asset/icons/volume-mute.png") : QIcon(getProjectRootPath() + "/asset/icons/volume.png");
+    QIcon volumeIcon = muted ? QIcon(getProjectRootPath() + "/asset/icons/volume_mute.png") : QIcon(getProjectRootPath() + "/asset/icons/volume.png");
     ui->toggleButton_Mute->setIcon(volumeIcon);
 }
 
