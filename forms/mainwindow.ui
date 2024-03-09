@@ -404,9 +404,9 @@
     <widget class="QLabel" name="label_Ambience">
      <property name="geometry">
       <rect>
-       <x>60</x>
+       <x>20</x>
        <y>20</y>
-       <width>141</width>
+       <width>211</width>
        <height>24</height>
       </rect>
      </property>
@@ -424,6 +424,9 @@
      </property>
      <property name="text">
       <string>Ambience Mode</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
     <widget class="QComboBox" name="comboBox_AmbienceBox">
@@ -531,17 +534,25 @@ border-radius: 5px;
        <height>341</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>-1</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
      <property name="styleSheet">
-      <string notr="true">
-							color: rgb(255, 255, 255);
-							font-size: 15px;
-						</string>
+      <string notr="true">font: 17px;
+color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="spacing">
+      <number>2</number>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_AddSong">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>520</x>
        <y>20</y>
        <width>40</width>
        <height>40</height>
@@ -576,9 +587,9 @@ border-radius: 5px;
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>0</y>
+       <y>10</y>
        <width>331</width>
-       <height>61</height>
+       <height>51</height>
       </rect>
      </property>
      <property name="font">
@@ -621,7 +632,7 @@ border-radius: 5px;
       <rect>
        <x>430</x>
        <y>20</y>
-       <width>51</width>
+       <width>81</width>
        <height>41</height>
       </rect>
      </property>
@@ -775,10 +786,10 @@ border-radius: 5px;
     <widget class="QLabel" name="label_Playlist">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>20</y>
-       <width>71</width>
-       <height>24</height>
+       <x>20</x>
+       <y>10</y>
+       <width>111</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="font">
@@ -847,11 +858,17 @@ border-radius: 5px;
      </property>
      <property name="font">
       <font>
-       <pointsize>15</pointsize>
+       <pointsize>-1</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">font: 17px;
+color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="spacing">
+      <number>2</number>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_ViewAllSongs">
