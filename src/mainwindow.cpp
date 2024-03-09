@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(player, &QMediaPlayer::playingChanged, this, &MainWindow::updatePlayPauseIcon);
     connect(m_audioControl->getAudioOutput(), &QAudioOutput::mutedChanged, this, &MainWindow::updateMuteIcon);
     connect(m_audioControl, &AudioControl::isZeroVolume, this, &MainWindow::updateMuteIcon);
-    connect(m_audioControl, &AudioControl::gifUpdated, this, &MainWindow::updateGif);
+    connect(m_audioControl, &AudioControl::gifUpdated, this, &MainWindow::changeGif);
     connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::onMediaStatusChanged);
     connect(player, &QMediaPlayer::playbackStateChanged, this, &MainWindow::updateGifState);
 
@@ -86,7 +86,7 @@ MainWindow::MainWindow(QWidget* parent) :
     loadFromJSON(m_dataPath);
     m_playlistManager->onMusicLibraryChanged(m_playlistManager->getMusicLibraryPath());
     ui->slider_AmbienceVolume->setValue(20);
-    updateGif();
+    changeGif();
 }
 
 MainWindow::~MainWindow()
@@ -237,7 +237,7 @@ void MainWindow::updateOnPlaylistSelected()
     updatePlaylistInfo();
 }
 
-void MainWindow::updateGif()
+void MainWindow::changeGif()
 {
 	QString selectedText = ui->comboBox_AmbienceBox->currentText();
 	QString gifPath = getProjectRootPath() + "/gifs/" + selectedText.toLower() + ".gif";
