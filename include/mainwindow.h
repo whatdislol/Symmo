@@ -66,6 +66,7 @@ private:
     PlaylistManager* m_playlistManager;
     QString getProjectRootPath() const;
     QString m_dataPath;
+    QString m_assetPath;
     QMovie* m_gif;
 };
 
