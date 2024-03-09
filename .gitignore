@@ -55,7 +55,9 @@ compile_commands.json
 *.swp
 debug/
 saves/
+
+# Local stuff
+*mp3
+*wav
 /build
-/music_library/*
-/data.json
 /data.json
