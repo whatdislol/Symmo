@@ -347,25 +347,29 @@
     <widget class="QLabel" name="label_fileName">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>40</x>
        <y>50</y>
-       <width>271</width>
+       <width>231</width>
        <height>20</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>STHeiti</family>
+       <italic>false</italic>
+       <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255,255,255);</string>
+      <string notr="true">color: rgb(255,255,255);
+font: bold Gotham;
+</string>
      </property>
      <property name="text">
       <string/>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
     <zorder>toggleButton_PlayPause</zorder>
@@ -412,14 +416,16 @@
      </property>
      <property name="font">
       <font>
-       <family>STHeiti</family>
+       <family>Gotham</family>
        <pointsize>-1</pointsize>
+       <italic>false</italic>
+       <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">
-							font-size: 20px;
-							color: rgb(255,255,255);
+      <string notr="true">font-size: 20px;
+color: rgb(255,255,255);
+font: bold Gotham;
 						</string>
      </property>
      <property name="text">
@@ -536,17 +542,20 @@ border-radius: 5px;
      </property>
      <property name="font">
       <font>
+       <family>Gotham</family>
        <pointsize>-1</pointsize>
        <italic>false</italic>
        <bold>false</bold>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 17px;
-color: rgb(255, 255, 255);</string>
+      <string notr="true">font: 14px;
+color: rgb(255, 255, 255);
+font: Gotham;
+</string>
      </property>
      <property name="spacing">
-      <number>2</number>
+      <number>4</number>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_AddSong">
@@ -596,12 +605,14 @@ color: rgb(255, 255, 255);</string>
       <font>
        <family>STHeiti</family>
        <pointsize>-1</pointsize>
+       <italic>false</italic>
+       <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">
-							font-size: 40px;
-							color: rgb(255,255,255);
+      <string notr="true">font-size: 40px;
+color: rgb(255,255,255);
+font: bold Gotham
 						</string>
      </property>
      <property name="text">
@@ -618,9 +629,9 @@ color: rgb(255, 255, 255);</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">
-							font-size: 20px;
-							color: rgb(255, 255, 255);
+      <string notr="true">font-size: 20px;
+color: rgb(255, 255, 255);
+font: bold Gotham;
 						</string>
      </property>
      <property name="text">
@@ -637,9 +648,10 @@ color: rgb(255, 255, 255);</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">
-							font-size: 20px;
-							color: rgb(255, 255, 255);
+      <string notr="true">font-size: 20px;
+color: rgb(255, 255, 255);
+font: bold Gotham;
+
 						</string>
      </property>
      <property name="text">
@@ -796,13 +808,14 @@ color: rgb(255, 255, 255);</string>
       <font>
        <family>STHeiti</family>
        <pointsize>-1</pointsize>
+       <italic>false</italic>
        <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">
-							font-size: 20px;
-							color: rgb(255, 255, 255);
+      <string notr="true">font-size: 20px;
+color: rgb(255, 255, 255);
+font: bold Gotham
 
 						</string>
      </property>
@@ -865,7 +878,9 @@ color: rgb(255, 255, 255);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 17px;
-color: rgb(255, 255, 255);</string>
+color: rgb(255, 255, 255);
+font: Gotham;
+</string>
      </property>
      <property name="spacing">
       <number>2</number>
@@ -887,8 +902,7 @@ color: rgb(255, 255, 255);</string>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">
-							QPushButton {
+      <string notr="true">QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
 							background-color: #86B6F6;
