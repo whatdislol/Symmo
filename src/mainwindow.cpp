@@ -179,6 +179,7 @@ void MainWindow::setupUI()
     ui->pushButton_Back->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
     ui->label_Gif->setMovie(m_gif);
     m_gif->setScaledSize(ui->label_Gif->size());
+    ui->lineEdit_SearchBar->setPlaceholderText("Search in Playlist");
 }
 
 void MainWindow::addSongWidgetItem(QListWidgetItem* song)
