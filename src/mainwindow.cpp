@@ -212,7 +212,7 @@ void MainWindow::updateSongsDisplay()
     Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
     if (selectedPlaylist) {
         QList<QString> m_songPaths = selectedPlaylist->getSongPaths();
-        for (QString songPath : m_songPaths) {
+        for (QString& songPath : m_songPaths) {
             QFileInfo fileInfo(songPath);
             QString baseName = fileInfo.baseName();
             QListWidgetItem* musicItem = new QListWidgetItem(baseName);
@@ -321,7 +321,6 @@ void MainWindow::showContextMenu(const QPoint& pos)
         if (!songItem) {
             return;
         }
-        int songIndex = ui->listWidget_SongsInPlaylist->row(songItem);
         QMenu songsMenu;
 		QAction* removeSongAction = songsMenu.addAction("Remove from Playlist");
 		connect(removeSongAction, &QAction::triggered, [=]() {
@@ -367,7 +366,7 @@ void MainWindow::saveToJSON(const QString &filePath)
         playlistsArray.append(playlistObject);
     }
 
-    QJsonObject positionObject;
+	QJsonObject positionObject;
 	positionObject["position"] = ui->slider_SongVolume->value();
 
 	QDir().mkpath(QFileInfo(filePath).path());
