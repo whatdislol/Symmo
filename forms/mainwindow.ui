@@ -258,7 +258,7 @@ border-radius: 10px;
      </property>
      <property name="styleSheet">
       <string notr="true">QSlider::groove:horizontal {
-    border: 1px solid #161728;
+	border: 1px solid #161728;
     background: transparent;
     background-color: #2B2A34;
     height: 10px;
@@ -267,10 +267,27 @@ border-radius: 10px;
 
 QSlider::handle:horizontal {
     background-color: #F3F3F3;
-    width: 10px; /* Adjust the width of the handle to be smaller */
-    height: 10px; /* Match the height of the groove */
-    border: none; /* Make the border transparent */
-    border-radius: 5px; /* Match the border radius of the groove */
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::add-page:horizontal {
+	border: 1px solid #161728;
+    background: #2B2A34;
+    border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+QSlider::sub-page:horizontal {
+	border: 1px solid #161728;
+    background: #F3F3F3;
+    border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: #0080FF;
 }</string>
      </property>
      <property name="value">
@@ -291,7 +308,7 @@ QSlider::handle:horizontal {
      </property>
      <property name="styleSheet">
       <string notr="true">QSlider::groove:horizontal {
-    border: 1px solid #161728;
+	border: 1px solid #161728;
     background: transparent;
     background-color: #2B2A34;
     height: 10px;
@@ -302,8 +319,25 @@ QSlider::handle:horizontal {
     background-color: #F3F3F3;
     width: 10px;
     height: 10px;
-    border: none;
     border-radius: 5px;
+}
+
+QSlider::add-page:horizontal {
+	border: 1px solid #161728;
+    background: #2B2A34;
+    border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+QSlider::sub-page:horizontal {
+	border: 1px solid #161728;
+    background: #F3F3F3;
+    border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: #0080FF;
 }</string>
      </property>
      <property name="orientation">
@@ -482,7 +516,7 @@ font: regular Gotham;
      </property>
      <property name="styleSheet">
       <string notr="true">QSlider::groove:horizontal {
-    border: 1px solid #161728;
+	border: 1px solid #161728;
     background: transparent;
     background-color: #2B2A34;
     height: 10px;
@@ -491,10 +525,27 @@ font: regular Gotham;
 
 QSlider::handle:horizontal {
     background-color: #F3F3F3;
-    width: 10px; /* Adjust the width of the handle to be smaller */
-    height: 10px; /* Match the height of the groove */
-    border: none; /* Make the border transparent */
-    border-radius: 5px; /* Match the border radius of the groove */
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::add-page:horizontal {
+	border: 1px solid #161728;
+    background: #2B2A34;
+    border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+QSlider::sub-page:horizontal {
+	border: 1px solid #161728;
+    background: #F3F3F3;
+    border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: #0080FF;
 }</string>
      </property>
      <property name="value">
