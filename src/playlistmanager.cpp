@@ -114,7 +114,7 @@ void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
 
 void PlaylistManager::displaySongSelectionDialog()
 {
-    m_songSelectionDialog->show();
+    m_songSelectionDialog->exec();
     m_songSelectionDialog->displaySongs();
 }
 
