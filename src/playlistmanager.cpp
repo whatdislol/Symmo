@@ -171,11 +171,6 @@ QString PlaylistManager::onGetNextSongName(AudioControl* audioControl) const
     return m_activePlaylist->getNextSongName(audioControl, m_shuffled);
 }
 
-QString PlaylistManager::onGetNextSongName(AudioControl* audioControl) const
-{
-    return m_activePlaylist->getNextSongName(audioControl, m_shuffled);
-}
-
 void PlaylistManager::onAddMultipleSongs()
 {
     QStringList selectedSongPaths = m_songSelectionDialog->getSelectedSongPaths();
