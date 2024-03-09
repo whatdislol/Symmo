@@ -56,7 +56,7 @@ void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
     }
 
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
-	QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
+    QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
     QStringList songPaths;
 
     QString currentSongPath = getCurrentSongPath(m_player);
@@ -80,7 +80,7 @@ void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
         m_player->play();
-		m_ambiencePlayer->play();
+        m_ambiencePlayer->play();
     }
 }
 
@@ -91,7 +91,7 @@ void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
     }
 
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
-	QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
+    QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
     QStringList songPaths;
 
     QString currentSongPath = getCurrentSongPath(m_player);
@@ -115,7 +115,7 @@ void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
         m_player->play();
-		m_ambiencePlayer->play();
+        m_ambiencePlayer->play();
     }
 }
 
@@ -210,6 +210,19 @@ void Playlist::shuffleRandom()
         } while ((m_shuffledSongPaths[i - 1] == randomSong) && i > 0);
         m_shuffledSongPaths[i] = randomSong;
     }
+}
+
+QString Playlist::getNextSongName(AudioControl* audioControl, bool shuffled) const
+{
+    QString nextSongPath;
+    if (shuffled) {
+        nextSongPath = m_shuffledSongPaths[(m_currentShuffledSongIndex + 1) % m_shuffledSongPaths.size()];
+    }
+    else {
+        QMediaPlayer* m_player = audioControl->getMediaPlayer();
+        nextSongPath = m_songPaths[(m_songPaths.indexOf(getCurrentSongPath(m_player)) + 1) % m_songPaths.size()];
+    }
+    return QFileInfo(nextSongPath).baseName();
 }
 
 QString Playlist::getProjectRootPath() const {
