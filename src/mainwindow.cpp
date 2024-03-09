@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget* parent) :
     m_audioControl(new AudioControl(this)),
     m_playlistManager(new PlaylistManager(this)),
     m_dataPath(getProjectRootPath() + "/data.json"),
-    m_gif(new QMovie(getProjectRootPath() + "/gifs/none.gif"))
+    m_gif(new QMovie(getProjectRootPath() + "/asset/gifs/none.gif"))
 {
     ui->setupUi(this);
     Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
@@ -149,20 +149,32 @@ void MainWindow::updatePlaybackUI(QMediaPlayer::MediaStatus status)
 
 void MainWindow::updateMuteIcon(bool muted)
 {
-    QIcon volumeIcon = muted ? style()->standardIcon(QStyle::SP_MediaVolumeMuted) : style()->standardIcon(QStyle::SP_MediaVolume);
+    QIcon volumeIcon = muted ? QIcon(getProjectRootPath() + "/asset/icons/volume-mute.png") : QIcon(getProjectRootPath() + "/asset/icons/volume.png");
     ui->toggleButton_Mute->setIcon(volumeIcon);
 }
 
 void MainWindow::updatePlayPauseIcon(bool playing)
 {
-    QIcon playPauseIcon = playing ? style()->standardIcon(QStyle::SP_MediaPause) : style()->standardIcon(QStyle::SP_MediaPlay);
+    QIcon playPauseIcon = playing ? QIcon(getProjectRootPath() + "/asset/icons/pause.png") : QIcon(getProjectRootPath() + "/asset/icons/play.png");
     ui->toggleButton_PlayPause->setIcon(playPauseIcon);
 }
 
 void MainWindow::updateShuffleIcon(bool shuffled)
 {
-	QIcon shuffleIcon = shuffled ? style()->standardIcon(QStyle::SP_MediaSeekForward) : style()->standardIcon(QStyle::SP_MediaSeekBackward);
-	ui->toggleButton_Shuffle->setIcon(shuffleIcon);
+    QIcon shuffleIcon;
+    if (shuffled) {
+        int shuffleMode = m_playlistManager->getShuffleMode();
+        if (shuffleMode == 0) {
+			shuffleIcon = QIcon(getProjectRootPath() + "/asset/icons/shuffle_non_dupe.png");
+		}
+        else if (shuffleMode == 1) {
+			shuffleIcon = QIcon(getProjectRootPath() + "/asset/icons/shuffle_random.png");
+		}
+    }
+    else {
+		shuffleIcon = QIcon(getProjectRootPath() + "/asset/icons/shuffle_off.png");
+	}
+    ui->toggleButton_Shuffle->setIcon(shuffleIcon);
 }
 
 void MainWindow::updateLoopIcon(bool looped)
@@ -173,10 +185,14 @@ void MainWindow::updateLoopIcon(bool looped)
 
 void MainWindow::setupUI()
 {
-    ui->toggleButton_PlayPause->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-    ui->toggleButton_Mute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
-    ui->pushButton_Skip->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
-    ui->pushButton_Back->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
+    ui->toggleButton_PlayPause->setIcon(QIcon(getProjectRootPath() + "/asset/icons/play.png"));
+    ui->toggleButton_Mute->setIcon(QIcon(getProjectRootPath() + "/asset/icons/volume.png"));
+    ui->pushButton_Skip->setIcon(QIcon(getProjectRootPath() + "/asset/icons/next.png"));
+    ui->pushButton_Back->setIcon(QIcon(getProjectRootPath() + "/asset/icons/back.png"));
+    ui->toggleButton_Shuffle->setIcon(QIcon(getProjectRootPath() + "/asset/icons/shuffle_off.png"));
+    ui->pushButton_Search->setIcon(QIcon(getProjectRootPath() + "/asset/icons/search.png"));
+    ui->pushButton_AddPlaylist->setIcon(QIcon(getProjectRootPath() + "/asset/icons/add.png"));
+    ui->pushButton_ViewAllSongs->setIcon(QIcon(getProjectRootPath() + "/asset/icons/music.png"));
     ui->label_Gif->setMovie(m_gif);
     m_gif->setScaledSize(ui->label_Gif->size());
     ui->lineEdit_SearchBar->setPlaceholderText("Search in Playlist");
@@ -240,7 +256,7 @@ void MainWindow::updateOnPlaylistSelected()
 void MainWindow::changeGif()
 {
 	QString selectedText = ui->comboBox_AmbienceBox->currentText();
-	QString gifPath = getProjectRootPath() + "/gifs/" + selectedText.toLower() + ".gif";
+	QString gifPath = getProjectRootPath() + "/asset/gifs/" + selectedText.toLower() + ".gif";
     m_gif->stop();
     m_gif->setFileName(gifPath);
     m_gif->start();

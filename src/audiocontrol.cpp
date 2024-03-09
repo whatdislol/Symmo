@@ -17,8 +17,8 @@ AudioControl::AudioControl(QObject* parent)
     setAmbienceVolume(20);
     m_ambiencePaths = {
         "", 
-        getProjectRootPath() + "/ambience_sounds/rain.mp3",
-        getProjectRootPath() + "/ambience_sounds/campfire.mp3"
+        getProjectRootPath() + "/asset/ambience_sounds/rain.mp3",
+        getProjectRootPath() + "/asset/ambience_sounds/campfire.mp3"
     };
 }
 

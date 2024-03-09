@@ -13,6 +13,7 @@
 #include <QJsonObject>
 #include <QMenu>
 #include <QMovie>
+#include <QHBoxLayout>
 #include "audiocontrol.h"
 #include "playlistmanager.h"
 
