@@ -46,7 +46,6 @@ void SelectSongDialog::displaySongs()
     QFileInfoList musicFiles = musicDir.entryInfoList(musicFilters, QDir::Files);
 
     for (const QFileInfo& fileInfo : musicFiles) {
-        QString songPath = fileInfo.absoluteFilePath();
         QString songName = fileInfo.baseName();
         ui->listWidget_SongsToSelect->addItem(songName);
     }

@@ -34,14 +34,13 @@ void Playlist::selectSong(QListWidgetItem* song, AudioControl* audioControl)
 {
     QString filePath = m_musicLibraryPath + song->text() + ".mp3";
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
+    QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
     m_player->setSource(QUrl::fromLocalFile(filePath));
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
         m_player->play();
+        m_ambiencePlayer->play();
         emit songSelected(this);
-    }
-    else {
-        qDebug() << "Error setting media source: " << m_player->errorString();
     }
 }
 
@@ -57,6 +56,7 @@ void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
     }
 
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
+	QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
     QStringList songPaths;
 
     QString currentSongPath = getCurrentSongPath(m_player);
@@ -66,26 +66,21 @@ void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
         songPaths = m_shuffledSongPaths;
         index = m_currentShuffledSongIndex;
         ++m_currentShuffledSongIndex;
+        if (m_currentShuffledSongIndex >= m_shuffledSongPaths.size()) {
+            m_currentShuffledSongIndex = 0;
+        }
     }
     else {
         songPaths = m_songPaths;
         index = songPaths.indexOf(currentSongPath);
     }
-
-    if (index != -1) {
-        filePath = songPaths[(index + 1) % songPaths.size()];
-    }
-    else if (shuffled) {
-        filePath = m_shuffledSongPaths.first();
-    }
+    filePath = songPaths[(index + 1) % songPaths.size()];
 
     m_player->setSource(QUrl::fromLocalFile(filePath));
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
         m_player->play();
-    }
-    else {
-        qDebug() << "Error setting media source: " << m_player->errorString();
+		m_ambiencePlayer->play();
     }
 }
 
@@ -96,6 +91,7 @@ void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
     }
 
     QMediaPlayer* m_player = audioControl->getMediaPlayer();
+	QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
     QStringList songPaths;
 
     QString currentSongPath = getCurrentSongPath(m_player);
@@ -105,31 +101,27 @@ void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
         songPaths = m_shuffledSongPaths;
         index = m_currentShuffledSongIndex;
         --m_currentShuffledSongIndex;
+        if (m_currentShuffledSongIndex < 0) {
+            m_currentShuffledSongIndex = 0;
+        }
     }
     else {
         songPaths = m_songPaths;
         index = songPaths.indexOf(currentSongPath);
     }
-
-    if (index != -1) {
-        filePath = songPaths[(index > 0) ? index - 1 : 0];
-    }
-    else if (shuffled) {
-        filePath = m_shuffledSongPaths.first();
-    }
+    filePath = songPaths[(index > 0) ? index - 1 : 0];
 
     m_player->setSource(QUrl::fromLocalFile(filePath));
 
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
         m_player->play();
-    }
-    else {
-        qDebug() << "Error setting media source: " << m_player->errorString();
+		m_ambiencePlayer->play();
     }
 }
 
-void Playlist::skipOnSongEnd(AudioControl* audioControl, QMediaPlayer::MediaStatus status, bool shuffled)
+void Playlist::skipOnSongEnd(AudioControl* audioControl, bool shuffled)
 {
+    QMediaPlayer::MediaStatus status = audioControl->getMediaPlayer()->mediaStatus();
     if (status == QMediaPlayer::EndOfMedia) {
         toNextSong(audioControl, shuffled);
     }
@@ -195,18 +187,12 @@ void Playlist::shuffleFisherYates()
 {
     m_currentShuffledSongIndex = 0;
     m_shuffledSongPaths = m_songPaths;
-    std::mt19937 gen(std::time(nullptr)); // Seed the random number generator
-    qDebug() << "Initial: " << m_shuffledSongPaths;
+    std::mt19937 gen(std::time(nullptr));
     int n = m_shuffledSongPaths.size();
     for (int i = n - 1; i > 0; --i) {
         std::uniform_int_distribution<int> dist(0, i);
         int j = dist(gen);
         m_shuffledSongPaths.swapItemsAt(i, j);
-    }
-    
-    qDebug() << "Fisher Yates Shuffled: ";
-    for (auto& song : m_shuffledSongPaths) {
-        qDebug() << song;
     }
 }
 
@@ -214,9 +200,6 @@ void Playlist::shuffleRandom()
 {
     m_currentShuffledSongIndex = 0;
     m_shuffledSongPaths = m_songPaths;
-    qDebug() << "Initial: " << m_shuffledSongPaths;
-    qDebug() << "Ctime Shuffle:";
-
     std::mt19937 gen(std::time(nullptr));
 
     for (int i = 0; i < m_shuffledSongPaths.size(); ++i) {
@@ -226,11 +209,6 @@ void Playlist::shuffleRandom()
             randomSong = m_songPaths[randomIndex];
         } while ((m_shuffledSongPaths[i - 1] == randomSong) && i > 0);
         m_shuffledSongPaths[i] = randomSong;
-    }
-    
-    qDebug() << "CTime Shuffled: ";
-    for (auto& song : m_shuffledSongPaths) {
-        qDebug() << song;
     }
 }
 
