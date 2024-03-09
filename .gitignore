@@ -63,3 +63,4 @@ saves/
 /music_library/*
 !music_library/.gitkeep
 /data.json
+/.vs
