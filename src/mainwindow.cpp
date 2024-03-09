@@ -83,6 +83,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(selectedPlaylist, &Playlist::songAdded, this, &MainWindow::addSongWidgetItem);
 
     setupUI();
+    setupFonts();
     m_playlistManager->updateDefaultPlaylist();
     loadFromJSON(m_dataPath);
     m_playlistManager->onMusicLibraryChanged(m_playlistManager->getMusicLibraryPath());
@@ -199,10 +200,13 @@ void MainWindow::setupUI()
     ui->label_Gif->setMovie(m_gif);
     m_gif->setScaledSize(ui->label_Gif->size());
     ui->lineEdit_SearchBar->setPlaceholderText("Search in Playlist");
+}
 
+void MainWindow::setupFonts()
+{
     int fontId = QFontDatabase::addApplicationFont(m_assetPath + "/fonts/GothamBold.ttf");
     QString GothamBold = QFontDatabase::applicationFontFamilies(fontId).at(0);
-    int fontId2 = QFontDatabase::addApplicationFont(m_assetPath + "/fonts//GothamBook.ttf");
+    int fontId2 = QFontDatabase::addApplicationFont(m_assetPath + "/fonts/GothamBook.ttf");
     QString GothamBook = QFontDatabase::applicationFontFamilies(fontId2).at(0);
     ui->label_Ambience->setFont(QFont(GothamBold, 25, QFont::Bold));
     ui->label_PlaylistName->setFont(QFont(GothamBold, 40, QFont::Bold));

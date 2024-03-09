@@ -46,6 +46,7 @@ private slots:
     void updateShuffleIcon(bool shuffled);
     void updateLoopIcon(bool looped);
     void setupUI();
+    void setupFonts();
     void addSongWidgetItem(QListWidgetItem* song);
     void addPlaylistWidgetItem(QListWidgetItem* playlist);
     void getNewPlaylistName();
