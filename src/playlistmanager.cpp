@@ -72,7 +72,6 @@ void PlaylistManager::removePlaylist(const int& index)
 		QMessageBox::Yes | QMessageBox::No);
 
 	if (reply == QMessageBox::No) {
-		// User clicked No, do nothing
 		return;
 	}
 

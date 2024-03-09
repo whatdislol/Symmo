@@ -337,13 +337,11 @@ void MainWindow::showContextMenu(const QPoint& pos)
         connect(shuffleFisherYates, &QAction::triggered, [=]() {
             m_playlistManager->setShuffleMode(0);
             m_playlistManager->shufflePlaylist();
-            // update shuffle icon for FISHER YATES shuffle
         });
         QAction* shuffleRandom = shuffleMenu.addAction("Random Shuffle");
 		connect(shuffleRandom, &QAction::triggered, [=]() {
 			m_playlistManager->setShuffleMode(1);
 			m_playlistManager->shufflePlaylist();
-			// update shuffle icon for shuffle THREE
 		});
         shuffleMenu.exec(globalShufflePos);
     }
@@ -368,8 +366,8 @@ void MainWindow::saveToJSON(const QString &filePath)
 
         playlistsArray.append(playlistObject);
     }
-	// Save the position of the slider
-	QJsonObject positionObject;
+
+    QJsonObject positionObject;
 	positionObject["position"] = ui->slider_SongVolume->value();
 
 	QDir().mkpath(QFileInfo(filePath).path());

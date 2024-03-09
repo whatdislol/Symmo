@@ -187,7 +187,7 @@ void Playlist::shuffleFisherYates()
 {
     m_currentShuffledSongIndex = 0;
     m_shuffledSongPaths = m_songPaths;
-    std::mt19937 gen(std::time(nullptr)); // Seed the random number generator
+    std::mt19937 gen(std::time(nullptr));
     int n = m_shuffledSongPaths.size();
     for (int i = n - 1; i > 0; --i) {
         std::uniform_int_distribution<int> dist(0, i);
