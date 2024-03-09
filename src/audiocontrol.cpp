@@ -26,6 +26,7 @@ AudioControl::~AudioControl()
 {
     delete m_player;
     delete m_audioOutput;
+    delete m_ambiencePlayer;
     delete m_ambienceOutput;
 }
 
