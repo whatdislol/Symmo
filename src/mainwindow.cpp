@@ -300,7 +300,7 @@ void MainWindow::filterSearchResults(const QString& searchQuery)
 		QList<QString> songNames = selectedPlaylist->getSongNames();
 		ui->listWidget_SongsInPlaylist->clear();
         for (QString& songName : songNames) {
-            if (songName.contains(searchQuery)) {
+            if (songName.toLower().contains(searchQuery.toLower())) {
 				QListWidgetItem* songItem = new QListWidgetItem(songName);
 				ui->listWidget_SongsInPlaylist->addItem(songItem);
 			}
