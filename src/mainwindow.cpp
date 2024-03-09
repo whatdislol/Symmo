@@ -179,6 +179,7 @@ void MainWindow::setupUI()
     ui->pushButton_Back->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
     ui->label_Gif->setMovie(m_gif);
     m_gif->setScaledSize(ui->label_Gif->size());
+    ui->lineEdit_SearchBar->setPlaceholderText("Search in Playlist");
 }
 
 void MainWindow::addSongWidgetItem(QListWidgetItem* song)
@@ -346,14 +347,14 @@ void MainWindow::showContextMenu(const QPoint& pos)
     }
 }
 
-void MainWindow::saveToJSON(const QString &filePath)
+void MainWindow::saveToJSON(const QString& filePath)
 {
     QJsonArray playlistsArray;
 
     for (Playlist* playlist : m_playlistManager->getPlaylists()) {
         if (playlist == m_playlistManager->getDefaultPlaylist()) {
-			continue;
-		}
+            continue;
+        }
         QJsonObject playlistObject;
         playlistObject["name"] = playlist->getName();
 
@@ -366,29 +367,27 @@ void MainWindow::saveToJSON(const QString &filePath)
         playlistsArray.append(playlistObject);
     }
 
-	QJsonObject positionObject;
-	positionObject["position"] = ui->slider_SongVolume->value();
+    QJsonObject positionObject;
+    positionObject["position"] = ui->slider_SongVolume->value();
 
-	QDir().mkpath(QFileInfo(filePath).path());
+    QJsonObject rootObject;
+    rootObject["playlists"] = playlistsArray;
+    rootObject["position"] = positionObject;
 
-	QJsonDocument jsonDoc;
-	jsonDoc.setArray(playlistsArray);
-	jsonDoc.setObject(positionObject);
-	if (jsonDoc.isNull() || jsonDoc.isEmpty()) {
-		qDebug() << "Failed to serialize playlists data to JSON";
-		return;
-	}
+    QJsonDocument jsonDoc(rootObject);
+
+    QDir().mkpath(QFileInfo(filePath).path());
 
     QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly)) {
         qDebug() << "Failed to open file for writing:" << file.errorString();
         return;
     }
-	file.write(jsonDoc.toJson());
+    file.write(jsonDoc.toJson());
     file.close();
 }
 
-void MainWindow::loadFromJSON(const QString &filePath)
+void MainWindow::loadFromJSON(const QString& filePath)
 {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
@@ -403,7 +402,8 @@ void MainWindow::loadFromJSON(const QString &filePath)
         return;
     }
 
-    QJsonArray playlistsArray = doc.array();
+    // Load playlists
+    QJsonArray playlistsArray = doc["playlists"].toArray();
     QList<Playlist*> loadedPlaylists;
     for (const QJsonValue& playlistValue : playlistsArray) {
         QJsonObject playlistObject = playlistValue.toObject();
@@ -420,11 +420,13 @@ void MainWindow::loadFromJSON(const QString &filePath)
         addPlaylistWidgetItem(new QListWidgetItem(playlistName));
     }
     m_playlistManager->setPlaylists(loadedPlaylists);
-	int position = 50;
-	if (doc.isObject() && doc.object().contains("position")) {
-		position = doc.object()["position"].toInt();
-	}
-	ui->slider_SongVolume->setSliderPosition(position);
+
+    // Load position
+    int position = 50;
+    if (doc.isObject() && doc.object().contains("position")) {
+        position = doc["position"].toObject()["position"].toInt();
+    }
+    ui->slider_SongVolume->setSliderPosition(position);
     m_audioControl->setVolume(position);
 
     file.close();
