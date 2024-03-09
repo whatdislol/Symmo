@@ -50,7 +50,7 @@ private slots:
     void updateSongsDisplay();
     void updatePlaylistInfo();
     void updateOnPlaylistSelected();
-    void updateGif();
+    void changeGif();
     void updateGifState(QMediaPlayer::PlaybackState state);
     void removePlaylist(const int& index);
     void onMediaStatusChanged(QMediaPlayer::MediaStatus status);

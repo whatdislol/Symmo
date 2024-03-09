@@ -184,7 +184,6 @@ void MainWindow::setupUI()
 void MainWindow::addSongWidgetItem(QListWidgetItem* song)
 {
     ui->listWidget_SongsInPlaylist->addItem(song);
-    qDebug() << "Song added to playlist: " << song->text();
 }
 
 void MainWindow::addPlaylistWidgetItem(QListWidgetItem* playlist)
@@ -249,7 +248,6 @@ void MainWindow::changeGif()
 
 void MainWindow::updateGifState(QMediaPlayer::PlaybackState state)
 {
-    qDebug() << "GIF state updated";
 	if (state == QMediaPlayer::PlayingState) {
 		m_gif->start();
 	}

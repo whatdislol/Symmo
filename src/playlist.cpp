@@ -42,9 +42,6 @@ void Playlist::selectSong(QListWidgetItem* song, AudioControl* audioControl)
         m_ambiencePlayer->play();
         emit songSelected(this);
     }
-    else {
-        qDebug() << "Error setting media source: " << m_player->errorString();
-    }
 }
 
 QString Playlist::getTrackQuantity() const
@@ -85,9 +82,6 @@ void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
         m_player->play();
 		m_ambiencePlayer->play();
     }
-    else {
-        qDebug() << "Error setting media source: " << m_player->errorString();
-    }
 }
 
 void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
@@ -122,9 +116,6 @@ void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
     if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
         m_player->play();
 		m_ambiencePlayer->play();
-    }
-    else {
-        qDebug() << "Error setting media source: " << m_player->errorString();
     }
 }
 
@@ -197,17 +188,11 @@ void Playlist::shuffleFisherYates()
     m_currentShuffledSongIndex = 0;
     m_shuffledSongPaths = m_songPaths;
     std::mt19937 gen(std::time(nullptr)); // Seed the random number generator
-    qDebug() << "Initial: " << m_shuffledSongPaths;
     int n = m_shuffledSongPaths.size();
     for (int i = n - 1; i > 0; --i) {
         std::uniform_int_distribution<int> dist(0, i);
         int j = dist(gen);
         m_shuffledSongPaths.swapItemsAt(i, j);
-    }
-    
-    qDebug() << "Fisher Yates Shuffled: ";
-    for (auto& song : m_shuffledSongPaths) {
-        qDebug() << song;
     }
 }
 
@@ -215,9 +200,6 @@ void Playlist::shuffleRandom()
 {
     m_currentShuffledSongIndex = 0;
     m_shuffledSongPaths = m_songPaths;
-    qDebug() << "Initial: " << m_shuffledSongPaths;
-    qDebug() << "Ctime Shuffle:";
-
     std::mt19937 gen(std::time(nullptr));
 
     for (int i = 0; i < m_shuffledSongPaths.size(); ++i) {
@@ -227,11 +209,6 @@ void Playlist::shuffleRandom()
             randomSong = m_songPaths[randomIndex];
         } while ((m_shuffledSongPaths[i - 1] == randomSong) && i > 0);
         m_shuffledSongPaths[i] = randomSong;
-    }
-    
-    qDebug() << "CTime Shuffled: ";
-    for (auto& song : m_shuffledSongPaths) {
-        qDebug() << song;
     }
 }
 
