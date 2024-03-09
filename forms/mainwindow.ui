@@ -365,7 +365,10 @@ QSlider::handle:horizontal {
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255,255,255);</string>
+      <string notr="true">
+							color: rgb(255,255,255);
+							font: bold Gotham;
+						</string>
      </property>
      <property name="text">
       <string/>
@@ -427,6 +430,7 @@ border-radius: 10px;
       <string notr="true">
 							font-size: 20px;
 							color: rgb(255,255,255);
+							font: bold Gotham;
 						</string>
      </property>
      <property name="text">
@@ -552,8 +556,10 @@ border-radius: 10px;
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 17px;
-color: rgb(255, 255, 255);</string>
+      <string notr="true">font: 14px;
+color: rgb(255, 255, 255);
+font: regular Gotham;
+						</string>
      </property>
      <property name="spacing">
       <number>4</number>
@@ -614,6 +620,7 @@ color: rgb(255, 255, 255);</string>
       <string notr="true">
 							font-size: 40px;
 							color: rgb(255,255,255);
+							font: bold Gotham
 						</string>
      </property>
      <property name="text">
@@ -633,6 +640,7 @@ color: rgb(255, 255, 255);</string>
       <string notr="true">
 							font-size: 20px;
 							color: rgb(255, 255, 255);
+							font: bold Gotham;
 						</string>
      </property>
      <property name="text">
@@ -652,6 +660,8 @@ color: rgb(255, 255, 255);</string>
       <string notr="true">
 							font-size: 20px;
 							color: rgb(255, 255, 255);
+							font: bold Gotham;
+
 						</string>
      </property>
      <property name="text">
@@ -812,8 +822,9 @@ border-radius: 10px;
      </property>
      <property name="styleSheet">
       <string notr="true">
-							font-size: 20px;
+							font-size: 25px;
 							color: rgb(255, 255, 255);
+							font: bold Gotham
 
 						</string>
      </property>
@@ -876,8 +887,10 @@ border-radius: 10px;
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 17px;
-color: rgb(255, 255, 255);</string>
+      <string notr="true">font: 18px;
+color: rgb(255, 255, 255);
+font: regular Gotham;
+						</string>
      </property>
      <property name="spacing">
       <number>2</number>
@@ -899,7 +912,8 @@ color: rgb(255, 255, 255);</string>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton {
+      <string notr="true">
+							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
 							background-color: #FFFFFF;
@@ -937,6 +951,66 @@ border-radius: 10px;
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
+    <widget class="QLabel" name="label_NextInQueue">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>151</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Gotham</family>
+       <pointsize>-1</pointsize>
+       <italic>false</italic>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+							font-size: 20px;
+							color: rgb(255,255,255);
+							font: bold Gotham;
+						</string>
+     </property>
+     <property name="text">
+      <string>Next in Queue</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_nextFileName">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>70</y>
+       <width>211</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>STHeiti</family>
+       <italic>false</italic>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+							color: rgb(255,255,255);
+							font: bold Gotham;
+						</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
