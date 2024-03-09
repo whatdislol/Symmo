@@ -248,6 +248,11 @@ void PlaylistManager::setShuffleMode(const int& mode)
 	m_shuffleMode = mode;
 }
 
+int PlaylistManager::getShuffleMode() const
+{
+    return m_shuffleMode;
+}
+
 void PlaylistManager::shufflePlaylist()
 {
     switch (m_shuffleMode) {

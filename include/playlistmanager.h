@@ -41,6 +41,7 @@ public:
     void renamePlaylist(const int& index, const QString& name);
     void onMusicLibraryChanged(const QString& path);
     void setShuffleMode(const int& mode);
+    int getShuffleMode() const;
     void shufflePlaylist();
     void toggleShuffleStatus();
     void onShuffleFisherYates();
