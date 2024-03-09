@@ -57,8 +57,6 @@ debug/
 saves/
 
 # Local stuff
-*mp3
-*wav
 /build
 /music_library/*
 !music_library/.gitkeep
