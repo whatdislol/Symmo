@@ -21,7 +21,7 @@
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: #596FB7</string>
+    <string notr="true">background: #333333;</string>
    </property>
    <widget class="QFrame" name="frame_AudioControl">
     <property name="geometry">
@@ -33,9 +33,8 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">
-						background-color: #11235A;
-					</string>
+     <string notr="true">background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(3, 3, 3, 255), stop:1 rgba(29, 29, 32, 255));
+border-radius: 10px;</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -63,7 +62,7 @@
 							QPushButton {
 							border: none;
 							border-radius: 20px;
-							background-color: #86B6F6;
+							background-color: #F3F3F3;
 							color: rgb(52, 51, 64);
 							min-width: 40px;
 							max-width: 40px;
@@ -97,7 +96,7 @@
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #F3F3F3;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -131,7 +130,7 @@
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #F3F3F3;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -165,7 +164,7 @@
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #F3F3F3;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -199,7 +198,7 @@
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #F3F3F3;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -233,7 +232,7 @@
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #F3F3F3;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -258,18 +257,22 @@
      </property>
      <property name="styleSheet">
       <string notr="true">
-							QSlider::groove:horizontal {
-							border: none;
-							background-color: rgb(200, 200, 200);
-							height: 10px;
-							border-radius: 5px;
-							}
-							QSlider::handle:horizontal {
-							background-color: rgb(0, 120, 215);
-							width: 20px;
-							border-radius: 10px;
-							}
-						</string>
+QSlider::groove:horizontal {
+    border: none;
+    background: transparent;
+    background-color: #4D4D4D;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::handle:horizontal {
+    border: none;
+    background-color: #F3F3F3;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px; 
+};
+    background: transparent;</string>
      </property>
      <property name="value">
       <number>50</number>
@@ -289,18 +292,22 @@
      </property>
      <property name="styleSheet">
       <string notr="true">
-							QSlider::groove:horizontal {
-							border: none;
-							background-color: rgb(200, 200, 200);
-							height: 10px;
-							border-radius: 5px;
-							}
-							QSlider::handle:horizontal {
-							background-color: rgb(0, 120, 215);
-							width: 20px;
-							border-radius: 10px;
-							}
-						</string>
+QSlider::groove:horizontal {
+    border: none;
+    background: transparent;
+    background-color: #4D4D4D;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::handle:horizontal {
+    border: none;
+    background-color: #F3F3F3;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px; 
+};
+    background: transparent;</string>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -316,7 +323,8 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255,255,255);</string>
+      <string notr="true">color: rgb(255,255,255);
+background: transparent;</string>
      </property>
      <property name="text">
       <string>00:00</string>
@@ -335,7 +343,8 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255,255,255);</string>
+      <string notr="true">color: rgb(255,255,255);
+background: transparent;</string>
      </property>
      <property name="text">
       <string>00:00</string>
@@ -359,7 +368,9 @@
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255,255,255);</string>
+      <string notr="true">color: rgb(255,255,255);
+ background: transparent;
+    color: white;</string>
      </property>
      <property name="text">
       <string/>
@@ -391,7 +402,8 @@
     </property>
     <property name="styleSheet">
      <string notr="true">
-						background-color: #192655;
+background: #121212;
+
 						border-radius: 10px;
 					</string>
     </property>
@@ -412,8 +424,9 @@
      </property>
      <property name="font">
       <font>
-       <family>STHeiti</family>
+       <family>Segoe UI</family>
        <pointsize>-1</pointsize>
+       <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
@@ -470,18 +483,22 @@ border-radius: 5px;
      </property>
      <property name="styleSheet">
       <string notr="true">
-							QSlider::groove:horizontal {
-							border: none;
-							background-color: rgb(200, 200, 200);
-							height: 10px;
-							border-radius: 5px;
-							}
-							QSlider::handle:horizontal {
-							background-color: rgb(0, 120, 215);
-							width: 20px;
-							border-radius: 10px;
-							}
-						</string>
+QSlider::groove:horizontal {
+    border: none;
+    background: transparent;
+    background-color: #4D4D4D;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::handle:horizontal {
+    border: none;
+    background-color: #F3F3F3;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px; 
+};
+    background: transparent;</string>
      </property>
      <property name="value">
       <number>50</number>
@@ -514,10 +531,10 @@ border-radius: 5px;
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">
-						background-color: #192655;
-						border-radius: 10px;
-					</string>
+     <string notr="true">background-color: #1D1D20;
+border-radius: 10px;
+background: #121212;
+</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -528,9 +545,9 @@ border-radius: 5px;
     <widget class="QListWidget" name="listWidget_SongsInPlaylist">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>40</x>
        <y>80</y>
-       <width>531</width>
+       <width>491</width>
        <height>341</height>
       </rect>
      </property>
@@ -543,10 +560,12 @@ border-radius: 5px;
      </property>
      <property name="styleSheet">
       <string notr="true">font: 17px;
-color: rgb(255, 255, 255);</string>
+color: rgb(255, 255, 255);
+border:none;
+background: transparent;</string>
      </property>
      <property name="spacing">
-      <number>2</number>
+      <number>4</number>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_AddSong">
@@ -569,7 +588,7 @@ color: rgb(255, 255, 255);</string>
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #F3F3F3;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -594,14 +613,17 @@ color: rgb(255, 255, 255);</string>
      </property>
      <property name="font">
       <font>
-       <family>STHeiti</family>
+       <family>Segoe UI</family>
        <pointsize>-1</pointsize>
+       <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">
 							font-size: 40px;
 							color: rgb(255,255,255);
+border:none;
+background: transparent;
 						</string>
      </property>
      <property name="text">
@@ -621,6 +643,8 @@ color: rgb(255, 255, 255);</string>
       <string notr="true">
 							font-size: 20px;
 							color: rgb(255, 255, 255);
+border:none;
+background: transparent;
 						</string>
      </property>
      <property name="text">
@@ -636,10 +660,17 @@ color: rgb(255, 255, 255);</string>
        <height>41</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>-1</pointsize>
+      </font>
+     </property>
      <property name="styleSheet">
       <string notr="true">
 							font-size: 20px;
 							color: rgb(255, 255, 255);
+border:none;
+background: transparent;
 						</string>
      </property>
      <property name="text">
@@ -658,8 +689,10 @@ color: rgb(255, 255, 255);</string>
     </property>
     <property name="styleSheet">
      <string notr="true">
-						background-color: #11235A;
+						background-color: #1D1D20;
 						border-radius: 10px;
+background:black;
+
 					</string>
     </property>
     <property name="frameShape">
@@ -688,7 +721,7 @@ color: rgb(255, 255, 255);</string>
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #F3F3F3;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -772,10 +805,9 @@ color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">
-						background-color: #192655;
-						border-radius: 10px;
-					</string>
+     <string notr="true">background: #121212;
+border-radius: 10px;
+</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -794,7 +826,7 @@ color: rgb(255, 255, 255);</string>
      </property>
      <property name="font">
       <font>
-       <family>STHeiti</family>
+       <family>Segoe UI</family>
        <pointsize>-1</pointsize>
        <bold>true</bold>
       </font>
@@ -803,6 +835,8 @@ color: rgb(255, 255, 255);</string>
       <string notr="true">
 							font-size: 20px;
 							color: rgb(255, 255, 255);
+border:none;
+background: transparent;
 
 						</string>
      </property>
@@ -833,7 +867,7 @@ color: rgb(255, 255, 255);</string>
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #F3F3F3;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -865,10 +899,12 @@ color: rgb(255, 255, 255);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 17px;
-color: rgb(255, 255, 255);</string>
+color: rgb(255, 255, 255);
+border:none;
+background: transparent;</string>
      </property>
      <property name="spacing">
-      <number>2</number>
+      <number>4</number>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_ViewAllSongs">
@@ -891,7 +927,7 @@ color: rgb(255, 255, 255);</string>
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #F3F3F3;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -916,7 +952,7 @@ color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: #192655;
+     <string notr="true">background: #121212;
 border-radius: 10px;</string>
     </property>
     <property name="frameShape">
