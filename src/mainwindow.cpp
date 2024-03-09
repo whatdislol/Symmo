@@ -199,6 +199,19 @@ void MainWindow::setupUI()
     ui->label_Gif->setMovie(m_gif);
     m_gif->setScaledSize(ui->label_Gif->size());
     ui->lineEdit_SearchBar->setPlaceholderText("Search in Playlist");
+
+    int fontId = QFontDatabase::addApplicationFont(m_assetPath + "/fonts/GothamBold.ttf");
+    QString GothamBold = QFontDatabase::applicationFontFamilies(fontId).at(0);
+    int fontId2 = QFontDatabase::addApplicationFont(m_assetPath + "/fonts//GothamBook.ttf");
+    QString GothamBook = QFontDatabase::applicationFontFamilies(fontId2).at(0);
+    ui->label_Ambience->setFont(QFont(GothamBold, 25, QFont::Bold));
+    ui->label_PlaylistName->setFont(QFont(GothamBold, 40, QFont::Bold));
+    ui->label_Playlist->setFont(QFont(GothamBold, 30, QFont::Bold));
+    ui->label_TrackQuantity->setFont(QFont(GothamBold, 20));
+    ui->label_Tracks->setFont(QFont(GothamBold, 20));
+    ui->label_fileName->setFont(QFont(GothamBold, 11));
+    ui->listWidget_SongsInPlaylist->setFont(QFont(GothamBook, 20, QFont::Normal));
+    ui->listWidget_Playlist->setFont(QFont(GothamBook, 20, QFont::Normal));
 }
 
 void MainWindow::addSongWidgetItem(QListWidgetItem* song)
