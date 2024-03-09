@@ -14,6 +14,8 @@
 #include <QMenu>
 #include <QMovie>
 #include <QHBoxLayout>
+#include <QFontDataBase>
+#include <QFont>
 #include "audiocontrol.h"
 #include "playlistmanager.h"
 
