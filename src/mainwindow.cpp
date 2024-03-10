@@ -17,11 +17,13 @@ MainWindow::MainWindow(QWidget* parent) :
     Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
     QMediaPlayer* player = m_audioControl->getMediaPlayer();
 
-    // CONNECT UI SIGNALS TO METHODS
-    // main window
     ui->listWidget_SongsInPlaylist->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->listWidget_Playlist->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->toggleButton_Shuffle->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->slider_SongProgress->setMouseTracking(true);
+
+    // CONNECT UI SIGNALS TO METHODS
+    // main window
     connect(ui->listWidget_SongsInPlaylist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
     connect(ui->listWidget_Playlist, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
     connect(ui->toggleButton_Shuffle, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
@@ -130,6 +132,8 @@ void MainWindow::updateSongProgress(qint64 progress)
 void MainWindow::updateDuration(qint64 duration)
 {
     qint64 totalDuration = m_audioControl->getTotalDuration();
+    QMediaPlayer::MediaStatus status = m_audioControl->getMediaPlayer()->mediaStatus();
+    duration = (status == QMediaPlayer::NoMedia) ? 0 : duration;
     if (duration || totalDuration) {
         QTime currentTime((duration / 3600) % 60, (duration / 60) % 60, duration % 60, (duration * 1000) % 1000);
         QTime totalTime((totalDuration / 3600) % 60, (totalDuration / 60) % 60, totalDuration % 60, (totalDuration * 1000) % 1000);
