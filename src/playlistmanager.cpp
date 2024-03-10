@@ -76,7 +76,6 @@ void PlaylistManager::removePlaylist(const int& index)
     }
 
     changePlaylistDisplayOnRemove(index);
-    m_activePlaylist = nullptr;
     delete m_playlists.at(index);
     m_playlists.removeAt(index);
     emit playlistRemoved(index);
