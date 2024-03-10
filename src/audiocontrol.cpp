@@ -60,14 +60,14 @@ void AudioControl::toggleMute()
 
 void AudioControl::togglePlayPause()
 {
-	if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
+    if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
         if (m_player->isPlaying()) {
             m_player->pause();
             m_ambiencePlayer->pause();
         }
         else {
             m_player->play();
-		    m_ambiencePlayer->play();
+            m_ambiencePlayer->play();
         }
     }
 }
