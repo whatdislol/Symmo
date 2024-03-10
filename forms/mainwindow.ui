@@ -607,10 +607,67 @@ border-radius: 10px;
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 14px;
-color: rgb(255, 255, 255);
-font: regular Gotham;
-						</string>
+      <string notr="true">QListWidget {
+    font: 14px;
+    color: rgb(255, 255, 255);
+    font: regular Gotham;
+}
+
+QScrollBar:vertical {              
+            border: none;
+            background:#23263D;
+            width:3px;
+            margin: 0px;
+        }
+        QScrollBar::handle:vertical {
+            background:white;
+            min-height: 0px;
+        }
+        QScrollBar::add-line:vertical {
+            background:white;
+            height: 0px;
+            subcontrol-position: bottom;
+            subcontrol-origin: margin;
+			border-bottom-left-radius: 7px;
+			border-bottom-right-radius: 7px;
+        }
+        QScrollBar::sub-line:vertical {
+            background: white;
+            height: 0 px;
+            subcontrol-position: top;
+            subcontrol-origin: margin;
+			border-top-left-radius: 7px;
+			border-top-right-radius: 7px;
+        }
+	QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+background:none;
+}
+QScrollBar:horizontal {              
+            border: none;
+            background:#23263D;
+            width:3px;
+            margin: 0px;
+        }
+        QScrollBar::handle:horizontal {
+            background:white;
+            min-height: 0px;
+        }
+        QScrollBar::add-line:horizontal {
+            background:white;
+            height: 0px;
+            subcontrol-position: bottom;
+            subcontrol-origin: margin;
+			border-bottom-left-radius: 7px;
+			border-bottom-right-radius: 7px;
+        }
+        QScrollBar::sub-line:horizontal {
+            background: white;
+            height: 0 px;
+            subcontrol-position: top;
+            subcontrol-origin: margin;
+			border-top-left-radius: 7px;
+			border-top-right-radius: 7px;
+        }</string>
      </property>
      <property name="spacing">
       <number>4</number>
@@ -938,10 +995,67 @@ border-radius: 10px;
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 18px;
+      <string notr="true">QListWidget {
+font: 18px;
 color: rgb(255, 255, 255);
 font: regular Gotham;
-						</string>
+}
+QScrollBar:vertical {              
+            border: none;
+            background:#23263D;
+            width:3px;
+            margin: 0px;
+        }
+        QScrollBar::handle:vertical {
+            background:white;
+            min-height: 0px;
+        }
+        QScrollBar::add-line:vertical {
+            background:white;
+            height: 0px;
+            subcontrol-position: bottom;
+            subcontrol-origin: margin;
+			border-bottom-left-radius: 7px;
+			border-bottom-right-radius: 7px;
+        }
+        QScrollBar::sub-line:vertical {
+            background: white;
+            height: 0 px;
+            subcontrol-position: top;
+            subcontrol-origin: margin;
+			border-top-left-radius: 7px;
+			border-top-right-radius: 7px;
+        }
+	QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+background:none;
+}
+QScrollBar:horizontal {              
+            border: none;
+            background:#23263D;
+            width:3px;
+            margin: 0px;
+        }
+        QScrollBar::handle:horizontal {
+            background:white;
+            min-height: 0px;
+        }
+        QScrollBar::add-line:horizontal {
+            background:white;
+            height: 0px;
+            subcontrol-position: bottom;
+            subcontrol-origin: margin;
+			border-bottom-left-radius: 7px;
+			border-bottom-right-radius: 7px;
+        }
+        QScrollBar::sub-line:horizontal {
+            background: white;
+            height: 0 px;
+            subcontrol-position: top;
+            subcontrol-origin: margin;
+			border-top-left-radius: 7px;
+			border-top-right-radius: 7px;
+        }
+</string>
      </property>
      <property name="spacing">
       <number>2</number>
