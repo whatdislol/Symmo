@@ -18,6 +18,7 @@
 #include <QTimer>
 #include "audiocontrol.h"
 #include "playlistmanager.h"
+#include "songitem.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
