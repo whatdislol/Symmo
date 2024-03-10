@@ -27,7 +27,6 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->toggleButton_Shuffle, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
     connect(ui->lineEdit_SearchBar, &QLineEdit::textChanged, this, &MainWindow::filterSearchResults);
     connect(ui->pushButton_ClearSearch, &QPushButton::clicked, ui->lineEdit_SearchBar, &QLineEdit::clear);
-    connect(m_timer, &QTimer::timeout, this, &MainWindow::scrollOverflownText);
 
     // audio control
     connect(ui->slider_SongVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setVolume);
@@ -57,6 +56,9 @@ MainWindow::MainWindow(QWidget* parent) :
         });
 
     // CONNECT LOGIC SIGNALS TO METHODS
+    // main window
+    connect(m_timer, &QTimer::timeout, this, &MainWindow::scrollOverflownText);
+
     // audio control
     connect(player, &QMediaPlayer::durationChanged, this, &MainWindow::setMaxDuration);
     connect(player, &QMediaPlayer::positionChanged, this, &MainWindow::updateSongProgress);
@@ -91,7 +93,7 @@ MainWindow::MainWindow(QWidget* parent) :
     m_playlistManager->onMusicLibraryChanged(m_playlistManager->getMusicLibraryPath());
     ui->slider_AmbienceVolume->setValue(20);
     changeGif();
-    m_timer->setInterval(160);
+    m_timer->setInterval(200);
     m_timer->start();
 }
 
@@ -146,7 +148,8 @@ void MainWindow::updatePlaybackUI(QMediaPlayer::MediaStatus status)
             QFileInfo fileInfo(mediaUrl.toLocalFile());
             QString fileNameWithoutExtension = fileInfo.fileName();
             fileNameWithoutExtension = fileNameWithoutExtension.left(fileNameWithoutExtension.lastIndexOf('.'));
-            ui->label_fileName->setText(fileNameWithoutExtension);
+            QString separator = "        ";
+            ui->label_fileName->setText(fileNameWithoutExtension + separator);
             ui->toggleButton_PlayPause->setIcon(QIcon(m_assetPath + "/icons/pause.png"));
             m_audioControl->setTotalDuration(totalDuration);
             updateDuration(0);
@@ -156,7 +159,9 @@ void MainWindow::updatePlaybackUI(QMediaPlayer::MediaStatus status)
 
 void MainWindow::updateNextSongName()
 {
-    ui->label_nextFileName->setText(m_playlistManager->onGetNextSongName(m_audioControl));
+    QString separator = "        ";
+    QString nextSongName = m_playlistManager->onGetNextSongName(m_audioControl);
+    ui->label_nextFileName->setText(nextSongName + separator);
 }
 
 void MainWindow::updateMuteIcon(bool muted)
@@ -303,11 +308,18 @@ void MainWindow::removePlaylist(const int& index)
 
 void MainWindow::scrollOverflownText()
 {
-    if (!ui->label_fileName->text().isEmpty() && ui->label_fileName->text().size() > 20) {
+    QString trimmedCurrentSongName = ui->label_fileName->text().trimmed();
+    if (!trimmedCurrentSongName.isEmpty() && trimmedCurrentSongName.size() > 33) {
         QString displayedText = ui->label_fileName->text();
-        displayedText = displayedText.mid(1) + displayedText.at(0);
+        displayedText = displayedText.sliced(1) + displayedText.at(0);
         ui->label_fileName->setText(displayedText);
     }
+    QString trimmedNextSongName = ui->label_nextFileName->text().trimmed();
+    if (!trimmedNextSongName.isEmpty() && trimmedNextSongName.size() > 30) {
+		QString displayedText = ui->label_nextFileName->text();
+		displayedText = displayedText.sliced(1) + displayedText.at(0);
+		ui->label_nextFileName->setText(displayedText);
+	}
 }
 
 void MainWindow::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
