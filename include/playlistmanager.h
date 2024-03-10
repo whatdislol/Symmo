@@ -35,7 +35,7 @@ public:
     void onAddMultipleSongs();
     void setSelectedPlaylist(Playlist* playlist);
     void setActivePlaylist(Playlist* playlist);
-    void changePlaylistDisplayOnRemove(const int& index);
+    void onRemovePlaylist(const int& index);
     QString getMusicLibraryPath() const;
     void setPlaylists(QList<Playlist*> playlists);
     QList<Playlist*> getPlaylists();

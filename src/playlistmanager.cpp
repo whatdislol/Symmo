@@ -75,7 +75,7 @@ void PlaylistManager::removePlaylist(const int& index)
         return;
     }
 
-    changePlaylistDisplayOnRemove(index);
+    onRemovePlaylist(index);
     delete m_playlists.at(index);
     m_playlists.removeAt(index);
     emit playlistRemoved(index);
@@ -187,11 +187,14 @@ void PlaylistManager::setActivePlaylist(Playlist* playlist)
     m_activePlaylist = playlist;
 }
 
-void PlaylistManager::changePlaylistDisplayOnRemove(const int& index)
+void PlaylistManager::onRemovePlaylist(const int& index)
 {
     if (m_selectedPlaylist == m_playlists.at(index)) {
         updateDefaultPlaylist();
     }
+    if (m_activePlaylist == m_playlists.at(index)) {
+		m_activePlaylist = m_defaultPlaylist;
+	}
 }
 
 QString PlaylistManager::getMusicLibraryPath() const
