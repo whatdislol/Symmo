@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->toggleButton_Shuffle, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
     connect(ui->lineEdit_SearchBar, &QLineEdit::textChanged, this, &MainWindow::filterSearchResults);
     connect(ui->pushButton_ClearSearch, &QPushButton::clicked, ui->lineEdit_SearchBar, &QLineEdit::clear);
+    connect(ui->slider_SongProgress, &QSlider::sliderMoved, this, &MainWindow::updateDuration);
 
     // audio control
     connect(ui->slider_SongVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setVolume);
@@ -36,18 +37,16 @@ MainWindow::MainWindow(QWidget* parent) :
         int sliderPosition = ui->slider_SongProgress->sliderPosition();
         ui->slider_SongProgress->setSliderPosition(sliderPosition);
         m_audioControl->setPosition(sliderPosition);
-        });
-    connect(ui->slider_SongProgress, &QSlider::sliderMoved, this, &MainWindow::updateDuration);
+    });
     connect(ui->toggleButton_PlayPause, &QPushButton::clicked, m_audioControl, &AudioControl::togglePlayPause);
+
     connect(ui->toggleButton_Mute, &QPushButton::clicked, m_audioControl, &AudioControl::toggleMute);
     connect(ui->comboBox_AmbienceBox, &QComboBox::currentIndexChanged, m_audioControl, &AudioControl::playAmbience);
     connect(ui->slider_AmbienceVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setAmbienceVolume);
 
     // playlist manager
     connect(ui->pushButton_ViewAllSongs, &QPushButton::clicked, m_playlistManager, &PlaylistManager::updateDefaultPlaylist);
-    connect(ui->listWidget_SongsInPlaylist, &QListWidget::itemClicked, [=](QListWidgetItem* song) {
-        m_playlistManager->onSelectSong(song, m_audioControl);
-        });
+    connect(ui->listWidget_SongsInPlaylist, &QListWidget::itemClicked, [=](QListWidgetItem* song) { m_playlistManager->onSelectSong(song, m_audioControl); });
     connect(ui->pushButton_AddPlaylist, &QPushButton::clicked, this, &MainWindow::getNewPlaylistName);
     connect(ui->listWidget_Playlist, &QListWidget::itemClicked, m_playlistManager, &PlaylistManager::selectPlaylist);
     connect(ui->pushButton_AddSong, &QPushButton::clicked, m_playlistManager, &PlaylistManager::displaySongSelectionDialog);
@@ -55,12 +54,8 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->toggleButton_Loop, &QPushButton::clicked, m_playlistManager, &PlaylistManager::toggleLoopStatus);
 
     // playlist
-    connect(ui->pushButton_Skip, &QPushButton::clicked, [=]() {
-        m_playlistManager->onToNextSong(m_audioControl);
-        });
-    connect(ui->pushButton_Back, &QPushButton::clicked, [=]() {
-        m_playlistManager->onToPreviousSong(m_audioControl);
-        });
+    connect(ui->pushButton_Skip, &QPushButton::clicked, [=]() { m_playlistManager->onToNextSong(m_audioControl); });
+    connect(ui->pushButton_Back, &QPushButton::clicked, [=]() { m_playlistManager->onToPreviousSong(m_audioControl); });
 
     // CONNECT LOGIC SIGNALS TO METHODS
     // main window
