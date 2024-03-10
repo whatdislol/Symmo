@@ -30,7 +30,12 @@ MainWindow::MainWindow(QWidget* parent) :
 
     // audio control
     connect(ui->slider_SongVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setVolume);
-    connect(ui->slider_SongProgress, &QSlider::sliderMoved, m_audioControl, &AudioControl::setPosition);
+    connect(ui->slider_SongProgress, &QSlider::sliderReleased, [=]() {
+        int sliderPosition = ui->slider_SongProgress->sliderPosition();
+        ui->slider_SongProgress->setSliderPosition(sliderPosition);
+        m_audioControl->setPosition(sliderPosition);
+        });
+    connect(ui->slider_SongProgress, &QSlider::sliderMoved, this, &MainWindow::updateDuration);
     connect(ui->toggleButton_PlayPause, &QPushButton::clicked, m_audioControl, &AudioControl::togglePlayPause);
     connect(ui->toggleButton_Mute, &QPushButton::clicked, m_audioControl, &AudioControl::toggleMute);
     connect(ui->comboBox_AmbienceBox, &QComboBox::currentIndexChanged, m_audioControl, &AudioControl::playAmbience);
@@ -118,8 +123,8 @@ void MainWindow::updateSongProgress(qint64 progress)
 {
     if (!ui->slider_SongProgress->isSliderDown()) {
         ui->slider_SongProgress->setValue(progress / 1000);
+        updateDuration(progress / 1000);
     }
-    updateDuration(progress / 1000);
 }
 
 void MainWindow::updateDuration(qint64 duration)
