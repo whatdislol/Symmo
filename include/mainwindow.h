@@ -15,6 +15,7 @@
 #include <QMovie>
 #include <QFontDataBase>
 #include <QFont>
+#include <QTimer>
 #include "audiocontrol.h"
 #include "playlistmanager.h"
 
@@ -57,6 +58,7 @@ private slots:
     void changeGif();
     void updateGifState(QMediaPlayer::PlaybackState state);
     void removePlaylist(const int& index);
+    void scrollOverflownText();
     void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
     void onShuffleStatusChanged(bool shuffled);
     void filterSearchResults(const QString& searchQuery);
@@ -72,6 +74,7 @@ private:
     QString m_dataPath;
     QString m_assetPath;
     QMovie* m_gif;
+    QTimer* m_timer;
 };
 
 #endif // MAINWINDOW_H

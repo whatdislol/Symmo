@@ -10,7 +10,8 @@ MainWindow::MainWindow(QWidget* parent) :
     m_playlistManager(new PlaylistManager(this)),
     m_dataPath(getProjectRootPath() + "/data.json"),
     m_assetPath(getProjectRootPath() + "/asset"),
-    m_gif(new QMovie(m_assetPath + "/gifs/none.gif"))
+    m_gif(new QMovie(m_assetPath + "/gifs/none.gif")),
+    m_timer(new QTimer(this))
 {
     ui->setupUi(this);
     Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
@@ -26,6 +27,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->toggleButton_Shuffle, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
     connect(ui->lineEdit_SearchBar, &QLineEdit::textChanged, this, &MainWindow::filterSearchResults);
     connect(ui->pushButton_ClearSearch, &QPushButton::clicked, ui->lineEdit_SearchBar, &QLineEdit::clear);
+    connect(m_timer, &QTimer::timeout, this, &MainWindow::scrollOverflownText);
 
     // audio control
     connect(ui->slider_SongVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setVolume);
@@ -89,6 +91,8 @@ MainWindow::MainWindow(QWidget* parent) :
     m_playlistManager->onMusicLibraryChanged(m_playlistManager->getMusicLibraryPath());
     ui->slider_AmbienceVolume->setValue(20);
     changeGif();
+    m_timer->setInterval(160);
+    m_timer->start();
 }
 
 MainWindow::~MainWindow()
@@ -98,6 +102,7 @@ MainWindow::~MainWindow()
     delete m_audioControl;
     delete m_playlistManager;
     delete m_gif;
+    delete m_timer;
 }
 
 void MainWindow::setMaxDuration(qint64 duration)
@@ -294,6 +299,15 @@ void MainWindow::removePlaylist(const int& index)
 {
     QListWidgetItem* item = ui->listWidget_Playlist->takeItem(index);
     delete item;
+}
+
+void MainWindow::scrollOverflownText()
+{
+    if (!ui->label_fileName->text().isEmpty() && ui->label_fileName->text().size() > 20) {
+        QString displayedText = ui->label_fileName->text();
+        displayedText = displayedText.mid(1) + displayedText.at(0);
+        ui->label_fileName->setText(displayedText);
+    }
 }
 
 void MainWindow::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
