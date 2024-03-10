@@ -753,6 +753,9 @@ background:none;
      <property name="text">
       <string>0</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="label_Tracks">
      <property name="geometry">
