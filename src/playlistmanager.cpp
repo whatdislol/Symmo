@@ -30,6 +30,7 @@ PlaylistManager::~PlaylistManager()
     m_selectedPlaylist = nullptr;
     m_defaultPlaylist = nullptr;
     delete m_defaultPlaylist;
+    delete m_defaultPlaylist;
 
     delete m_songSelectionDialog;
 }
@@ -119,6 +120,7 @@ void PlaylistManager::displaySongSelectionDialog()
 
 void PlaylistManager::onSelectSong(QListWidgetItem* song, AudioControl* audioControl)
 {
+    m_activePlaylist = m_selectedPlaylist;
     m_selectedPlaylist->selectSong(song, audioControl);
     if (m_shuffled) {
         shufflePlaylist();
