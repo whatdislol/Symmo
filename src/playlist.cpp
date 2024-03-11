@@ -135,11 +135,6 @@ void Playlist::addSong(const QString& songPath)
         QString baseName = fileInfo.baseName();
         QListWidgetItem* musicItem = new QListWidgetItem(baseName);
         emit songAdded(musicItem);
-
-        //test
-        int index = m_songPaths.indexOf(songPath);
-        //int duration =
-        SongItem* songItem = new SongItem(index, baseName, "placeholder");
     }
 }
 

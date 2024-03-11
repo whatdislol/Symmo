@@ -15,7 +15,6 @@
 #include <algorithm>
 #include "audiocontrol.h"
 #include "selectsongdialog.h"
-#include "songitem.h"
 #include "filepath.h"
 
 class Playlist : public QObject

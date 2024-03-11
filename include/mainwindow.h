@@ -18,7 +18,6 @@
 #include <QTimer>
 #include "audiocontrol.h"
 #include "playlistmanager.h"
-#include "songitem.h"
 #include "filepath.h"
 
 QT_BEGIN_NAMESPACE
