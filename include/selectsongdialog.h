@@ -6,6 +6,7 @@
 #include <QListWidget>
 #include <QDir>
 #include <QFileInfo>
+#include <filepath.h>
 
 namespace Ui {
     class SelectSongDialog;
@@ -16,7 +17,7 @@ class SelectSongDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SelectSongDialog(QString musicLibraryPath, QWidget* parent = nullptr);
+    explicit SelectSongDialog(QWidget* parent = nullptr);
     ~SelectSongDialog();
 
     void updateSelectedSongs();

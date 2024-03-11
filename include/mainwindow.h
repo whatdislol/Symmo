@@ -19,6 +19,7 @@
 #include "audiocontrol.h"
 #include "playlistmanager.h"
 #include "songitem.h"
+#include "filepath.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -71,7 +72,6 @@ private:
     Ui::MainWindow* ui;
     AudioControl* m_audioControl;
     PlaylistManager* m_playlistManager;
-    QString getProjectRootPath() const;
     QString m_dataPath;
     QString m_assetPath;
     QMovie* m_gif;

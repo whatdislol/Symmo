@@ -6,12 +6,12 @@ PlaylistManager::PlaylistManager(QObject* parent)
     m_playlists(QList<Playlist*>()),
     m_selectedPlaylist(m_defaultPlaylist),
     m_activePlaylist(m_defaultPlaylist),
-    m_songSelectionDialog(new SelectSongDialog(m_selectedPlaylist->getMusicLibraryPath())),
+    m_songSelectionDialog(new SelectSongDialog()),
     m_looped(false),
     m_shuffled(false),
     m_shuffleMode(0)
 {
-    m_watcher.addPath(m_selectedPlaylist->getMusicLibraryPath());
+    m_watcher.addPath(FilePath::getProjectRootPath() + "/music_library/");
 
     connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, &PlaylistManager::onMusicLibraryChanged);
     connect(m_songSelectionDialog, &SelectSongDialog::accepted, this, &PlaylistManager::onAddMultipleSongs);
@@ -195,11 +195,6 @@ void PlaylistManager::onRemovePlaylist(const int& index)
     if (m_activePlaylist == m_playlists.at(index)) {
 		m_activePlaylist = m_defaultPlaylist;
 	}
-}
-
-QString PlaylistManager::getMusicLibraryPath() const
-{
-    return m_defaultPlaylist->getMusicLibraryPath();
 }
 
 void PlaylistManager::setPlaylists(QList<Playlist*> playlists)

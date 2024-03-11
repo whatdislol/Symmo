@@ -3,10 +3,10 @@
 #include "selectsongdialog.h"
 #include "./ui_selectsongdialog.h"
 
-SelectSongDialog::SelectSongDialog(QString musicLibraryPath, QWidget* parent)
+SelectSongDialog::SelectSongDialog(QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::SelectSongDialog)
-    , m_musicLibraryPath(musicLibraryPath)
+    , m_musicLibraryPath(FilePath::getProjectRootPath() + "/music_library/")
 {
     ui->setupUi(this);
     ui->listWidget_SongsToSelect->setSelectionMode(QAbstractItemView::MultiSelection);

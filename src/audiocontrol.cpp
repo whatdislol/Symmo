@@ -17,8 +17,8 @@ AudioControl::AudioControl(QObject* parent)
     setAmbienceVolume(20);
     m_ambiencePaths = {
         "", 
-        getProjectRootPath() + "/asset/ambience_sounds/rain.mp3",
-        getProjectRootPath() + "/asset/ambience_sounds/campfire.mp3"
+        FilePath::getProjectRootPath() + "/asset/ambience_sounds/rain.mp3",
+        FilePath::getProjectRootPath() + "/asset/ambience_sounds/campfire.mp3"
     };
 }
 
@@ -114,13 +114,4 @@ void AudioControl::playAmbience(int index)
         m_ambiencePlayer->play();
     }
     emit gifUpdated();
-}
-
-QString AudioControl::getProjectRootPath() const
-{
-    QString executablePath = QCoreApplication::applicationDirPath();
-    QDir currentDir(executablePath);
-    while (!currentDir.exists("CMakeLists.txt") && currentDir.cdUp());
-
-    return currentDir.absolutePath();
 }

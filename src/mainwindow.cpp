@@ -8,8 +8,8 @@ MainWindow::MainWindow(QWidget* parent) :
     ui(new Ui::MainWindow),
     m_audioControl(new AudioControl(this)),
     m_playlistManager(new PlaylistManager(this)),
-    m_dataPath(getProjectRootPath() + "/data.json"),
-    m_assetPath(getProjectRootPath() + "/asset"),
+    m_dataPath(FilePath::getProjectRootPath() + "/data.json"),
+    m_assetPath(FilePath::getProjectRootPath() + "/asset"),
     m_gif(new QMovie(m_assetPath + "/gifs/none.gif")),
     m_timer(new QTimer(this))
 {
@@ -92,7 +92,7 @@ MainWindow::MainWindow(QWidget* parent) :
     setupFonts();
     m_playlistManager->updateDefaultPlaylist();
     loadFromJSON(m_dataPath);
-    m_playlistManager->onMusicLibraryChanged(m_playlistManager->getMusicLibraryPath());
+    m_playlistManager->onMusicLibraryChanged(FilePath::getProjectRootPath() + "/music_library/");
     ui->slider_AmbienceVolume->setValue(20);
     changeGif();
     m_timer->setInterval(200);
@@ -396,7 +396,7 @@ void MainWindow::showContextMenu(const QPoint& pos)
         QMenu songsMenu;
         QAction* removeSongAction = songsMenu.addAction("Remove from Playlist");
         connect(removeSongAction, &QAction::triggered, [=]() {
-            QString songPath = m_playlistManager->getMusicLibraryPath() + songItem->text() + ".mp3";
+            QString songPath = FilePath::getProjectRootPath() + "/music_library/" + songItem->text() + ".mp3";
             selectedPlaylist->removeSong(songPath);
             updateOnPlaylistSelected();
             });
@@ -501,13 +501,4 @@ void MainWindow::loadFromJSON(const QString& filePath)
     m_audioControl->setVolume(position);
 
     file.close();
-}
-
-QString MainWindow::getProjectRootPath() const
-{
-    QString executablePath = QCoreApplication::applicationDirPath();
-    QDir currentDir(executablePath);
-    while (!currentDir.exists("CMakeLists.txt") && currentDir.cdUp());
-
-    return currentDir.absolutePath();
 }

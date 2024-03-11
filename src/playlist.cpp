@@ -4,7 +4,7 @@
 
 Playlist::Playlist(QObject* parent)
     : QObject(parent),
-    m_musicLibraryPath(getProjectRootPath() + "/music_library/"),
+    m_musicLibraryPath(FilePath::getProjectRootPath() + "/music_library/"),
     m_name("Playlist"),
     m_currentShuffledSongIndex(0)
 {
@@ -135,6 +135,11 @@ void Playlist::addSong(const QString& songPath)
         QString baseName = fileInfo.baseName();
         QListWidgetItem* musicItem = new QListWidgetItem(baseName);
         emit songAdded(musicItem);
+
+        //test
+        int index = m_songPaths.indexOf(songPath);
+        //int duration =
+        SongItem* songItem = new SongItem(index, baseName, "placeholder");
     }
 }
 
@@ -178,11 +183,6 @@ QStringList Playlist::getSongNames() const
     return songNames;
 }
 
-QString Playlist::getMusicLibraryPath() const
-{
-    return m_musicLibraryPath;
-}
-
 void Playlist::shuffleFisherYates()
 {
     m_currentShuffledSongIndex = 0;
@@ -223,14 +223,6 @@ QString Playlist::getNextSongName(AudioControl* audioControl, bool shuffled) con
         nextSongPath = m_songPaths[(m_songPaths.indexOf(getCurrentSongPath(m_player)) + 1) % m_songPaths.size()];
     }
     return QFileInfo(nextSongPath).baseName();
-}
-
-QString Playlist::getProjectRootPath() const {
-    QString executablePath = QCoreApplication::applicationDirPath();
-    QDir currentDir(executablePath);
-    while (!currentDir.exists("CMakeLists.txt") && currentDir.cdUp());
-
-    return currentDir.absolutePath();
 }
 
 QString Playlist::getCurrentSongPath(QMediaPlayer* m_player) const

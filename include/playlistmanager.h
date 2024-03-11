@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include "audiocontrol.h"
 #include "playlist.h"
+#include "filepath.h"
 
 class PlaylistManager : public QObject
 {
@@ -36,7 +37,6 @@ public:
     void setSelectedPlaylist(Playlist* playlist);
     void setActivePlaylist(Playlist* playlist);
     void onRemovePlaylist(const int& index);
-    QString getMusicLibraryPath() const;
     void setPlaylists(QList<Playlist*> playlists);
     QList<Playlist*> getPlaylists();
     void renamePlaylist(const int& index, const QString& name);
