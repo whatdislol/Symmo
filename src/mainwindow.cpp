@@ -91,12 +91,12 @@ MainWindow::MainWindow(QWidget* parent) :
     setupUI();
     setupFonts();
     m_playlistManager->updateDefaultPlaylist();
-    loadFromJSON(m_dataPath);
     m_playlistManager->onMusicLibraryChanged(FilePath::getProjectRootPath() + "/music_library/");
     ui->slider_AmbienceVolume->setValue(20);
     changeGif();
     m_timer->setInterval(200);
     m_timer->start();
+    loadFromJSON(m_dataPath);
 }
 
 MainWindow::~MainWindow()
@@ -430,43 +430,51 @@ void MainWindow::showContextMenu(const QPoint& pos)
 
 void MainWindow::saveToJSON(const QString& filePath)
 {
-    QJsonArray playlistsArray;
+	QJsonArray playlistsArray;
+	for (Playlist* playlist : m_playlistManager->getPlaylists()) {
+		if (playlist == m_playlistManager->getDefaultPlaylist()) {
+			continue;
+		}
+		QJsonObject playlistObject;
+		playlistObject["name"] = playlist->getName();
 
-    for (Playlist* playlist : m_playlistManager->getPlaylists()) {
-        if (playlist == m_playlistManager->getDefaultPlaylist()) {
-            continue;
-        }
-        QJsonObject playlistObject;
-        playlistObject["name"] = playlist->getName();
+		QJsonArray songsArray;
+		for (const QString& song : playlist->getSongPaths()) {
+			songsArray.append(song);
+		}
+		playlistObject["songs"] = songsArray;
 
-        QJsonArray songsArray;
-        for (const QString& song : playlist->getSongPaths()) {
-            songsArray.append(song);
-        }
-        playlistObject["songs"] = songsArray;
+		playlistsArray.append(playlistObject);
+	}
 
-        playlistsArray.append(playlistObject);
-    }
+	QJsonObject positionObject;
+	positionObject["position"] = ui->slider_SongVolume->value();
 
-    QJsonObject positionObject;
-    positionObject["position"] = ui->slider_SongVolume->value();
+    QJsonObject activePlaylist;
+    activePlaylist["name"] = m_playlistManager->getActivePlaylist()->getName();
 
-    QJsonObject rootObject;
-    rootObject["playlists"] = playlistsArray;
-    rootObject["position"] = positionObject;
+    QJsonObject currentSong;
+    currentSong["currentSong"] = FilePath::getCurrentSongPath(m_audioControl->getMediaPlayer());
 
-    QJsonDocument jsonDoc(rootObject);
+	QJsonObject rootObject;
+	rootObject["playlists"] = playlistsArray;
+	rootObject["position"] = positionObject;
+    rootObject["activePlaylist"] = activePlaylist;
+    rootObject["currentSong"] = currentSong;
 
-    QDir().mkpath(QFileInfo(filePath).path());
+	QJsonDocument jsonDoc(rootObject);
 
-    QFile file(filePath);
-    if (!file.open(QIODevice::WriteOnly)) {
-        qDebug() << "Failed to open file for writing:" << file.errorString();
-        return;
-    }
-    file.write(jsonDoc.toJson());
-    file.close();
+	QDir().mkpath(QFileInfo(filePath).path());
+
+	QFile file(filePath);
+	if (!file.open(QIODevice::WriteOnly)) {
+		qDebug() << "Failed to open file for writing:" << file.errorString();
+		return;
+	}
+	file.write(jsonDoc.toJson());
+	file.close();
 }
+
 
 void MainWindow::loadFromJSON(const QString& filePath)
 {
@@ -510,5 +518,27 @@ void MainWindow::loadFromJSON(const QString& filePath)
     ui->slider_SongVolume->setSliderPosition(position);
     m_audioControl->setVolume(position);
 
+	// Load active playlist
+	if (doc.isObject() && doc.object().contains("activePlaylist")) {
+		QJsonObject activePlaylistObject = doc["activePlaylist"].toObject();
+		QString activePlaylistName = activePlaylistObject["name"].toString();
+		Playlist* activePlaylist = m_playlistManager->findPlaylistByName(activePlaylistName);
+		if (activePlaylist) {
+			m_playlistManager->setActivePlaylist(activePlaylist);
+            m_playlistManager->setSelectedPlaylist(activePlaylist);
+		}
+	}
+
+	// Load current song
+	if (doc.isObject() && doc.object().contains("currentSong")) {
+		QJsonObject currentSongObject = doc["currentSong"].toObject();
+		QString currentSongPath = currentSongObject["currentSong"].toString();
+        m_playlistManager->onSelectSong(currentSongPath, m_audioControl);
+		QTimer::singleShot(1000, [this]() {
+			m_audioControl->togglePlayPause();
+		});
+	}
+
+    updateOnPlaylistSelected();
     file.close();
 }
