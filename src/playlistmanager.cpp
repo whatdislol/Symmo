@@ -21,17 +21,11 @@ PlaylistManager::PlaylistManager(QObject* parent)
 
 PlaylistManager::~PlaylistManager()
 {
-    for (Playlist* playlist : m_playlists) {
-        delete playlist;
-    }
-    m_playlists.clear();
-
-    m_activePlaylist = nullptr;
-    m_selectedPlaylist = nullptr;
-    m_defaultPlaylist = nullptr;
+	for (Playlist* playlist : m_playlists) {
+		delete playlist;
+	}
+	m_playlists.clear();
     delete m_defaultPlaylist;
-    delete m_defaultPlaylist;
-
     delete m_songSelectionDialog;
 }
 
