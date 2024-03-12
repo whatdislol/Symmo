@@ -21,20 +21,20 @@
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: #596FB7</string>
+    <string notr="true">background-color: #161728;</string>
    </property>
    <widget class="QFrame" name="frame_AudioControl">
     <property name="geometry">
      <rect>
-      <x>-10</x>
+      <x>10</x>
       <y>470</y>
-      <width>1171</width>
+      <width>1131</width>
       <height>121</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">
-						background-color: #11235A;
+     <string notr="true">background-color: #23263D;
+border-radius: 10px;
 					</string>
     </property>
     <property name="frameShape">
@@ -62,10 +62,10 @@
       <string notr="true">
 							QPushButton {
 							border: none;
-							border-radius: 20px;
-							background-color: #86B6F6;
+							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
+							background-color: #FFFFFF;
 							color: rgb(52, 51, 64);
-							min-width: 40px;
+							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
 							min-height: 40px;
 							max-height: 40px;
@@ -97,7 +97,7 @@
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #FFFFFF;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -131,7 +131,7 @@
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #FFFFFF;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -165,7 +165,7 @@
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #FFFFFF;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -199,7 +199,7 @@
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #FFFFFF;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -216,7 +216,7 @@
     <widget class="QPushButton" name="toggleButton_Mute">
      <property name="geometry">
       <rect>
-       <x>930</x>
+       <x>890</x>
        <y>40</y>
        <width>40</width>
        <height>40</height>
@@ -233,7 +233,7 @@
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #FFFFFF;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -250,26 +250,45 @@
     <widget class="QSlider" name="slider_SongVolume">
      <property name="geometry">
       <rect>
-       <x>980</x>
+       <x>950</x>
        <y>50</y>
        <width>160</width>
        <height>25</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">
-							QSlider::groove:horizontal {
-							border: none;
-							background-color: rgb(200, 200, 200);
-							height: 10px;
-							border-radius: 5px;
-							}
-							QSlider::handle:horizontal {
-							background-color: rgb(0, 120, 215);
-							width: 20px;
-							border-radius: 10px;
-							}
-						</string>
+      <string notr="true">QSlider::groove:horizontal {
+	border: 1px solid #161728;
+    background: transparent;
+    background-color: #2B2A34;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::handle:horizontal {
+    background-color: #F3F3F3;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::add-page:horizontal {
+	border: 1px solid #161728;
+    background: #2B2A34;
+    border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+QSlider::sub-page:horizontal {
+	border: 1px solid #161728;
+    background: #F3F3F3;
+    border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: #0080FF;
+}</string>
      </property>
      <property name="value">
       <number>50</number>
@@ -288,19 +307,38 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">
-							QSlider::groove:horizontal {
-							border: none;
-							background-color: rgb(200, 200, 200);
-							height: 10px;
-							border-radius: 5px;
-							}
-							QSlider::handle:horizontal {
-							background-color: rgb(0, 120, 215);
-							width: 20px;
-							border-radius: 10px;
-							}
-						</string>
+      <string notr="true">QSlider::groove:horizontal {
+	border: 1px solid #161728;
+    background: transparent;
+    background-color: #2B2A34;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::handle:horizontal {
+    background-color: #F3F3F3;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::add-page:horizontal {
+	border: 1px solid #161728;
+    background: #2B2A34;
+    border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+QSlider::sub-page:horizontal {
+	border: 1px solid #161728;
+    background: #F3F3F3;
+    border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: #0080FF;
+}</string>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -347,25 +385,30 @@
     <widget class="QLabel" name="label_fileName">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>40</x>
        <y>50</y>
-       <width>271</width>
+       <width>231</width>
        <height>20</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>STHeiti</family>
+       <italic>false</italic>
+       <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255,255,255);</string>
+      <string notr="true">
+							color: rgb(255,255,255);
+							font: bold Gotham;
+						</string>
      </property>
      <property name="text">
-      <string/>
+      <string>Pick a song!</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
     <zorder>toggleButton_PlayPause</zorder>
@@ -390,9 +433,8 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">
-						background-color: #192655;
-						border-radius: 10px;
+     <string notr="true">background-color: #23263D;
+border-radius: 10px;
 					</string>
     </property>
     <property name="frameShape">
@@ -404,26 +446,32 @@
     <widget class="QLabel" name="label_Ambience">
      <property name="geometry">
       <rect>
-       <x>60</x>
+       <x>40</x>
        <y>20</y>
-       <width>141</width>
+       <width>181</width>
        <height>24</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <family>STHeiti</family>
+       <family>Gotham</family>
        <pointsize>-1</pointsize>
+       <italic>false</italic>
+       <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">
 							font-size: 20px;
 							color: rgb(255,255,255);
+							font: bold Gotham;
 						</string>
      </property>
      <property name="text">
       <string>Ambience Mode</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
     <widget class="QComboBox" name="comboBox_AmbienceBox">
@@ -436,9 +484,10 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: &quot;light gray&quot;;
+      <string notr="true">background-color: #FFFFFF;
 border-radius: 5px;
-</string>
+font: regular Gotham;
+						</string>
      </property>
      <item>
       <property name="text">
@@ -466,19 +515,38 @@ border-radius: 5px;
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">
-							QSlider::groove:horizontal {
-							border: none;
-							background-color: rgb(200, 200, 200);
-							height: 10px;
-							border-radius: 5px;
-							}
-							QSlider::handle:horizontal {
-							background-color: rgb(0, 120, 215);
-							width: 20px;
-							border-radius: 10px;
-							}
-						</string>
+      <string notr="true">QSlider::groove:horizontal {
+	border: 1px solid #161728;
+    background: transparent;
+    background-color: #2B2A34;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::handle:horizontal {
+    background-color: #F3F3F3;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::add-page:horizontal {
+	border: 1px solid #161728;
+    background: #2B2A34;
+    border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+QSlider::sub-page:horizontal {
+	border: 1px solid #161728;
+    background: #F3F3F3;
+    border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: #0080FF;
+}</string>
      </property>
      <property name="value">
       <number>50</number>
@@ -496,6 +564,10 @@ border-radius: 5px;
        <height>161</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border: 5px solid white;
+border-radius: 2px;</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -511,9 +583,8 @@ border-radius: 5px;
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">
-						background-color: #192655;
-						border-radius: 10px;
+     <string notr="true">background-color: #23263D;
+border-radius: 10px;
 					</string>
     </property>
     <property name="frameShape">
@@ -531,11 +602,100 @@ border-radius: 5px;
        <height>341</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Gotham</family>
+       <pointsize>-1</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
      <property name="styleSheet">
-      <string notr="true">
-							color: rgb(255, 255, 255);
-							font-size: 15px;
-						</string>
+      <string notr="true">QListWidget {
+    font: 14px;
+    color: rgb(255, 255, 255);
+    font: regular Gotham;
+	border: 2px solid white;
+	padding: 10px 5px;
+}
+
+QListWidget::item {
+	background-color: #161A30;
+	color: white;
+	border-radius: 5px;
+	padding: 8px;
+	outline: none;
+}
+
+QListWidget::item::hover {
+	background-color: #31304D;
+}
+
+QListWidget::item::selected {
+	background-color: #424769;
+	border: none;
+}
+
+QScrollBar:vertical {              
+            border: none;
+            background:#23263D;
+            width:3px;
+            margin: 0px;
+        }
+        QScrollBar::handle:vertical {
+            background:#424769;
+            min-height: 0px;
+        }
+        QScrollBar::add-line:vertical {
+            background:#424769;
+            height: 0px;
+            subcontrol-position: bottom;
+            subcontrol-origin: margin;
+			border-bottom-left-radius: 7px;
+			border-bottom-right-radius: 7px;
+        }
+        QScrollBar::sub-line:vertical {
+            background: #424769;
+            height: 0 px;
+            subcontrol-position: top;
+            subcontrol-origin: margin;
+			border-top-left-radius: 7px;
+			border-top-right-radius: 7px;
+        }
+	QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+background:none;
+}
+QScrollBar:horizontal {              
+            border: none;
+            background:#23263D;
+            height:3px;
+            margin: 0px;
+        }
+        QScrollBar::handle:horizontal {
+            background:#424769;
+            min-width: 0px;
+        }
+        QScrollBar::add-line:horizontal {
+            background:#424769;
+            width: 0px;
+            subcontrol-position: bottom;
+            subcontrol-origin: margin;
+        }
+        QScrollBar::sub-line:horizontal {
+            background: #424769;
+            width: 0 px;
+            subcontrol-position: top;
+            subcontrol-origin: margin;
+        }
+	QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+background:none;
+}</string>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>false</bool>
+     </property>
+     <property name="spacing">
+      <number>2</number>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_AddSong">
@@ -558,7 +718,7 @@ border-radius: 5px;
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #FFFFFF;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -576,21 +736,24 @@ border-radius: 5px;
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>0</y>
+       <y>10</y>
        <width>331</width>
-       <height>61</height>
+       <height>51</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>STHeiti</family>
        <pointsize>-1</pointsize>
+       <italic>false</italic>
+       <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">
 							font-size: 40px;
 							color: rgb(255,255,255);
+							font: bold Gotham
 						</string>
      </property>
      <property name="text">
@@ -600,7 +763,7 @@ border-radius: 5px;
     <widget class="QLabel" name="label_TrackQuantity">
      <property name="geometry">
       <rect>
-       <x>390</x>
+       <x>380</x>
        <y>20</y>
        <width>31</width>
        <height>41</height>
@@ -610,18 +773,22 @@ border-radius: 5px;
       <string notr="true">
 							font-size: 20px;
 							color: rgb(255, 255, 255);
+							font: bold Gotham;
 						</string>
      </property>
      <property name="text">
       <string>0</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLabel" name="label_Tracks">
      <property name="geometry">
       <rect>
-       <x>430</x>
+       <x>420</x>
        <y>20</y>
-       <width>51</width>
+       <width>81</width>
        <height>41</height>
       </rect>
      </property>
@@ -629,6 +796,8 @@ border-radius: 5px;
       <string notr="true">
 							font-size: 20px;
 							color: rgb(255, 255, 255);
+							font: bold Gotham;
+
 						</string>
      </property>
      <property name="text">
@@ -646,9 +815,8 @@ border-radius: 5px;
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">
-						background-color: #11235A;
-						border-radius: 10px;
+     <string notr="true">background-color: #23263D;
+border-radius: 10px;
 					</string>
     </property>
     <property name="frameShape">
@@ -677,7 +845,7 @@ border-radius: 5px;
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #FFFFFF;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -736,14 +904,14 @@ border-radius: 5px;
       </property>
       <property name="styleSheet">
        <string notr="true">
-							QPushButton {
-							border: none;
-							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: white;
-							color: rgb(52, 51, 64);
-							padding: 0px;
-							}
-						</string>
+								QPushButton {
+								border: none;
+								border-radius: 20px; /* Adjust the border-radius for a smaller circle */
+								background-color: white;
+								color: rgb(52, 51, 64);
+								padding: 0px;
+								}
+							</string>
       </property>
       <property name="text">
        <string>X</string>
@@ -761,9 +929,8 @@ border-radius: 5px;
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">
-						background-color: #192655;
-						border-radius: 10px;
+     <string notr="true">background-color: #23263D;
+border-radius: 10px;
 					</string>
     </property>
     <property name="frameShape">
@@ -775,23 +942,25 @@ border-radius: 5px;
     <widget class="QLabel" name="label_Playlist">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>20</y>
-       <width>71</width>
-       <height>24</height>
+       <x>20</x>
+       <y>10</y>
+       <width>111</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>STHeiti</family>
        <pointsize>-1</pointsize>
+       <italic>false</italic>
        <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">
-							font-size: 20px;
+							font-size: 25px;
 							color: rgb(255, 255, 255);
+							font: bold Gotham
 
 						</string>
      </property>
@@ -822,7 +991,7 @@ border-radius: 5px;
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #FFFFFF;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -847,11 +1016,70 @@ border-radius: 5px;
      </property>
      <property name="font">
       <font>
-       <pointsize>15</pointsize>
+       <family>Gotham</family>
+       <pointsize>-1</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">QListWidget {
+    font: 16px;
+    color: rgb(255, 255, 255);
+    font: regular Gotham;
+	border: 2px solid white;
+	padding: 10px 5px;
+}
+
+QListWidget::item {
+	background-color: #161A30;
+	color: white;
+	border-radius: 5px;
+	padding: 8px;
+	outline: none;
+}
+
+QListWidget::item::hover {
+	background-color: #31304D;
+}
+
+QListWidget::item::selected {
+	background-color: #424769;
+	border: none;
+}
+
+QScrollBar:vertical {              
+            border: none;
+            background:#23263D;
+            width:3px;
+            margin: 0px;
+        }
+        QScrollBar::handle:vertical {
+            background:#424769;
+            min-height: 0px;
+        }
+        QScrollBar::add-line:vertical {
+            background:#424769;
+            height: 0px;
+            subcontrol-position: bottom;
+            subcontrol-origin: margin;
+			border-bottom-left-radius: 7px;
+			border-bottom-right-radius: 7px;
+        }
+        QScrollBar::sub-line:vertical {
+            background: #424769;
+            height: 0 px;
+            subcontrol-position: top;
+            subcontrol-origin: margin;
+			border-top-left-radius: 7px;
+			border-top-right-radius: 7px;
+        }
+	QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+background:none;
+}</string>
+     </property>
+     <property name="spacing">
+      <number>2</number>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_ViewAllSongs">
@@ -874,7 +1102,7 @@ border-radius: 5px;
 							QPushButton {
 							border: none;
 							border-radius: 20px; /* Adjust the border-radius for a smaller circle */
-							background-color: #86B6F6;
+							background-color: #FFFFFF;
 							color: rgb(52, 51, 64);
 							min-width: 40px;    /* Adjust the size of the button */
 							max-width: 40px;
@@ -889,7 +1117,7 @@ border-radius: 5px;
      </property>
     </widget>
    </widget>
-   <widget class="QFrame" name="frame">
+   <widget class="QFrame" name="frame_NextSong">
     <property name="geometry">
      <rect>
       <x>880</x>
@@ -899,8 +1127,9 @@ border-radius: 5px;
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: #192655;
-border-radius: 10px;</string>
+     <string notr="true">background-color: #23263D;
+border-radius: 10px;
+					</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -908,6 +1137,67 @@ border-radius: 10px;</string>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
+    <widget class="QLabel" name="label_NextInQueue">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>151</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Gotham</family>
+       <pointsize>-1</pointsize>
+       <italic>false</italic>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">
+							font-size: 20px;
+							color: rgb(255,255,255);
+							font: bold Gotham;
+						</string>
+     </property>
+     <property name="text">
+      <string>Next in Queue</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_nextFileName">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>70</y>
+       <width>221</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>STHeiti</family>
+       <italic>false</italic>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255,255,255);
+font: bold Gotham;
+background-color: #161A30;
+padding: 5px;
+						</string>
+     </property>
+     <property name="text">
+      <string>Next song is not available</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>

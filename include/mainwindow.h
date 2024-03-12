@@ -13,8 +13,13 @@
 #include <QJsonObject>
 #include <QMenu>
 #include <QMovie>
+#include <QFontDataBase>
+#include <QFont>
+#include <QTimer>
+#include <QFontMetrics>
 #include "audiocontrol.h"
 #include "playlistmanager.h"
+#include "filepath.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -38,11 +43,13 @@ private slots:
     void updateSongProgress(qint64 progress);
     void updateDuration(qint64 duration);
     void updatePlaybackUI(QMediaPlayer::MediaStatus status);
+    void updateNextSongName();
     void updateMuteIcon(bool muted);
     void updatePlayPauseIcon(bool playing);
     void updateShuffleIcon(bool shuffled);
     void updateLoopIcon(bool looped);
     void setupUI();
+    void setupFonts() const;
     void addSongWidgetItem(QListWidgetItem* song);
     void addPlaylistWidgetItem(QListWidgetItem* playlist);
     void getNewPlaylistName();
@@ -53,8 +60,11 @@ private slots:
     void changeGif();
     void updateGifState(QMediaPlayer::PlaybackState state);
     void removePlaylist(const int& index);
+    void scrollOverflownText();
     void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void onShuffleStatusChanged(bool shuffled);
     void filterSearchResults(const QString& searchQuery);
+    void setSongProgressValue();
     void showContextMenu(const QPoint& pos);
     void saveToJSON(const QString& filePath);
     void loadFromJSON(const QString& filePath);
@@ -63,9 +73,11 @@ private:
     Ui::MainWindow* ui;
     AudioControl* m_audioControl;
     PlaylistManager* m_playlistManager;
-    QString getProjectRootPath() const;
     QString m_dataPath;
+    QString m_assetPath;
     QMovie* m_gif;
+    QTimer* m_timer;
+    bool m_appStartup;
 };
 
 #endif // MAINWINDOW_H

@@ -6,13 +6,13 @@ PlaylistManager::PlaylistManager(QObject* parent)
     m_playlists(QList<Playlist*>()),
     m_selectedPlaylist(m_defaultPlaylist),
     m_activePlaylist(m_defaultPlaylist),
-    m_songSelectionDialog(new SelectSongDialog(m_selectedPlaylist->getMusicLibraryPath())),
+    m_songSelectionDialog(new SelectSongDialog()),
     m_looped(false),
     m_shuffled(false),
     m_shuffleMode(0)
 {
-    m_watcher.addPath(m_selectedPlaylist->getMusicLibraryPath());
-        
+    m_watcher.addPath(FilePath::getProjectRootPath() + "/music_library/");
+
     connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, &PlaylistManager::onMusicLibraryChanged);
     connect(m_songSelectionDialog, &SelectSongDialog::accepted, this, &PlaylistManager::onAddMultipleSongs);
     connect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
@@ -21,17 +21,12 @@ PlaylistManager::PlaylistManager(QObject* parent)
 
 PlaylistManager::~PlaylistManager()
 {
-    for (Playlist* playlist : m_playlists) {
-        delete playlist;
-    }
+	for (Playlist* playlist : m_playlists) {
+		delete playlist;
+	}
 	m_playlists.clear();
-
-    m_activePlaylist = nullptr;
-    m_selectedPlaylist = nullptr;
-    m_defaultPlaylist = nullptr;
     delete m_defaultPlaylist;
-
-	delete m_songSelectionDialog;
+    delete m_songSelectionDialog;
 }
 
 void PlaylistManager::updateDefaultPlaylist()
@@ -47,19 +42,19 @@ void PlaylistManager::updateDefaultPlaylist()
 
 void PlaylistManager::addPlaylist(QString name)
 {
-	if (name.trimmed().isEmpty() || name.trimmed().length() > 16 || name == "All Tracks") {
-		QMessageBox::warning(nullptr, "Warning", "Invalid playlist name. Please enter a name between 1 and 16 characters.");
-		return;
-	}
+    if (name.trimmed().isEmpty() || name.trimmed().length() > 16 || name == "All Tracks") {
+        QMessageBox::warning(nullptr, "Warning", "Invalid playlist name. Please enter a name between 1 and 16 characters.");
+        return;
+    }
     for (Playlist* pl : m_playlists) {
         if (pl->getName() == name) {
             QMessageBox::warning(nullptr, "Warning", "Invalid playlist name. This name already exists.");
-			return;
-		}
-	}
+            return;
+        }
+    }
     Playlist* playlist = new Playlist(this);
-	playlist->setName(name);
-	m_playlists.append(playlist);
+    playlist->setName(name);
+    m_playlists.append(playlist);
 
     QListWidgetItem* newPlaylist = new QListWidgetItem(name);
     emit playlistAdded(newPlaylist);
@@ -67,19 +62,18 @@ void PlaylistManager::addPlaylist(QString name)
 
 void PlaylistManager::removePlaylist(const int& index)
 {
-	QMessageBox::StandardButton reply;
-	reply = QMessageBox::question(nullptr, "Confirmation", "Are you sure you want to remove this playlist?",
-		QMessageBox::Yes | QMessageBox::No);
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(nullptr, "Confirmation", "Are you sure you want to remove this playlist?",
+        QMessageBox::Yes | QMessageBox::No);
 
-	if (reply == QMessageBox::No) {
-		return;
-	}
+    if (reply == QMessageBox::No) {
+        return;
+    }
 
-    changePlaylistDisplayOnRemove(index);
-    m_activePlaylist = nullptr;
+    onRemovePlaylist(index);
     delete m_playlists.at(index);
     m_playlists.removeAt(index);
-	emit playlistRemoved(index);
+    emit playlistRemoved(index);
 }
 
 Playlist* PlaylistManager::getSelectedPlaylist() const
@@ -90,6 +84,21 @@ Playlist* PlaylistManager::getSelectedPlaylist() const
 Playlist* PlaylistManager::getDefaultPlaylist() const
 {
     return m_defaultPlaylist;
+}
+
+Playlist* PlaylistManager::getActivePlaylist() const
+{
+    return m_activePlaylist;
+}
+
+Playlist* PlaylistManager::findPlaylistByName(QString& name) const
+{
+    for (Playlist* pl : m_playlists) {
+        if (pl->getName() == name) {
+			return pl;
+		}
+	}
+    return nullptr;
 }
 
 void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
@@ -114,22 +123,32 @@ void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
 
 void PlaylistManager::displaySongSelectionDialog()
 {
-    m_songSelectionDialog->show();
     m_songSelectionDialog->displaySongs();
+    m_songSelectionDialog->exec();
 }
 
 void PlaylistManager::onSelectSong(QListWidgetItem* song, AudioControl* audioControl)
 {
+    m_activePlaylist = m_selectedPlaylist;
+    if (m_shuffled) {
+        shufflePlaylist();
+    }
     m_selectedPlaylist->selectSong(song, audioControl);
+}
+
+void PlaylistManager::onSelectSong(const QString& songPath, AudioControl* audioControl)
+{
+    m_activePlaylist = m_selectedPlaylist;
     if (m_shuffled) {
 		shufflePlaylist();
-    }
+	}
+	m_selectedPlaylist->selectSong(songPath, audioControl);
 }
 
 void PlaylistManager::onToNextSong(AudioControl* audioControl)
 {
     if (m_activePlaylist != nullptr) {
-		m_activePlaylist->toNextSong(audioControl, m_shuffled);
+        m_activePlaylist->toNextSong(audioControl, m_shuffled);
     }
     else {
         QMediaPlayer* player = audioControl->getMediaPlayer();
@@ -163,7 +182,12 @@ void PlaylistManager::onSkipOnSongEnd(AudioControl* audioControl)
     else {
         QMediaPlayer* player = audioControl->getMediaPlayer();
         player->setPosition(0);
-	}
+    }
+}
+
+QString PlaylistManager::onGetNextSongName(AudioControl* audioControl) const
+{
+    return m_activePlaylist->getNextSongName(audioControl, m_shuffled);
 }
 
 void PlaylistManager::onAddMultipleSongs()
@@ -175,7 +199,7 @@ void PlaylistManager::onAddMultipleSongs()
 
 void PlaylistManager::setSelectedPlaylist(Playlist* playlist)
 {
-	m_selectedPlaylist = playlist;
+    m_selectedPlaylist = playlist;
 }
 
 void PlaylistManager::setActivePlaylist(Playlist* playlist)
@@ -183,16 +207,14 @@ void PlaylistManager::setActivePlaylist(Playlist* playlist)
     m_activePlaylist = playlist;
 }
 
-void PlaylistManager::changePlaylistDisplayOnRemove(const int& index)
+void PlaylistManager::onRemovePlaylist(const int& index)
 {
     if (m_selectedPlaylist == m_playlists.at(index)) {
-		updateDefaultPlaylist();
+        updateDefaultPlaylist();
+    }
+    if (m_activePlaylist == m_playlists.at(index)) {
+		m_activePlaylist = m_defaultPlaylist;
 	}
-}
-
-QString PlaylistManager::getMusicLibraryPath() const
-{
-    return m_defaultPlaylist->getMusicLibraryPath();
 }
 
 void PlaylistManager::setPlaylists(QList<Playlist*> playlists)
@@ -207,18 +229,18 @@ QList<Playlist*> PlaylistManager::getPlaylists()
 
 void PlaylistManager::renamePlaylist(const int& index, const QString& name)
 {
-	if (name.trimmed().isEmpty() || name.trimmed().length() > 16 || name == "All Tracks") {
-		QMessageBox::warning(nullptr, "Warning", "Invalid playlist name. Please enter a name between 1 and 16 characters.");
-		return;
-	}
+    if (name.trimmed().isEmpty() || name.trimmed().length() > 16 || name == "All Tracks") {
+        QMessageBox::warning(nullptr, "Warning", "Invalid playlist name. Please enter a name between 1 and 16 characters.");
+        return;
+    }
     for (Playlist* pl : m_playlists) {
         if (pl->getName() == name) {
-			QMessageBox::warning(nullptr, "Warning", "Invalid playlist name. This name already exists.");
+            QMessageBox::warning(nullptr, "Warning", "Invalid playlist name. This name already exists.");
             return;
         }
     }
-	m_playlists.at(index)->setName(name);
-	emit playlistRenamed(index, name);
+    m_playlists.at(index)->setName(name);
+    emit playlistRenamed(index, name);
     emit playlistDisplayUpdated();
 }
 
@@ -239,27 +261,37 @@ void PlaylistManager::onMusicLibraryChanged(const QString& path)
         updateDefaultPlaylist();
     }
     else {
-		emit playlistDisplayUpdated();
-	}
+        emit playlistDisplayUpdated();
+    }
 }
 
 void PlaylistManager::setShuffleMode(const int& mode)
 {
-	m_shuffleMode = mode;
+    m_shuffleMode = mode;
+}
+
+int PlaylistManager::getShuffleMode() const
+{
+    return m_shuffleMode;
+}
+
+bool PlaylistManager::getShuffleStatus() const
+{
+    return m_shuffled;
 }
 
 void PlaylistManager::shufflePlaylist()
 {
     switch (m_shuffleMode) {
-		case 0:
-			onShuffleFisherYates();
-			break;
-		case 1:
-			onShuffleRandom();
-			break;
-        default:
-			break;
-	}
+    case 0:
+        onShuffleFisherYates();
+        break;
+    case 1:
+        onShuffleRandom();
+        break;
+    default:
+        break;
+    }
     m_shuffled = true;
     emit updateShuffleStatus(m_shuffled);
 }
@@ -269,7 +301,7 @@ void PlaylistManager::toggleShuffleStatus()
     m_shuffled = !m_shuffled;
     if (m_shuffled) {
         shufflePlaylist();
-	}
+    }
     emit updateShuffleStatus(m_shuffled);
 }
 
@@ -280,7 +312,7 @@ void PlaylistManager::onShuffleFisherYates()
 
 void PlaylistManager::onShuffleRandom()
 {
-	m_activePlaylist->shuffleRandom();
+    m_activePlaylist->shuffleRandom();
 }
 
 void PlaylistManager::loop(AudioControl* audioControl) const
@@ -295,8 +327,13 @@ void PlaylistManager::loop(AudioControl* audioControl) const
 
 void PlaylistManager::toggleLoopStatus()
 {
-	m_looped = !m_looped;
+    m_looped = !m_looped;
     emit updateLoopStatus(m_looped);
+}
+
+bool PlaylistManager::getLoopStatus() const
+{
+    return m_looped;
 }
 
 QStringList PlaylistManager::getMusicLibraryAbsolutePaths(const QString& path)

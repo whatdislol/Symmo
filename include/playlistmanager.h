@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include "audiocontrol.h"
 #include "playlist.h"
+#include "filepath.h"
 
 class PlaylistManager : public QObject
 {
@@ -25,28 +26,34 @@ public:
     void removePlaylist(const int& index);
     Playlist* getSelectedPlaylist() const;
     Playlist* getDefaultPlaylist() const;
+    Playlist* getActivePlaylist() const;
+    Playlist* findPlaylistByName(QString& name) const;
     void selectPlaylist(QListWidgetItem* playlist);
     void displaySongSelectionDialog();
     void onSelectSong(QListWidgetItem* song, AudioControl* audioControl);
+    void onSelectSong(const QString& songPath, AudioControl* audioControl);
     void onToNextSong(AudioControl* audioControl);
     void onToPreviousSong(AudioControl* audioControl);
     void onSkipOnSongEnd(AudioControl* audioControl);
+    QString onGetNextSongName(AudioControl* audioControl) const;
     void onAddMultipleSongs();
     void setSelectedPlaylist(Playlist* playlist);
     void setActivePlaylist(Playlist* playlist);
-    void changePlaylistDisplayOnRemove(const int& index);
-    QString getMusicLibraryPath() const;
+    void onRemovePlaylist(const int& index);
     void setPlaylists(QList<Playlist*> playlists);
     QList<Playlist*> getPlaylists();
     void renamePlaylist(const int& index, const QString& name);
     void onMusicLibraryChanged(const QString& path);
     void setShuffleMode(const int& mode);
+    int getShuffleMode() const;
+    bool getShuffleStatus() const;
     void shufflePlaylist();
     void toggleShuffleStatus();
     void onShuffleFisherYates();
     void onShuffleRandom();
     void loop(AudioControl* audioControl) const;
     void toggleLoopStatus();
+    bool getLoopStatus() const;
 
 signals:
     void songsDisplayCleared();

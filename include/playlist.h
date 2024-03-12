@@ -15,6 +15,7 @@
 #include <algorithm>
 #include "audiocontrol.h"
 #include "selectsongdialog.h"
+#include "filepath.h"
 
 class Playlist : public QObject
 {
@@ -25,6 +26,7 @@ public:
 
     void addAllSongs();
     void selectSong(QListWidgetItem* song, AudioControl* audioControl);
+    void selectSong(const QString& songPath, AudioControl* audioControl);
     QString getTrackQuantity() const;
     void toNextSong(AudioControl* audiocontrol, bool shuffled);
     void toPreviousSong(AudioControl* audioControl, bool shuffled);
@@ -36,17 +38,15 @@ public:
     void setName(const QString& name);
     QList<QString> getSongPaths() const;
     QStringList getSongNames() const;
-    QString getMusicLibraryPath() const;
     void shuffleFisherYates();
     void shuffleRandom();
+    QString getNextSongName(AudioControl* audioControl, bool shuffled) const;
 
 signals:
     void songAdded(QListWidgetItem* song);
     void songSelected(Playlist* playlist);
 
 private:
-    QString getProjectRootPath() const;
-    QString getCurrentSongPath(QMediaPlayer* m_player) const;
     QString m_musicLibraryPath;
     QList<QString> m_songPaths;
     QList<QString> m_shuffledSongPaths;

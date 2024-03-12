@@ -13,14 +13,21 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #161728;</string>
+  </property>
   <widget class="QDialogButtonBox" name="buttonBox_OkandCancel">
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>310</y>
+     <y>320</y>
      <width>181</width>
      <height>32</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: white;
+font: regular Gotham;</string>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -33,20 +40,125 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>40</y>
+     <y>50</y>
      <width>491</width>
      <height>261</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QListWidget {
+    font: 14px;
+    color: rgb(255, 255, 255);
+    font: regular Gotham;
+	border: 2px solid white;
+	padding: 10px 5px;
+}
+
+QListWidget::item {
+	background-color: #181c34;
+	color: white;
+	border-radius: 5px;
+	padding: 8px;
+	outline: none;
+}
+
+QListWidget::item::hover {
+	background-color: #31304D;
+}
+
+QListWidget::item::selected {
+	background-color: #424769;
+	border: none;
+}
+
+QScrollBar:vertical {              
+            border: none;
+            background:#23263D;
+            width:3px;
+            margin: 0px;
+        }
+        QScrollBar::handle:vertical {
+            background:#424769;
+            min-height: 0px;
+        }
+        QScrollBar::add-line:vertical {
+            background:#424769;
+            height: 0px;
+            subcontrol-position: bottom;
+            subcontrol-origin: margin;
+			border-bottom-left-radius: 7px;
+			border-bottom-right-radius: 7px;
+        }
+        QScrollBar::sub-line:vertical {
+            background: #424769;
+            height: 0 px;
+            subcontrol-position: top;
+            subcontrol-origin: margin;
+			border-top-left-radius: 7px;
+			border-top-right-radius: 7px;
+        }
+	QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+background:none;
+}
+QScrollBar:horizontal {              
+            border: none;
+            background:#23263D;
+            height:3px;
+            margin: 0px;
+        }
+        QScrollBar::handle:horizontal {
+            background:#424769;
+            min-width: 0px;
+        }
+        QScrollBar::add-line:horizontal {
+            background:#424769;
+            width: 0px;
+            subcontrol-position: bottom;
+            subcontrol-origin: margin;
+        }
+        QScrollBar::sub-line:horizontal {
+            background: #424769;
+            width: 0 px;
+            subcontrol-position: top;
+            subcontrol-origin: margin;
+        }
+	QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+background:none;
+}</string>
+   </property>
+   <property name="spacing">
+    <number>4</number>
+   </property>
+   <item>
+    <property name="text">
+     <string>New Item</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>New Item</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>New Item</string>
+    </property>
+   </item>
   </widget>
   <widget class="QLabel" name="label_SelectSong">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>220</x>
      <y>10</y>
-     <width>71</width>
-     <height>16</height>
+     <width>111</width>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size: 20px;
+color: rgb(255,255,255);
+font: bold Gotham;
+						</string>
    </property>
    <property name="text">
     <string>Select Song</string>

@@ -8,6 +8,7 @@
 #include <QAudioOutput>
 #include <QCoreApplication>
 #include <QDir>
+#include <filepath.h>
 
 class AudioControl : public QObject
 {
@@ -39,7 +40,6 @@ private:
     QAudioOutput* m_ambienceOutput;
     QStringList m_ambiencePaths;
     qint64 m_totalDuration;
-    QString getProjectRootPath() const;
 };
 
 #endif // AUDIOCONTROL_H
