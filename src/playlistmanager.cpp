@@ -92,6 +92,11 @@ Playlist* PlaylistManager::getDefaultPlaylist() const
     return m_defaultPlaylist;
 }
 
+Playlist* PlaylistManager::getActivePlaylist() const
+{
+    return m_activePlaylist;
+}
+
 void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
 {
     if (!m_selectedPlaylist) {
@@ -125,6 +130,15 @@ void PlaylistManager::onSelectSong(QListWidgetItem* song, AudioControl* audioCon
         shufflePlaylist();
     }
     m_selectedPlaylist->selectSong(song, audioControl);
+}
+
+void PlaylistManager::onSelectSong(const QString& songPath, AudioControl* audioControl)
+{
+    m_activePlaylist = m_selectedPlaylist;
+    if (m_shuffled) {
+		shufflePlaylist();
+	}
+	m_selectedPlaylist->selectSong(songPath, audioControl);
 }
 
 void PlaylistManager::onToNextSong(AudioControl* audioControl)

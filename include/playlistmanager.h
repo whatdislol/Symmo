@@ -26,9 +26,11 @@ public:
     void removePlaylist(const int& index);
     Playlist* getSelectedPlaylist() const;
     Playlist* getDefaultPlaylist() const;
+    Playlist* getActivePlaylist() const;
     void selectPlaylist(QListWidgetItem* playlist);
     void displaySongSelectionDialog();
     void onSelectSong(QListWidgetItem* song, AudioControl* audioControl);
+    void onSelectSong(const QString& songPath, AudioControl* audioControl);
     void onToNextSong(AudioControl* audioControl);
     void onToPreviousSong(AudioControl* audioControl);
     void onSkipOnSongEnd(AudioControl* audioControl);
