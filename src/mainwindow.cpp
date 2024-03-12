@@ -315,17 +315,25 @@ void MainWindow::removePlaylist(const int& index)
 void MainWindow::scrollOverflownText()
 {
     QString trimmedCurrentSongName = ui->label_fileName->text().trimmed();
-    if (!trimmedCurrentSongName.isEmpty() && trimmedCurrentSongName.size() > 33) {
-        QString displayedText = ui->label_fileName->text();
-        displayedText = displayedText.sliced(1) + displayedText.at(0);
-        ui->label_fileName->setText(displayedText);
-    }
-    QString trimmedNextSongName = ui->label_nextFileName->text().trimmed();
-    if (!trimmedNextSongName.isEmpty() && trimmedNextSongName.size() > 30) {
-		QString displayedText = ui->label_nextFileName->text();
+    QFontMetrics currentSongMetrics(ui->label_fileName->font());
+    int textWidth = currentSongMetrics.horizontalAdvance(trimmedCurrentSongName);
+    int labelWidth = ui->label_fileName->width();
+    if (textWidth > labelWidth) {
+		QString displayedText = ui->label_fileName->text();
 		displayedText = displayedText.sliced(1) + displayedText.at(0);
-		ui->label_nextFileName->setText(displayedText);
+		ui->label_fileName->setText(displayedText);
 	}
+
+    QString trimmedNextSongName = ui->label_nextFileName->text().trimmed();
+    QFontMetrics nextSongMetrics(ui->label_nextFileName->font());
+    int nextTextPadding = 7;
+    int nextTextWidth = nextSongMetrics.horizontalAdvance(trimmedNextSongName);
+    int nextLabelWidth = ui->label_nextFileName->width() - nextTextPadding * 2;
+    if (nextTextWidth > nextLabelWidth) {
+        QString displayedText = ui->label_nextFileName->text();
+        displayedText = displayedText.sliced(1) + displayedText.at(0);
+        ui->label_nextFileName->setText(displayedText);
+    }
 }
 
 void MainWindow::onMediaStatusChanged(QMediaPlayer::MediaStatus status)

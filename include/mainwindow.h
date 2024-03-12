@@ -16,6 +16,7 @@
 #include <QFontDataBase>
 #include <QFont>
 #include <QTimer>
+#include <QFontMetrics>
 #include "audiocontrol.h"
 #include "playlistmanager.h"
 #include "filepath.h"
