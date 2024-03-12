@@ -97,6 +97,16 @@ Playlist* PlaylistManager::getActivePlaylist() const
     return m_activePlaylist;
 }
 
+Playlist* PlaylistManager::findPlaylistByName(QString& name) const
+{
+    for (Playlist* pl : m_playlists) {
+        if (pl->getName() == name) {
+			return pl;
+		}
+	}
+    return nullptr;
+}
+
 void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
 {
     if (!m_selectedPlaylist) {

@@ -27,6 +27,7 @@ public:
     Playlist* getSelectedPlaylist() const;
     Playlist* getDefaultPlaylist() const;
     Playlist* getActivePlaylist() const;
+    Playlist* findPlaylistByName(QString& name) const;
     void selectPlaylist(QListWidgetItem* playlist);
     void displaySongSelectionDialog();
     void onSelectSong(QListWidgetItem* song, AudioControl* audioControl);
