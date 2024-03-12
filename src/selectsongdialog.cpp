@@ -11,6 +11,7 @@ SelectSongDialog::SelectSongDialog(QWidget* parent)
     ui->setupUi(this);
     ui->listWidget_SongsToSelect->setSelectionMode(QAbstractItemView::MultiSelection);
     ui->listWidget_SongsToSelect->setSelectionBehavior(QAbstractItemView::SelectItems);
+    ui->listWidget_SongsToSelect->setFocusPolicy(Qt::NoFocus);
 
     // CONNECT UI TO METHODS
     connect(ui->listWidget_SongsToSelect, &QListWidget::itemSelectionChanged, this, &SelectSongDialog::updateSelectedSongs);

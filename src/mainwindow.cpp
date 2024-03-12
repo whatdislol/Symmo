@@ -219,6 +219,8 @@ void MainWindow::setupUI()
     ui->label_Gif->setMovie(m_gif);
     m_gif->setScaledSize(ui->label_Gif->size());
     ui->lineEdit_SearchBar->setPlaceholderText("Search in Playlist");
+    ui->listWidget_SongsInPlaylist->setFocusPolicy(Qt::NoFocus);
+    ui->listWidget_Playlist->setFocusPolicy(Qt::NoFocus);
 }
 
 void MainWindow::setupFonts() const
