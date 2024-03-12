@@ -62,6 +62,7 @@ private slots:
     void removePlaylist(const int& index);
     void scrollOverflownText();
     void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void onSongProgressSliderReleased();
     void onShuffleStatusChanged(bool shuffled);
     void filterSearchResults(const QString& searchQuery);
     void setSongProgressValue();

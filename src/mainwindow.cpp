@@ -35,11 +35,7 @@ MainWindow::MainWindow(QWidget* parent) :
 
     // audio control
     connect(ui->slider_SongVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setVolume);
-    connect(ui->slider_SongProgress, &QSlider::sliderReleased, [=]() {
-        int sliderPosition = ui->slider_SongProgress->sliderPosition();
-        ui->slider_SongProgress->setSliderPosition(sliderPosition);
-        m_audioControl->setPosition(sliderPosition);
-    });
+    connect(ui->slider_SongProgress, &QSlider::sliderReleased, this, &MainWindow::onSongProgressSliderReleased);
     connect(ui->toggleButton_PlayPause, &QPushButton::clicked, m_audioControl, &AudioControl::togglePlayPause);
 
     connect(ui->toggleButton_Mute, &QPushButton::clicked, m_audioControl, &AudioControl::toggleMute);
@@ -349,6 +345,13 @@ void MainWindow::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
     updatePlaybackUI(status);
     m_playlistManager->onSkipOnSongEnd(m_audioControl);
     updateNextSongName();
+}
+
+void MainWindow::onSongProgressSliderReleased()
+{
+    int sliderPosition = ui->slider_SongProgress->sliderPosition();
+    ui->slider_SongProgress->setSliderPosition(sliderPosition);
+    m_audioControl->setPosition(sliderPosition);
 }
 
 void MainWindow::onShuffleStatusChanged(bool shuffled)
