@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(ui->lineEdit_SearchBar, &QLineEdit::textChanged, this, &MainWindow::filterSearchResults);
     connect(ui->pushButton_ClearSearch, &QPushButton::clicked, ui->lineEdit_SearchBar, &QLineEdit::clear);
     connect(ui->slider_SongProgress, &QSlider::sliderMoved, this, &MainWindow::updateDuration);
+    connect(ui->slider_SongProgress, &QSlider::actionTriggered, this, &MainWindow::setSongProgressValue);
 
     // audio control
     connect(ui->slider_SongVolume, &QSlider::sliderMoved, m_audioControl, &AudioControl::setVolume);
@@ -374,6 +375,40 @@ void MainWindow::filterSearchResults(const QString& searchQuery)
             }
         }
     }
+}
+
+void MainWindow::setSongProgressValue()
+{
+	if (ui->slider_SongProgress->isSliderDown()) {
+		return;
+	}
+	Qt::MouseButtons btns = QApplication::mouseButtons();
+    QSlider* slider = ui->slider_SongProgress;
+	QPoint localMousePos = slider->mapFromGlobal(QCursor::pos());
+	bool clickOnSlider = (btns & Qt::LeftButton) &&
+		(localMousePos.x() >= 0 && localMousePos.y() >= 0 &&
+			localMousePos.x() < slider->size().width() &&
+			localMousePos.y() < slider->size().height());
+	if (clickOnSlider)
+	{
+		float posRatio = localMousePos.x() / static_cast<float>(slider->size().width());
+		int sliderRange = slider->maximum() - slider->minimum();
+		int sliderPosUnderMouse = slider->minimum() + sliderRange * posRatio;
+		if (sliderPosUnderMouse != slider->value())
+		{
+			slider->setSliderPosition(sliderPosUnderMouse);
+			if (slider == ui->slider_SongProgress) {
+				m_audioControl->setPosition(sliderPosUnderMouse);
+			}
+			else if (slider == ui->slider_SongVolume) {
+				m_audioControl->setVolume(sliderPosUnderMouse);
+			}
+			else if (slider == ui->slider_AmbienceVolume) {
+				m_audioControl->setAmbienceVolume(sliderPosUnderMouse);
+			}
+			return;
+		}
+	}
 }
 
 void MainWindow::showContextMenu(const QPoint& pos)

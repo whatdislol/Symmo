@@ -64,6 +64,7 @@ private slots:
     void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
     void onShuffleStatusChanged(bool shuffled);
     void filterSearchResults(const QString& searchQuery);
+    void setSongProgressValue();
     void showContextMenu(const QPoint& pos);
     void saveToJSON(const QString& filePath);
     void loadFromJSON(const QString& filePath);
