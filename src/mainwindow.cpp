@@ -11,7 +11,8 @@ MainWindow::MainWindow(QWidget* parent) :
     m_dataPath(FilePath::getProjectRootPath() + "/data.json"),
     m_assetPath(FilePath::getProjectRootPath() + "/asset"),
     m_gif(new QMovie(m_assetPath + "/gifs/none.gif")),
-    m_timer(new QTimer(this))
+    m_timer(new QTimer(this)),
+    m_appStartup(false)
 {
     ui->setupUi(this);
     Playlist* selectedPlaylist = m_playlistManager->getSelectedPlaylist();
@@ -146,17 +147,23 @@ void MainWindow::updatePlaybackUI(QMediaPlayer::MediaStatus status)
     if (status == QMediaPlayer::LoadedMedia) {
         QMediaPlayer* M_Player = m_audioControl->getMediaPlayer();
         qint64 totalDuration = M_Player->duration() / 1000;
+        QMediaPlayer::MediaStatus status = M_Player->mediaStatus();
+        QMediaPlayer::PlaybackState state = M_Player->playbackState();
 
-        if (M_Player->mediaStatus() != QMediaPlayer::NoMedia) {
+        if (status != QMediaPlayer::NoMedia) {
             QUrl mediaUrl = M_Player->source();
             QFileInfo fileInfo(mediaUrl.toLocalFile());
             QString fileNameWithoutExtension = fileInfo.fileName();
             fileNameWithoutExtension = fileNameWithoutExtension.left(fileNameWithoutExtension.lastIndexOf('.'));
             QString separator = "        ";
             ui->label_fileName->setText(fileNameWithoutExtension + separator);
-            ui->toggleButton_PlayPause->setIcon(QIcon(m_assetPath + "/icons/pause.png"));
             m_audioControl->setTotalDuration(totalDuration);
             updateDuration(0);
+            if (!m_appStartup) {
+				m_appStartup = true;
+                return;
+            }
+			ui->toggleButton_PlayPause->setIcon(QIcon(m_assetPath + "/icons/pause.png"));
         }
     }
 }
@@ -534,9 +541,9 @@ void MainWindow::loadFromJSON(const QString& filePath)
 		QJsonObject currentSongObject = doc["currentSong"].toObject();
 		QString currentSongPath = currentSongObject["currentSong"].toString();
         m_playlistManager->onSelectSong(currentSongPath, m_audioControl);
-		QTimer::singleShot(1000, [this]() {
-			m_audioControl->togglePlayPause();
-		});
+        m_audioControl->getMediaPlayer()->pause();
+        ui->toggleButton_PlayPause->setIcon(QIcon(m_assetPath + "/icons/play.png"));
+        qDebug() << "called";
 	}
 
     updateOnPlaylistSelected();

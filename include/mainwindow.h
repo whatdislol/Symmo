@@ -76,6 +76,7 @@ private:
     QString m_assetPath;
     QMovie* m_gif;
     QTimer* m_timer;
+    bool m_appStartup;
 };
 
 #endif // MAINWINDOW_H
