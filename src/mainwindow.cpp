@@ -463,11 +463,23 @@ void MainWindow::saveToJSON(const QString& filePath)
     QJsonObject currentSong;
     currentSong["currentSong"] = FilePath::getCurrentSongPath(m_audioControl->getMediaPlayer());
 
+    QJsonObject shuffleMode;
+    shuffleMode["shuffleMode"] = m_playlistManager->getShuffleMode();
+
+    QJsonObject shuffleStatus;
+    shuffleStatus["shuffleStatus"] = m_playlistManager->getShuffleStatus();
+
+    QJsonObject loopStatus;
+    loopStatus["loopStatus"] = m_playlistManager->getLoopStatus();
+
 	QJsonObject rootObject;
 	rootObject["playlists"] = playlistsArray;
 	rootObject["position"] = positionObject;
     rootObject["activePlaylist"] = activePlaylist;
     rootObject["currentSong"] = currentSong;
+    rootObject["shuffleMode"] = shuffleMode;
+    rootObject["shuffleStatus"] = shuffleStatus;
+    rootObject["loopStatus"] = loopStatus;
 
 	QJsonDocument jsonDoc(rootObject);
 
@@ -543,7 +555,31 @@ void MainWindow::loadFromJSON(const QString& filePath)
         m_playlistManager->onSelectSong(currentSongPath, m_audioControl);
         m_audioControl->getMediaPlayer()->pause();
         ui->toggleButton_PlayPause->setIcon(QIcon(m_assetPath + "/icons/play.png"));
-        qDebug() << "called";
+	}
+
+    // Load shuffle mode
+    if (doc.isObject() && doc.object().contains("shuffleMode")) {
+		QJsonObject shuffleModeObject = doc["shuffleMode"].toObject();
+		int shuffleMode = shuffleModeObject["shuffleMode"].toInt();
+		m_playlistManager->setShuffleMode(shuffleMode);
+	}   
+
+    // Load shuffle status
+    if (doc.isObject() && doc.object().contains("shuffleStatus")) {
+        QJsonObject shuffleStatusObject = doc["shuffleStatus"].toObject();
+        bool shuffleStatus = shuffleStatusObject["shuffleStatus"].toBool();
+        if (shuffleStatus) {
+			m_playlistManager->shufflePlaylist();
+		}
+    }
+
+    // Load loop status
+    if (doc.isObject() && doc.object().contains("loopStatus")) {
+		QJsonObject loopStatusObject = doc["loopStatus"].toObject();
+		bool loopStatus = loopStatusObject["loopStatus"].toBool();
+        if (loopStatus) {
+			m_playlistManager->toggleLoopStatus();
+		}
 	}
 
     updateOnPlaylistSelected();
