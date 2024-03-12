@@ -9,6 +9,13 @@ QString FilePath::getProjectRootPath()
     return currentDir.absolutePath();
 }
 
+QString FilePath::getCurrentSongPath(QMediaPlayer* m_player)
+{
+	QUrl mediaUrl = m_player->source();
+	QFileInfo fileInfo(mediaUrl.toLocalFile());
+	return fileInfo.absoluteFilePath();
+}
+
 qint64 FilePath::getSongDuration(const QString& songPath)
 {
     QMediaPlayer player;
@@ -30,3 +37,4 @@ QString FilePath::getSongDurationString(const qint64& duration)
     }
     return time.toString(format);
 }
+

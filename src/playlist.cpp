@@ -44,6 +44,19 @@ void Playlist::selectSong(QListWidgetItem* song, AudioControl* audioControl)
     }
 }
 
+void Playlist::selectSong(const QString& songPath, AudioControl* audioControl)
+{
+	QMediaPlayer* m_player = audioControl->getMediaPlayer();
+	QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
+	m_player->setSource(QUrl::fromLocalFile(songPath));
+
+    if (m_player->mediaStatus() != QMediaPlayer::NoMedia) {
+		m_player->play();
+		m_ambiencePlayer->play();
+		emit songSelected(this);
+	}
+}
+
 QString Playlist::getTrackQuantity() const
 {
     return QString::number(m_songPaths.size());
@@ -59,7 +72,7 @@ void Playlist::toNextSong(AudioControl* audioControl, bool shuffled)
     QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
     QStringList songPaths;
 
-    QString currentSongPath = getCurrentSongPath(m_player);
+    QString currentSongPath = FilePath::getCurrentSongPath(m_player);
     qint64 index;
     QString filePath;
     if (shuffled) {
@@ -94,7 +107,7 @@ void Playlist::toPreviousSong(AudioControl* audioControl, bool shuffled)
     QMediaPlayer* m_ambiencePlayer = audioControl->getAmbiencePlayer();
     QStringList songPaths;
 
-    QString currentSongPath = getCurrentSongPath(m_player);
+    QString currentSongPath = FilePath::getCurrentSongPath(m_player);
     qint64 index;
     QString filePath;
     if (shuffled) {
@@ -215,14 +228,7 @@ QString Playlist::getNextSongName(AudioControl* audioControl, bool shuffled) con
     }
     else {
         QMediaPlayer* m_player = audioControl->getMediaPlayer();
-        nextSongPath = m_songPaths[(m_songPaths.indexOf(getCurrentSongPath(m_player)) + 1) % m_songPaths.size()];
+        nextSongPath = m_songPaths[(m_songPaths.indexOf(FilePath::getCurrentSongPath(m_player)) + 1) % m_songPaths.size()];
     }
     return QFileInfo(nextSongPath).baseName();
-}
-
-QString Playlist::getCurrentSongPath(QMediaPlayer* m_player) const
-{
-    QUrl mediaUrl = m_player->source();
-    QFileInfo fileInfo(mediaUrl.toLocalFile());
-    return fileInfo.absoluteFilePath();
 }

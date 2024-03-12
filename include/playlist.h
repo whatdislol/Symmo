@@ -26,6 +26,7 @@ public:
 
     void addAllSongs();
     void selectSong(QListWidgetItem* song, AudioControl* audioControl);
+    void selectSong(const QString& songPath, AudioControl* audioControl);
     QString getTrackQuantity() const;
     void toNextSong(AudioControl* audiocontrol, bool shuffled);
     void toPreviousSong(AudioControl* audioControl, bool shuffled);
@@ -46,7 +47,6 @@ signals:
     void songSelected(Playlist* playlist);
 
 private:
-    QString getCurrentSongPath(QMediaPlayer* m_player) const;
     QString m_musicLibraryPath;
     QList<QString> m_songPaths;
     QList<QString> m_shuffledSongPaths;
