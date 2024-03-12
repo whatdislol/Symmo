@@ -281,6 +281,11 @@ int PlaylistManager::getShuffleMode() const
     return m_shuffleMode;
 }
 
+bool PlaylistManager::getShuffleStatus() const
+{
+    return m_shuffled;
+}
+
 void PlaylistManager::shufflePlaylist()
 {
     switch (m_shuffleMode) {
@@ -330,6 +335,11 @@ void PlaylistManager::toggleLoopStatus()
 {
     m_looped = !m_looped;
     emit updateLoopStatus(m_looped);
+}
+
+bool PlaylistManager::getLoopStatus() const
+{
+    return m_looped;
 }
 
 QStringList PlaylistManager::getMusicLibraryAbsolutePaths(const QString& path)

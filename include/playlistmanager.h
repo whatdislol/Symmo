@@ -46,12 +46,14 @@ public:
     void onMusicLibraryChanged(const QString& path);
     void setShuffleMode(const int& mode);
     int getShuffleMode() const;
+    bool getShuffleStatus() const;
     void shufflePlaylist();
     void toggleShuffleStatus();
     void onShuffleFisherYates();
     void onShuffleRandom();
     void loop(AudioControl* audioControl) const;
     void toggleLoopStatus();
+    bool getLoopStatus() const;
 
 signals:
     void songsDisplayCleared();
