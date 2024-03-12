@@ -403,12 +403,6 @@ void MainWindow::setSongProgressValue()
 			if (slider == ui->slider_SongProgress) {
 				m_audioControl->setPosition(sliderPosUnderMouse);
 			}
-			else if (slider == ui->slider_SongVolume) {
-				m_audioControl->setVolume(sliderPosUnderMouse);
-			}
-			else if (slider == ui->slider_AmbienceVolume) {
-				m_audioControl->setAmbienceVolume(sliderPosUnderMouse);
-			}
 			return;
 		}
 	}
