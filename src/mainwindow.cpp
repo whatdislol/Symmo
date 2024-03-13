@@ -89,12 +89,12 @@ MainWindow::MainWindow(QWidget* parent) :
     setupUI();
     setupFonts();
     m_playlistManager->updateDefaultPlaylist();
-    m_playlistManager->onMusicLibraryChanged(FilePath::getProjectRootPath() + "/music_library/");
     ui->slider_AmbienceVolume->setValue(20);
     changeGif();
     m_timer->setInterval(200);
     m_timer->start();
     loadFromJSON(m_dataPath);
+    m_playlistManager->onMusicLibraryChanged(FilePath::getProjectRootPath() + "/music_library/");
 }
 
 MainWindow::~MainWindow()
