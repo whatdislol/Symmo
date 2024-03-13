@@ -94,7 +94,6 @@ MainWindow::MainWindow(QWidget* parent) :
     m_timer->setInterval(200);
     m_timer->start();
     loadFromJSON(m_dataPath);
-    m_playlistManager->onMusicLibraryChanged(FilePath::getProjectRootPath() + "/music_library/");
 }
 
 MainWindow::~MainWindow()
@@ -615,5 +614,6 @@ void MainWindow::loadFromJSON(const QString& filePath)
 	}
 
     updateOnPlaylistSelected();
+    m_playlistManager->onMusicLibraryChanged(FilePath::getProjectRootPath() + "/music_library/");
     file.close();
 }
