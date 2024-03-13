@@ -116,9 +116,6 @@ void PlaylistManager::selectPlaylist(QListWidgetItem* playlist)
         }
     }
     connect(m_selectedPlaylist, &Playlist::songSelected, this, &PlaylistManager::setActivePlaylist);
-    emit playlistDisplayUpdated();
-    emit songImportButtonVisible();
-    emit searchBarCleared();
 }
 
 void PlaylistManager::displaySongSelectionDialog()
@@ -200,6 +197,9 @@ void PlaylistManager::onAddMultipleSongs()
 void PlaylistManager::setSelectedPlaylist(Playlist* playlist)
 {
     m_selectedPlaylist = playlist;
+    emit playlistDisplayUpdated();
+    emit songImportButtonVisible();
+    emit searchBarCleared();
 }
 
 void PlaylistManager::setActivePlaylist(Playlist* playlist)
